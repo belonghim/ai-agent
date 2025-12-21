@@ -79,23 +79,22 @@ AI가 도면/영수증에서 추출한 데이터(Session 6 결과)를 바로 DB�
 * **Resume Strategy:** `On Webhook Call` (웹훅 신호가 오면 깨어남)
 * **Respond to Webhook:** `Node Output` (브라우저에 "처리되었습니다" 메시지 표시)
 * **Authentication:** `None` (실습 편의상)
-* **Suffix:** 이 부분은 비워두거나 `/path`를 설정할 수 있는데, 우리는 위 HTML에서 `/approve` 등을 URL 자체에 붙였으므로 **비워두어도 됩니다.** (n8n 설정에 따라 다를 수 있으니, 아래 Tip 참고)
+* **Suffix:** `/`
 
 > **⚠️ 중요 (로컬 사용자 필독):**
 > n8n을 `localhost`에서 실행 중이라면, 이메일에 적힌 링크(`http://localhost...`)는 외부(스마트폰 등)에서 클릭하면 안 열립니다. 실습할 때는 **같은 PC의 브라우저**에서 클릭해야 합니다.
 
 ### Step 3: 승인/반려 판단하기 (Switch Node)
 
-사람이 `/approve` 링크를 눌렀는지, `/reject` 링크를 눌렀는지 판단합니다.
+사람이 `approve` 링크를 눌렀는지, `reject` 링크를 눌렀는지 판단합니다.
 
 * **Node 추가:** `Switch`
-* **Mode:** `Rules`
-* **Rule 1 (승인):**
-
-1. **Wait 노드** 설정에서 `Webhook Suffix`를 `/`로 둡니다.
-2. HTML의 링크를 `.../approve` 대신 `...?action=approve` 로 바꿉니다.
-3. **Switch 노드**에서 `{{ $json.query.action }}` 값이 `approve` 인지 검사합니다.
-4. **Switch 2 노드**에서 `{{ $json.query.id }}` 값이 `{{ $('Loop Over Items').item.json.id }}` 인지 검사합니다.
+* **Mode:** `Expression`
+* **Number of Outputs:** `2`
+* **Output Index:** 에서 승인 여부를 검사합니다.
+    ```
+    {{ $json.query.action == "approve" && $json.query.id === $('Loop Over Items').item.json.id }}
+    ```
 
 
 ### Step 4: DB 저장 (Google Sheets)
