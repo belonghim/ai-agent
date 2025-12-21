@@ -53,7 +53,7 @@ AI가 도면/영수증에서 추출한 데이터(Session 6 결과)를 바로 DB�
 
   <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
 
-  <a href="{{ $execution.resumeUrl }}/?action=approve" 
+  <a href="{{ $execution.resumeUrl }}/?action=approve&id={{ $('Loop Over Items').item.json.id }}" 
      style="background-color: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
      ✅ 승인 및 저장
   </a>
