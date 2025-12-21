@@ -91,17 +91,11 @@ AI가 도면/영수증에서 추출한 데이터(Session 6 결과)를 바로 DB�
 * **Node 추가:** `Switch`
 * **Mode:** `Rules`
 * **Rule 1 (승인):**
-* Condition: `String`
-* Value 1: `{{ $execution.resumeUrlString }}` (또는 URL 경로 변수)
-* *Tip:* 더 쉬운 방법은 Wait 노드의 출력을 확인하는 것입니다. Wait 노드 바로 뒤에 연결하고 실행 결과를 보면 URL 정보가 넘어옵니다.
-* **간편 설정:** 그냥 Condition을 쓰지 않고, **Wait 노드의 Webhook Suffix 설정** 기능을 이용해 경로를 나눌 수도 있습니다.
 
-
-*(초보자를 위한 가장 쉬운 설정법)*
 1. **Wait 노드** 설정에서 `Webhook Suffix`를 `/`로 둡니다.
 2. HTML의 링크를 `.../approve` 대신 `...?action=approve` 로 바꿉니다.
 3. **Switch 노드**에서 `{{ $json.query.action }}` 값이 `approve` 인지 검사합니다.
-
+4. {{ $json.query.id }} 값이 {{ $('Loop Over Items').item.json.id }} 인지 검사합니다.
 
 
 ### Step 4: DB 저장 (Google Sheets)
