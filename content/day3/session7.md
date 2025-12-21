@@ -27,6 +27,50 @@ AI가 도면/영수증에서 추출한 데이터(Session 6 결과)를 바로 DB�
 
 ## 3. 단계별 상세 가이드
 
+### Step 0: 새 workflow 만들기
+
+**도면** 을 분석하는 workflow 를 만듭니다. Session 6 에서 만든 workflow 를 복사한 뒤 수정합니다.
+
+* **Duplicate** 이전 workflow 의 오른쪽 세점을 누른 뒤, `Duplicate` 를 수행합니다.
+* **구글 시트** 도면 분석을 위한 새 구글 시트를 공유한 구글 드라이브 안에 준비합니다.
+    * "Drawing link",	"Product code",	"Sectional area (mm²)",	"Approximate mass (kg/m)", "Drawing title", "File name", "Drawing number", "Date" 을 첫번째 행의 각 열에 입력합니다.
+* **Basic LLM Chain** 노드를 수정합니다.
+  * `Require Specific Output Format` 는 끄고, `Structured Output Parser` 는 제거합니다.
+  * `system message` 는 `너는 도면 OCR 텍스트를 단일 계층(Flat)의 Key-Value JSON으로 변환하는 데이터 정제 엔진이야.` 라고 입력합니다.
+  * `user message` 는 아래와 같습니다.
+  ```
+  # Task
+  제공된 여러 들여쓰기로 분리된 텍스트에서 **Target Keys**에 해당하는 값만 찾아 JSON으로 추출해.
+
+  # Rules
+  1. **Target Keys:**
+   - "Drawing link","Product code","Sectional area (mm²)","Approximate mass (kg/m)","Drawing title","File name","Drawing number","Date".
+  2. **Noise Filter:**위 키에 해당하지 않는 단순 치수(예: 159.5 mm)나 라벨은 절대 포함하지 마.
+  3. **Key-Value 는 다른 들여쓰기 일 수 없음:** Key와 Value가 서로 다른 줄인 경우, 반드시 Value는 Key의 바로 아랫줄이여야만 하고 같은 들여쓰기여야만 한다.
+
+  # Input Text
+  {{ $json.text }}
+  ```
+* **Structured Output Parser** 노드 `Generate From JSON Example` type 을 사용합니다. `JSON Example` 은 아래와 같습니다.
+    ```
+    [
+      {
+        "Product code": "STTHM205",
+        "Sectional area (mm²)": "1 256",
+        "Approximate mass (kg/m)": "0.9",
+        "Drawing title": "Profile properties - STTHM205",
+        "File name": "VERSION F - TDS - VistaClad Parts",
+        "Drawing number": "01",
+        "Date": "December 14, 2023",
+        "Page": "5 of 8",
+        "Scale": "NTS"
+      }
+    ]
+    ```
+* **Subject:** `[승인요청] {{ $json.output.product_code }} 도면 처리 건`
+* **HTML Message:** (아래 코드를 복사해서 붙여넣으세요)
+
+
 ### Step 1: 승인 요청 이메일 보내기 (SendAndWait email Node)
 
 **이메일(SMTP)** 노드를 사용합니다(또는 Slack). HTML을 지원하므로 예쁜 버튼을 만들 수 있습니다.
