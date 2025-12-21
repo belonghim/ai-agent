@@ -95,7 +95,7 @@ AI가 도면/영수증에서 추출한 데이터(Session 6 결과)를 바로 DB�
 1. **Wait 노드** 설정에서 `Webhook Suffix`를 `/`로 둡니다.
 2. HTML의 링크를 `.../approve` 대신 `...?action=approve` 로 바꿉니다.
 3. **Switch 노드**에서 `{{ $json.query.action }}` 값이 `approve` 인지 검사합니다.
-4. {{ $json.query.id }} 값이 {{ $('Loop Over Items').item.json.id }} 인지 검사합니다.
+4. **Switch 2 노드**에서 `{{ $json.query.id }}` 값이 `{{ $('Loop Over Items').item.json.id }}` 인지 검사합니다.
 
 
 ### Step 4: DB 저장 (Google Sheets)
