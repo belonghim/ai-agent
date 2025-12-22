@@ -61,7 +61,7 @@
     * *Put Output File in Field:* 는 `data` 라는 이름으로 바이너리를 전달합니다.
     * mp3 파일로 된 대화 레코딩 파일을 준비하세요.
 
-#### Step 2: 음성을 텍스트로 변환 (Whisper API)
+#### Step 3: 음성을 텍스트로 변환 (Whisper API)
 
 사람의 귀 역할을 하는 단계입니다.
 
@@ -78,7 +78,7 @@
 * **Input Data Field:** Step 1에서 넘어온 바이너리 데이터 속성명: `data`
 
 
-#### Step 3: 회의록 요약 및 구조화 (LLM)
+#### Step 4: 회의록 요약 및 구조화 (LLM)
 
 단순히 받아쓴 글은 줄글이라 읽기 힘듭니다. 이를 깔끔하게 정리합니다.
 
@@ -106,7 +106,7 @@
   * **Node 추가 및 연결** `OpenAI Chat Model`
 
 
-#### Step 4: 결과 내보내기
+#### Step 5: 결과 내보내기
 
   * **Node:** `Send Email` or `Slack`
   * **Content:** Step 3(LLM)에서 나온 `text`를 본문에 넣습니다.
