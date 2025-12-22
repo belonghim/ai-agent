@@ -44,7 +44,7 @@
 * *이 주소는 'OpenAI' 노드에서 사용됩니다.*
 
 
-#### Step 1: 오디오 파일 가져오기 (Trigger)
+#### Step 1: 오디오 파일 (Trigger)
 
 실습 편의를 위해 **Google Drive**나 **Telegram**을 많이 사용합니다. 지난 시간 연동해둔 **Google Drive**을 사용합니다. (또는 로컬 파일을 읽는 `Read Binary File` 노드도 사용 가능)
 
@@ -54,6 +54,12 @@
   * **Options:**
       * File Type: `Audio` 선택
       * **핵심:** 오디오 파일은 n8n 내부에서 **Binary Data**로 처리됨을 이해해야 합니다.
+
+#### Step 2: 오디오 파일 가져오기 (Download file)
+* **Google Drive Download** 노드에서 'Operation` 을 **Download** 를 선택합니다.
+    * **File:** 은 `By ID` 로 선택한 뒤, {{ $json.id }} 표현식으로 File 을 다운로드 받게 됩니다.
+    * *Put Output File in Field:* 는 `data` 라는 이름으로 바이너리를 전달합니다.
+    * mp3 파일로 된 대화 레코딩 파일을 준비하세요.
 
 #### Step 2: 음성을 텍스트로 변환 (Whisper API)
 
