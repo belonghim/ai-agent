@@ -44,34 +44,35 @@ AI가 도면/영수증에서 추출한 데이터(Session 6 결과)를 바로 DB�
 
   # Rules
   1. **Target Keys:**
-   - "Product code","Sectional area (mm²)","Approximate mass (kg/m)","Drawing title","File name","Drawing number","Date".
+   - "Product code","Sectional area (mm²)","Approximate mass (kg/m)","Drawing title","File name","Drawing number","Date","Page","Scale".
   2. **Noise Filter:**위 키에 해당하지 않는 단순 치수(예: 159.5 mm)나 라벨은 절대 포함하지 마.
   3. **Key-Value 는 다른 들여쓰기 일 수 없음:** Key와 Value가 서로 다른 줄인 경우, 반드시 Value는 Key의 바로 아랫줄이여야만 하고 같은 들여쓰기여야만 한다.
 
   # Input Text
   {{ $json.text }}
   ```
+
 * **Code in JavaScript** 노드를 `Basic LLM Chain` 뒤에 추가합니다.
     ```
-   // 입력된 모든 아이템의 개수만큼 반복 (인덱스 i 사용)
-   for (let i = 0; i < items.length; i++) {
-     try {
-       let item = items[i];
-       let fileId = $('Download file').all()[i].json.id;
-       let drawingLink = fileId ? `https://drive.google.com/file/d/${fileId}` : "File ID not found";
+    // 입력된 모든 아이템의 개수만큼 반복 (인덱스 i 사용)
+    for (let i = 0; i < items.length; i++) {
+      try {
+        let item = items[i];
+        let fileId = $('Download file').all()[i].json.id;
+        let drawingLink = fileId ? `https://drive.google.com/file/d/${fileId}` : "File ID not found";
 
-       item.json = {
-         "Drawing link": drawingLink,
-         ...item.json
-       };
+        item.json = {
+          "Drawing link": drawingLink,
+          ...item.json
+        };
 
-     } catch (error) {
-       console.error("처리 에러:", error);
-       items[i].json.error = "처리 실패: " + error.message;
-     }
-   }
+      } catch (error) {
+        console.error("처리 에러:", error);
+        items[i].json.error = "처리 실패: " + error.message;
+      }
+    }
 
-   return items;
+    return items;
     ```
 
 
@@ -83,20 +84,17 @@ AI가 도면/영수증에서 추출한 데이터(Session 6 결과)를 바로 DB�
 * **From Email:** 본인 이메일
 * **To Email:** 본인 이메일 (테스트용)
 * **Subject:** `[승인요청] {{ $json.output.product_code }} 도면 처리 건`
-* **HTML Message:** (아래 코드를 복사해서 붙여넣으세요)
-
+* **HTML Message:** (Expression)
 
 ```html
 <div style="font-family: sans-serif; border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
   <h2 style="color: #333;">📋 승인 요청</h2>
   <p>AI가 분석한 도면의 결과는 아래와 같습니다. DB에 저장을 승인하시겠습니까?</p>
-  
-  <ul style="background-color: #f9f9f9; padding: 15px; list-style: none;">
-    <li><b>Product code:</b> {{ $json.output.product_code }}</li>
-    <li><b>Date:</b> {{ $json.output.date }}</li>
-    <li><b>Approximate mass:</b> {{ $json.output.approximate_mass }}</li>
-    <li><b>Sectional area:</b> {{ $json.output.sectional_area }}</li>
-    <li><b>Drawing link:</b> https://drive.google.com/file/d/{{ $('Download file').item.json.id }}</li>
+
+<ul style="background-color: #f9f9f9; padding: 15px; list-style: none;">
+    {{ Object.entries($json).map(([key, value]) => `
+      <li><b>${key}:</b> ${value}</li>
+    `).join('') }}
   </ul>
 
   <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
@@ -113,10 +111,9 @@ AI가 도면/영수증에서 추출한 데이터(Session 6 결과)를 바로 DB�
      ❌ 반려
   </a>
 </div>
-
 ```
 
-> **💡 핵심 포인트:** `{{ $execution.resumeUrl }}`은 n8n이 자동으로 만들어주는 **"이 워크플로우를 깨우는 주소"**입니다. 뒤에 `/approve`와 `/reject`를 붙여서 경로를 구분합니다.
+> **💡 핵심 포인트:** `{{ $execution.resumeUrl }}`은 n8n이 자동으로 만들어주는 **"이 워크플로우를 깨우는 주소"**입니다. 뒤에 `/?action=approve`와 `/?action=reject`를 붙여서 동작을 구분합니다.
 
 
 ### Step 2: 사람 기다리기 (Wait Node)
@@ -141,23 +138,50 @@ AI가 도면/영수증에서 추출한 데이터(Session 6 결과)를 바로 DB�
 * **Number of Outputs:** `2`
 * **Output Index:** 에서 승인 여부를 검사합니다.
     ```
-    {{ $json.query.action == "approve" && $json.query.id === $('Loop Over Items').item.json.id }}
+    {{ $json.query.action == "approve" && $json.query.id == $('Loop Over Items').item.json.id }}
     ```
 
 
 ### Step 4: DB 저장 (Google Sheets)
 
-* **Switch 노드**의 **첫 번째 출력(승인)**에 `Google Sheets` 노드를 연결합니다.
-* (Session 6에서 만든 '행 추가' 노드 그대로 사용)
+* **Switch 노드**의 **출력 1(승인)**에 `Google Sheets` 노드를 연결합니다.
+* **Append or update row in sheet** 노드에서 `Document` 와 `Sheet` 는 도면용으로 만든 시트를 선택합니다.
+    * **Mapping Column Mode** 는 `Map Automatically` 로 선택합니다.
+    * **Column to match on** 는 `Draing link` 로 선택합니다.
+
+* **출력 0(반려)**에는 아무것도 연결하지 않거나, `Slack/Email` 노드를 연결해 "취소되었습니다" 알림을 보냅니다.
 
 
-* **두 번째 출력(반려)**에는 아무것도 연결하지 않거나, `Slack/Email` 노드를 연결해 "취소되었습니다" 알림을 보냅니다.
+### Step 5: Respond to Webhook 노드(브라우저에 "처리되었습니다" 메시지 표시)
+
+* **Respond to Webhook**노드를 **출력 1(승인)** 과 **출력 2(반려)** 에 각각 만들어 줍니다.
+* **출력 1(승인) 의 Respond to Webhook** 노드에는 아래와 같이 입력합니다. (Expression)
+    ```
+    <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
+    <h1 style="color: #4CAF50;">✅ 처리되었습니다.</h1>
+    <p>{{ $('Code in JavaScript').item.json['Drawing link'] }}</p>
+    <p>데이터가 성공적으로 구글 시트에 저장되었습니다.</p>
+    <button onclick="window.close()" style="padding: 10px 20px; cursor: pointer;">창 닫기</button>
+    </div>
+    ```
+    * **Respose Header** 를 추가하고, `Content-Type` 은 `text/html` 로 설정합니다.
+
+* **출력 0(반려) 의 Respond to Webhook1** 노드에는 아래와 같이 입력합니다. (Expression)
+    ```
+    <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
+    <h1 style="color: #4CAF50;">❌ 반려 되었습니다.</h1>
+    <p>{{ $('Code in JavaScript').item.json['Drawing link'] }}</p>
+    <button onclick="window.close()" style="padding: 10px 20px; cursor: pointer;">창 닫기</button>
+    </div>
+    ```
+    * **Respose Header** 를 추가하고, `Content-Type` 은 `text/html` 로 설정합니다.
+
 
 ---
 
 ## 4. [옵션] Google Chat으로 알림 받기
 
-이메일 대신 사내 메신저인 **Google Chat**을 쓰고 싶다면 더 간단합니다.
+이메일 대신 메신저인 **Google Chat**도 가능합니다.
 
 1. **Google Chat 스페이스(방)** 생성.
 2. 스페이스 이름 클릭 -> **앱 및 통합** -> **Webhook 관리**.
@@ -169,7 +193,7 @@ AI가 도면/영수증에서 추출한 데이터(Session 6 결과)를 바로 DB�
 * **Message:**
 ```text
 [승인요청] {{ $json.project_name }}
-승인: {{ $execution.resumeUrl }}?action=approve
+승인: {{ $execution.resumeUrl }}?action=approve&id={{ $('Loop Over Items').item.json.id }}
 반려: {{ $execution.resumeUrl }}?action=reject
 
 ```
@@ -190,7 +214,7 @@ AI가 도면/영수증에서 추출한 데이터(Session 6 결과)를 바로 DB�
 
 ---
 
-이 가이드로 진행하시면 복잡한 인증 절차 없이 **"메일 발송 -> 승인 대기 -> 처리"**라는 고급 워크플로우를 10분 안에 구현하실 수 있습니다.
+이 가이드로 진행하시면 복잡한 인증 절차 없이 **"메일 발송 -> 승인 대기 -> 처리"**라는 고급 워크플로우를 구현하실 수 있습니다.
 
 
 ---
