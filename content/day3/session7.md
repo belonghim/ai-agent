@@ -44,7 +44,7 @@ AI가 도면/영수증에서 추출한 데이터(Session 6 결과)를 바로 DB�
 
   # Rules
   1. **Target Keys:**
-   - "Drawing link","Product code","Sectional area (mm²)","Approximate mass (kg/m)","Drawing title","File name","Drawing number","Date".
+   - "Product code","Sectional area (mm²)","Approximate mass (kg/m)","Drawing title","File name","Drawing number","Date".
   2. **Noise Filter:**위 키에 해당하지 않는 단순 치수(예: 159.5 mm)나 라벨은 절대 포함하지 마.
   3. **Key-Value 는 다른 들여쓰기 일 수 없음:** Key와 Value가 서로 다른 줄인 경우, 반드시 Value는 Key의 바로 아랫줄이여야만 하고 같은 들여쓰기여야만 한다.
 
@@ -77,7 +77,7 @@ AI가 도면/영수증에서 추출한 데이터(Session 6 결과)를 바로 DB�
 
 ### Step 1: 승인 요청 이메일 보내기 (SendAndWait email Node)
 
-**이메일(SMTP)** 노드를 사용합니다(또는 Slack). HTML을 지원하므로 예쁜 버튼을 만들 수 있습니다.
+**이메일(SMTP)** 노드를 추가합니다(또는 Slack). HTML을 지원하므로 예쁜 버튼을 만들 수 있습니다.
 
 * **Node 추가** `Send Email` (n8n 기본 노드)
 * **From Email:** 본인 이메일
