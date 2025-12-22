@@ -76,7 +76,7 @@
 
 단순히 받아쓴 글은 줄글이라 읽기 힘듭니다. 이를 깔끔하게 정리합니다.
 
-  * **Node:** `OpenAI` (Chat Model)
+  * **Node:** `Basic LLM Chain`
   * **Prompt (System):**
     ```text
     너는 전문 속기사이자 프로젝트 매니저야.
@@ -96,6 +96,9 @@
     ```
   * **Prompt (User):** Expression 모드 사용
       * `{{ $json.text }}` (이전 Whisper 노드에서 나온 텍스트 결과)
+
+  * **Node 추가 및 연결** `OpenAI Chat Model`
+
 
 #### Step 4: 결과 내보내기
 
