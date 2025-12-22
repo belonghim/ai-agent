@@ -118,7 +118,7 @@
 #### Step 5: 결과 내보내기
 
 * **Node:** `Send Email` or `Slack`
-* **Subject (Expression):** [n8n 알리미] 회의 녹음본 {{$('Download file').item.json.name}} 요약 정리
+* **Subject (Expression):** `[n8n 알리미] 회의 녹음본 {{$('Download file').item.json.name}} 요약 정리`
 * **HTML (Expression):** Step 3(LLM)에서 나온 text 를 포함한 아래내용을 `HTML` 에 넣습니다.
   ```html
   {{$('Download file').item.json.name}} : https://drive.google.com/file/d/{{ $('Download file').item.json.id }}
