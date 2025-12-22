@@ -173,7 +173,7 @@ return result;
 
 ---
 
-### Part A. Google Drive & Sheets 연동 준비 (Service Account 방식)
+### 준비 Part A. Google Drive & Sheets 연동 준비 (Service Account 방식)
 
 서버나 백그라운드 자동화에서 가장 안정적인 **서비스 계정(Service Account)** 방식입니다.
 
@@ -238,7 +238,7 @@ return result;
 
 ---
 
-### Part B. 메일 전송 준비 ( 알람 발송용. Slack 등으로 대체 가능)
+### 준비 Part B. 메일 전송 준비 ( 알람 발송용. Slack 등으로 대체 가능)
 
 "알람"을 보내는 목적으로 **Gmail SMTP(앱 비밀번호)** 방식을 사용합니다.
 
