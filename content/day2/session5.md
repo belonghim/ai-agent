@@ -36,35 +36,124 @@ n8n의 최신 `AI Agent` 노드는 LangChain 기반으로 동작합니다.
 
 #### Step 1: 도구(Tools) 준비 (Agent의 손과 발)
 
-에이전트 노드에 연결할 3가지 도구를 준비합니다.
+에이전트 노드에 연결할 3가지 도구를 준비합니다. 3가지 모두 `Call n8n Workflow` 도구를 사용하여 서브 워크플로우를 호출합니다.
 
-1.  **Information Tool (검색):**
+1.  **google_search (검색):**
       * `Google Search` 노드 연결.
       * *용도:* 최신 정보를 실시간으로 긁어오는 역할.
-2.  **Web Scraper Tool (읽기):**
-      * `Get Webpage Content` (HTML -\> Text 변환) 노드 연결.
+2.  **web_scraper (읽기):**
+      * `HTTP Request` 와 `HTML` (HTML -\> Text 변환) 노드 연결.
       * *용도:* 검색된 URL의 상세 본문을 읽는 역할.
-3.  **Action Tool (보고):**
-      * **★핵심 기술:** `Call n8n Workflow` 도구 사용.
-      * 별도의 서브 워크플로우(Slack 전송용)를 만들고, 이를 메인 에이전트가 **함수처럼 호출**하게 만듭니다.
+3.  **email_sender (보고):**
+      * `Send Email` 노드 연결.
+      * *용도:* 보고서를 제출하는 역할.
+* 3가지 도구 모두 별도의 서브 워크플로우(Slack 전송용)를 통해 만들어지고, 이를 메인 에이전트가 **함수처럼 호출**하게 됩니다.
 
-##### Step 1.1: 서브 워크플로우 만들기 (기능 구현)
+##### Step 1.1: Sub_Google_Search 서브 워크플로우 만들기
 
-AI가 호출할 \*\*'심부름센터(Sub Workflow)'\*\*를 만듭니다.
+AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Google_Search** 를 만듭니다.
 
 1.  **새 워크플로우 생성:**
 
-      * n8n 대시보드에서 `Add workflow`를 눌러 새 창을 엽니다.
-      * 이름을 명확하게 짓습니다. (예: `Sub_Send_Slack_Report`)
+* n8n 대시보드에서 `Add workflow`를 눌러 새 창을 엽니다.
+* 이름을 명확하게 짓습니다. `Sub_Google_Search`
 
 2.  **Trigger 설정 (받는 곳):**
 
-      * 노드 검색창에 `Execute Workflow Trigger`를 검색하여 추가합니다.
-          * *(구버전 n8n에서는 `Workflow Trigger`라는 이름일 수 있습니다.)*
-      * 이 노드는 \*\*"누군가 나를 부르면(Call) 실행된다"\*\*는 뜻입니다.
-      * **[중요]** AI가 데이터를 넘겨줄 때 어떤 변수명을 쓸지 정해야 합니다. 우리는 `text`라는 변수에 내용을 담아 보낸다고 가정합시다.
+* 노드 검색창에 `Execute Workflow Trigger`를 검색하여 추가합니다.
+* 이 노드는 \*\*"누군가 나를 부르면(Call) 실행된다"\*\*는 뜻입니다.
+* **[중요]** AI가 데이터를 넘겨줄 때 어떤 변수명을 쓸지 정해야 합니다. `keyword`라는 변수에 내용을 담아 보낸다고 가정합니다.
 
 3.  **Action 설정 (하는 일):**
+
+* **Node:** `HTTP Request`
+* **Method:** `GET`
+* **URL:** `https://www.googleapis.com/customsearch/v1`
+* **Authentication:** `None` (API Key를 파라미터로 보낼 것이므로 여기선 끕니다.)
+
+###### Query Parameters 설정 (핵심)
+
+**`Send Query Parameters`** 스위치를 켜고, 아래 3가지 값을 추가합니다.
+
+| Name | Value | 설명 |
+| --- | --- | --- |
+| **`q`** | `{{ $json.keyword }}` | 검색어 (이전 노드에서 받아온 값 매핑) |
+| **`cx`** | `0123456789...` | **검색 엔진 ID** (Programmable Search Engine에서 복사한 값) |
+| **`key`** | `AIzaSy...` | **GCP API Key** (Google Cloud Platform에서 발급받은 키) |
+
+> **팁:** `num` 파라미터를 추가하고 값을 `3`이나 `5`로 주면 검색 결과 개수를 제한할 수 있습니다. (기본값은 10개)
+
+4.  **저장(Save):**
+
+* 워크플로우를 반드시 **저장**해야 다른 워크플로우에서 불러올 수 있습니다.
+
+##### Step 1.2: Sub_Web_Scraper 서브 워크플로우 만들기
+
+AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭니다.
+
+1.  **새 워크플로우 생성:**
+
+* n8n 대시보드에서 `Add workflow`를 눌러 `Sub_Web_Scraper` workflow 를 만듭니다.
+* 아래 3개 노드를 순서대로 연결하세요.
+
+**[Flow 구조]**
+`Execute Workflow Trigger` → `HTTP Request` → `HTML Extract`
+
+2.  **Trigger 설정:**
+
+* 노드 검색창에 `Execute Workflow Trigger`를 검색하여 추가합니다.
+* `url`라는 변수에 내용을 담아 보낸다고 가정합니다.
+
+3.  **HTTP Request (접속하기)**
+
+* **Method:** `GET`
+* **URL:** `{{ $json.url }}` (Expression 모드)
+* *(설명: 트리거로 들어온 url 주소로 접속합니다.)*
+
+
+* **Authentication:** `None` (일반 웹페이지는 인증 불필요)
+
+4. **HTML Extract (알맹이만 꺼내기)**
+
+* `HTTP Request`의 결과는 지저분한 HTML 코드(`<div>...</div>`) 덩어리입니다. 여기서 글자만 발라내야 AI가 읽을 수 있습니다.
+* **Source Data:** `JSON`
+* **JSON Property:** `data` (HTTP Request가 가져온 내용이 담긴 변수명)
+* **Extraction Values (추출 설정):**
+* **Key:** `content` (결과를 담을 변수 이름)
+* **CSS Selector:** `p` (본문 단락만 가져오기)
+* **Return Value:** `Text` (**가장 중요!** HTML 태그 제거)
+
+* **"사람인 척" 위장하기 (User-Agent 설정)**
+* Header (헤더) 추가
+* **Send Headers:** 스위치 **ON**
+* **Header Parameters** 아래 **[Add Parameter]** 클릭:
+* **Name:** `User-Agent`
+* **Value:** `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36`
+
+* **[하나 더 추가]**
+* **Name:** `Accept`
+* **Value:** `text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8`
+
+
+
+6.  **저장(Save):**
+
+* **저장** 합니다.
+
+##### Step 1.3: Sub_Web_Scraper 서브 워크플로우 만들기
+
+AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭니다.
+
+1.  **새 워크플로우 생성:**
+
+* n8n 대시보드에서 `Add workflow`를 눌러 `Sub_Web_Scraper` workflow 를 만듭니다.
+
+2.  **Trigger 설정:**
+
+* 노드 검색창에 `Execute Workflow Trigger`를 검색하여 추가합니다.
+* `url`라는 변수에 내용을 담아 보낸다고 가정합니다.
+
+3.  **Action 설정:**
 
       * `Slack` 노드를 추가하고 Trigger와 연결합니다.
       * **Operation:** `Post a Message`
@@ -76,7 +165,7 @@ AI가 호출할 \*\*'심부름센터(Sub Workflow)'\*\*를 만듭니다.
 
 4.  **저장(Save):**
 
-      * 워크플로우를 반드시 **저장**해야 다른 워크플로우에서 불러올 수 있습니다. (활성화 `Active` 스위치도 켜두는 것이 좋습니다.)
+* **저장** 합니다.
 
 -----
 
