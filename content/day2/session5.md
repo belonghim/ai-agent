@@ -57,6 +57,10 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Google_Search** 를 만듭
 
 * n8n 대시보드에서 `Add workflow`를 눌러 새 창을 엽니다.
 * 이름을 명확하게 짓습니다. `Sub_Google_Search`
+* 아래 **3개 노드**를 연결합니다.
+
+> **[전체 흐름]**
+> `Execute Workflow Trigger` → `HTTP Request` → **`Code` (다이어트)**
 
 2.  **Trigger 설정 (받는 곳):**
 
@@ -83,7 +87,29 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Google_Search** 를 만듭
 
 > **팁:** `num` 파라미터를 추가하고 값을 `3`이나 `5`로 주면 검색 결과 개수를 제한할 수 있습니다. (기본값은 10개)
 
-4.  **저장(Save):**
+4. **Code 노드:**
+* `HTTP Request` 노드 바로 뒤에 붙여서, 복잡한 JSON을 심플하게 바꿉니다.
+* 아래 코드를 복사해서 넣으세요.
+
+```javascript
+const items = $input.first().json.items || [];
+
+// 검색 결과가 없을 경우
+if (items.length === 0) {
+  return { result: "검색 결과가 없습니다. 키워드를 변경해서 다시 시도하세요." };
+}
+
+// JSON을 AI가 읽기 쉬운 '텍스트'로 변환
+const textOutput = items.map((item, index) => {
+  return `[기사 ${index + 1}]\n- 제목: ${item.title}\n- 요약: ${item.snippet}\n- 링크: ${item.link}`;
+}).join("\n\n");
+
+// 'result'라는 이름의 단순 텍스트로 반환
+return { result: textOutput };
+```
+
+
+5.  **저장(Save):**
 
 * 워크플로우를 반드시 **저장**해야 다른 워크플로우에서 불러올 수 있습니다.
 
@@ -116,25 +142,43 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
 4. **HTML Extract (알맹이만 꺼내기)**
 
 * `HTTP Request`의 결과는 지저분한 HTML 코드(`<div>...</div>`) 덩어리입니다. 여기서 글자만 발라내야 AI가 읽을 수 있습니다.
-* **Source Data:** `JSON`
-* **JSON Property:** `data` (HTTP Request가 가져온 내용이 담긴 변수명)
-* **Extraction Values (추출 설정):**
-* **Key:** `content` (결과를 담을 변수 이름)
-* **CSS Selector:** `p` (본문 단락만 가져오기)
-* **Return Value:** `Text` (**가장 중요!** HTML 태그 제거)
+    * **Source Data:** `JSON`
+    * **JSON Property:** `data` (HTTP Request가 가져온 내용이 담긴 변수명)
+    * **Extraction Values (추출 설정):**
+    * **Key:** `content` (결과를 담을 변수 이름)
+    * **CSS Selector:** `p` (본문 단락만 가져오기)
+    * **Return Value:** `Text` (**가장 중요!** HTML 태그 제거)
 
 * **"사람인 척" 위장하기 (User-Agent 설정)**
-* Header (헤더) 추가
-* **Send Headers:** 스위치 **ON**
-* **Header Parameters** 아래 **[Add Parameter]** 클릭:
-* **Name:** `User-Agent`
-* **Value:** `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36`
+    * Header (헤더) 추가
+    * **Send Headers:** 스위치 **ON**
+    * **Header Parameters** 아래 **[Add Parameter]** 클릭:
+    * **Name:** `User-Agent`
+    * **Value:** `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36`
 
 * **[하나 더 추가]**
-* **Name:** `Accept`
-* **Value:** `text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8`
+    * **Name:** `Accept`
+    * **Value:** `text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8`
 
+5. **(옵션) Code 노드 추가** (Scraper 데이터 줄이기)
 
+* 웹페이지 전체를 다 긁어오면 불필요한 약관, 댓글, 광고까지 딸려와서 수천 토큰을 잡아먹습니다.
+**서브 워크플로우(`Sub_Web_Scraper`)**를 수정해서 **글자 수를 강제로 자르세요.**
+
+1. `HTML` (또는 HTTP Request) 노드 뒤에 **`Code` 노드**를 하나 추가합니다.
+2. 아래 코드를 붙여넣습니다. (텍스트를 5,000자까지만 자릅니다.)
+
+```javascript
+// 입력된 텍스트가 있으면 가져오고, 없으면 빈 문자열
+const content = $input.first().json.text || "";
+
+// 앞에서부터 5000글자만 자르고, 뒤에 '...생략됨' 붙이기
+const truncated = content.length > 5000 ? content.substring(0, 5000) + " ...(내용이 너무 길어 생략됨)" : content;
+
+return {
+  text: truncated
+};
+```
 
 6.  **저장(Save):**
 
