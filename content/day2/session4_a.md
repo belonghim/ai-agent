@@ -40,7 +40,7 @@
 2. **New Model Service** 클릭 -> 다운로드한 whisper 모델 선택
 3. **Container port** 임의 지정 (예: 38888 포트)
 4. **Create Service** 클릭
-5. **Open Service Details** 클릭 후, **Endpoint 확인:** `http://localhost:38888/inference`
+5. **Open Service Details** 클릭 후, **Endpoint 확인:** `http://host.containers.internal:38888/inference`
 * *이 주소는 'OpenAI' 노드에서 사용됩니다.*
 
 
