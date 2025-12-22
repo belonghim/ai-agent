@@ -51,24 +51,28 @@ AI가 도면/영수증에서 추출한 데이터(Session 6 결과)를 바로 DB�
   # Input Text
   {{ $json.text }}
   ```
-* **Structured Output Parser** 노드 `Generate From JSON Example` type 을 사용합니다. `JSON Example` 은 아래와 같습니다.
+* **Code in JavaScript** 노드를 `Basic LLM Chain` 뒤에 추가합니다.
     ```
-    [
-      {
-        "Product code": "STTHM205",
-        "Sectional area (mm²)": "1 256",
-        "Approximate mass (kg/m)": "0.9",
-        "Drawing title": "Profile properties - STTHM205",
-        "File name": "VERSION F - TDS - VistaClad Parts",
-        "Drawing number": "01",
-        "Date": "December 14, 2023",
-        "Page": "5 of 8",
-        "Scale": "NTS"
-      }
-    ]
+   // 입력된 모든 아이템의 개수만큼 반복 (인덱스 i 사용)
+   for (let i = 0; i < items.length; i++) {
+     try {
+       let item = items[i];
+       let fileId = $('Download file').all()[i].json.id;
+       let drawingLink = fileId ? `https://drive.google.com/file/d/${fileId}` : "File ID not found";
+
+       item.json = {
+         "Drawing link": drawingLink,
+         ...item.json
+       };
+
+     } catch (error) {
+       console.error("처리 에러:", error);
+       items[i].json.error = "처리 실패: " + error.message;
+     }
+   }
+
+   return items;
     ```
-* **Subject:** `[승인요청] {{ $json.output.product_code }} 도면 처리 건`
-* **HTML Message:** (아래 코드를 복사해서 붙여넣으세요)
 
 
 ### Step 1: 승인 요청 이메일 보내기 (SendAndWait email Node)
