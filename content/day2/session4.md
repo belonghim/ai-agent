@@ -124,7 +124,7 @@ return result;
 
 ---
 
-#### Part A. Google Drive & Sheets & Gmail 연동 준비 (Service Account 방식)
+#### Part A. Google Drive & Sheets 연동 준비 (Service Account 방식)
 
 서버나 백그라운드 자동화에서 가장 안정적인 **서비스 계정(Service Account)** 방식입니다.
 
