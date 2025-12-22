@@ -49,6 +49,14 @@ n8n의 최신 `AI Agent` 노드는 LangChain 기반으로 동작합니다.
       * *용도:* 보고서를 제출하는 역할.
 * 3가지 도구 모두 별도의 서브 워크플로우(Slack 전송용)를 통해 만들어지고, 이를 메인 에이전트가 **함수처럼 호출**하게 됩니다.
 
+##### 💡 팁: 왜 굳이 서브 워크플로우로 만드나요?
+
+1.  **재사용성:** 서브 워크플로우는 다른 에이전트나 자동화에서도 계속 불러다 쓸 수 있습니다.
+2.  **복잡도 관리:** 메인 워크플로우가 너무 길어지는 것을 방지합니다.
+3.  **보안:** 슬랙 API 키나 채널 ID 같은 민감한 정보를 에이전트 프롬프트에 직접 노출하지 않고 숨길 수 있습니다.
+4.  **가공성:** 복잡한 데이터를 가공하여 의도하는 목적에 맞게 AI 에게 쥐어 줄 수 있습니다.
+
+
 ##### Step 1.1: Sub_Google_Search 서브 워크플로우 만들기
 
 AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Google_Search** 를 만듭니다.
@@ -172,8 +180,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
 // 입력된 텍스트가 있으면 가져오고, 없으면 빈 문자열
 const content = $input.first().json.text || "";
 
-// 앞에서부터 5000글자만 자르고, 뒤에 '...생략됨' 붙이기
-const truncated = content.length > 5000 ? content.substring(0, 5000) + " ...(내용이 너무 길어 생략됨)" : content;
+// 앞에서부터 9000글자만 자르고, 뒤에 '...생략됨' 붙이기
+const truncated = content.length > 9000 ? content.substring(0, 9000) + " ...(내용이 너무 길어 생략됨)" : content;
 
 return {
   text: truncated
@@ -223,7 +231,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 #### Step 2: AI Agent 노드 설정 (Brain)
 
   * **Node:** `AI Agent` (LangChain 기반)
-  * **Model:** `OpenAI Chat Model` (gpt-4o 권장 - 추론 능력이 좋아야 함)
+  * **Model:** `OpenAI Chat Model`
   * **Prompt Instructions (System):**
     ```text
     당신은 월가 출신의 노련한 투자 애널리스트입니다.
@@ -248,42 +256,78 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 
     ```
 
-##### Step 2.1: 메인 워크플로우에 연결하기 (도구 쥐여주기)
+##### Step 2.1: 메인 워크플로우에 google_search 연결하기 (도구 쥐여주기)
 
 이제 다시 **AI Agent가 있는 메인 워크플로우**로 돌아옵니다.
 
 1.  **도구 추가:**
 
-      * `AI Agent` 노드의 **Tools** 항목에서 `+` 버튼을 누릅니다.
-      * `Call n8n Workflow Tool` (또는 `Execute Workflow`)을 선택합니다.
+* `AI Agent` 노드의 **Tools** 항목에서 `+` 버튼을 누릅니다.
+* `Call n8n Workflow Tool` 을 선택합니다.
 
-2.  **도구 설정 (가장 중요 ★):**
-    이 부분 설정이 AI가 도구를 잘 쓰냐 못 쓰냐를 결정합니다.
+2.  **도구 설정:**
+이 부분 설정이 AI가 도구를 잘 쓰냐 못 쓰냐를 결정합니다.
 
-      * **Source:** `Database` 선택 (저장된 워크플로우 불러오기)
-      * **Workflow:** 방금 만든 `Sub_Send_Slack_Report`를 선택합니다.
-      * **Name:** `slack_sender` (AI가 인식할 도구의 이름입니다. 영문 소문자 권장)
-      * **Description (설명서):** **여기가 핵심입니다.** AI에게 이 도구를 언제, 어떻게 써야 하는지 자연어로 설명해줘야 합니다.
-        ```text
-        Use this tool when you need to send a final report or message to Slack.
-        The input must be a JSON object with a "text" field containing the message content.
-        Example: { "text": "Here is the summary..." }
-        ```
+* **Source:** `Database` 선택 (저장된 워크플로우 불러오기)
+* **Workflow:** 우리가 만든 `Sub_Goole_Search`를 선택합니다.
+* **Workflow Inputs:** `keyword` 오른쪽의 반짝이는 별 아이콘을 누릅니다. (AI 가 알아서 입력을 넣게 됩니다.)
+* **Name:** `google_search` (AI가 인식할 도구의 이름입니다. 영문 소문자 권장)
+* **Description (설명서):** **여기가 핵심입니다.** AI에게 이 도구를 언제, 어떻게 써야 하는지 자연어로 설명해줘야 합니다.
+    ```text
+    Use this tool to search for real-time information, news, or stock prices on the internet.
+    The input must be a JSON object with a "keyword" field.
+    Example: { "keyword": "Nvidia stock news today" }
+    ```
 
 3. 작동 원리 (설명용)
     아래와 같이 비유하면 이해가 빠릅니다.
 
     1.  **상황:** 에이전트(인턴 사원)가 리포트 작성을 마쳤습니다.
     2.  **판단:** 에이전트는 본인의 도구 상자를 봅니다.
-          * *"어? `slack_sender`라는 도구가 있네? 설명서를 보니 '리포트 보낼 때 쓰라'고 되어있고, `text`라는 봉투에 내용을 담아주면 된다고 하네."*
-    3.  **실행:** 에이전트는 `Sub_Send_Slack_Report` 워크플로우를 호출하면서 `{ "text": "오늘 엔비디아 주가는..." }` 라는 데이터를 던집니다.
-    4.  **결과:** 서브 워크플로우가 대신 슬랙을 보내고, 에이전트에게 "성공했어\!"라고 신호를 줍니다.
+          * *"어? `google_search`라는 도구가 있네? 설명서를 보니 '실시간 정보 검색에 써라'고 되어있고, `keyword`라는 봉투에 내용을 담아주면 된다고 하네."*
+    3.  **실행:** 에이전트는 `Sub_Goole_Search` 워크플로우를 호출하면서 `{ "keyword": "오늘 엔비디아 주가 뉴스" }` 라는 데이터를 던집니다.
+    4.  **결과:** 서브 워크플로우가 대신 구글 검색을 전달하고, 에이전트에게 "성공했어\!"라고 신호를 줍니다.
 
-##### 💡 팁: 왜 굳이 서브 워크플로우로 만드나요?
+##### Step 2.2: 메인 워크플로우에 web_scraper 연결하기 (도구 쥐여주기)
 
-1.  **재사용성:** 이 '슬랙 보내기' 워크플로우는 다른 에이전트나 자동화에서도 계속 불러다 쓸 수 있습니다.
-2.  **복잡도 관리:** 메인 워크플로우가 너무 길어지는 것을 방지합니다.
-3.  **보안:** 슬랙 API 키나 채널 ID 같은 민감한 정보를 에이전트 프롬프트에 직접 노출하지 않고 숨길 수 있습니다.
+1.  **도구 추가:**
+
+* `AI Agent` 노드의 **Tools** 항목에서 `+` 버튼을 누릅니다.
+* `Call n8n Workflow Tool` 을 선택합니다.
+
+2.  **도구 설정:**
+
+* **Source:** `Database` 선택
+* **Workflow:** `Sub_Web_Scraper`를 선택합니다.
+* **Workflow Inputs:** `url` 오른쪽의 반짝이는 별 아이콘을 누릅니다.
+* **Name:** `web_scraper`
+* **Description (설명서):**
+    ```text
+    Use this tool to read/scrape the full content of a specific webpage.
+    Useful when you need detailed information from a search result link.
+    The input must be a JSON object with a "url" field.
+    Example: { "url": "https://www.bbc.com/news/..." }
+    ```
+
+##### Step 2.3: 메인 워크플로우에 email_sender 연결하기 (도구 쥐여주기)
+
+1.  **도구 추가:**
+
+* `AI Agent` 노드의 **Tools** 항목에서 `+` 버튼을 누릅니다.
+* `Call n8n Workflow Tool` 을 선택합니다.
+
+2.  **도구 설정:**
+
+* **Source:** `Database` 선택
+* **Workflow:** `Sub_Send_Email_Report`를 선택합니다.
+* **Workflow Inputs:** `text` 와 `subject` 오른쪽의 반짝이는 별 아이콘을 누릅니다.
+* **Name:** `email_sender`
+* **Description (설명서):**
+    ```text
+    Use this tool to send a final report via email.
+    The input must be a JSON object with "subject" and "text" fields.
+    Example: { "subject": "Nvidia Analysis Report", "text": "Here is the summary..." }
+    ```
 
 -----
 
@@ -292,7 +336,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 이 부분이 '단순 자동화'와 '에이전트'의 차이점입니다.
 
   * **자율적 판단:** 에이전트는 한 번 검색 후 정보가 부족하다고 판단하면(예: 검색 결과가 광고뿐임), 사용자가 시키지 않아도 **스스로 검색어를 수정하여 다시 도구를 실행**합니다.
-  * **설정:** AI Agent 노드의 옵션 중 `Max Iterations`(최대 반복 횟수)를 5\~10회로 넉넉히 주어, 에이전트가 충분히 생각하고 시도할 시간을 줍니다.
+  * **설정:** AI Agent 노드의 옵션 중 `Max Iterations`(최대 반복 횟수)를 5회로 넉넉히 주어, 에이전트가 충분히 생각하고 시도할 시간을 줍니다.
 
 #### Step 4: 결과 확인 및 디버깅
 
