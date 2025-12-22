@@ -10,7 +10,7 @@ n8n에서 AI를 다루는 방식은 크게 두 가지가 있습니다. 이번 �
 * **AI Agent (다음 시간):** 도구를 사용하고 스스로 판단하여 반복 수행하는 구조. (예: 검색해서 정보 찾기)
 
 **[필수 준비물]**
-* **Model 노드:** `OpenAI Chat Model` (또는 기타 LLM)
+* **Model 노드:** `OpenAI Chat Model` (어제 만든 Model Service)
 * **Chain 노드:** `Basic LLM Chain`
 
 ---
@@ -105,7 +105,7 @@ return result;
 
 * Code 노드에서 `Switch` 노드로 추가(병렬) 연결.
 * **Condition:** `priority` (Number) `>=` 4
-* **True:** `Slack` 노드 연결 (🚨 긴급 채널 알림)
+* **True:** `Send Mail` 노드 연결 (🚨 긴급 채널 알림)
 * **False:** `Google Sheets` 노드 연결 (📝 일반 로그 기록)
 
 
@@ -123,121 +123,6 @@ return result;
 **Google Sheets 연동(Service Account)**과 **Gmail 알림**을 위한 상세 실습 가이드 입니다.
 
 ---
-
-#### Part A. Google Drive & Sheets 연동 준비 (Service Account 방식)
-
-서버나 백그라운드 자동화에서 가장 안정적인 **서비스 계정(Service Account)** 방식입니다.
-
-##### 1️⃣ Google Cloud 프로젝트 생성
-
-1. [Google Cloud Console](https://console.cloud.google.com) 접속.
-2. 상단 프로젝트 선택 창 클릭 → **[새 프로젝트]** 클릭.
-3. 프로젝트 이름 입력 (예: `n8n-automation`) → **[만들기]**.
-4. 알림창에서 **[프로젝트 선택]** 클릭하여 해당 프로젝트로 이동.
-
-##### 2️⃣ API 활성화 (Drive & Sheets)
-
-1. 좌측 메뉴 **[API 및 서비스]** → **[라이브러리]**.
-2. 검색창에 **`Google Sheets API`** 검색 → **[사용 설정]** 클릭.
-3. 다시 라이브러리로 돌아가서 **`Google Drive API`** 검색 → **[사용 설정]** 클릭.
-* *(Drive API는 시트 파일 자체를 찾거나 접근할 때 필요합니다.)*
-4. 다시 라이브러리로 돌아가서 **`Gmail API`** 검색 → **[사용 설정]** 클릭.
-
-
-
-##### 3️⃣ Service Account(서비스 계정) 생성
-
-1. 좌측 메뉴 **[API 및 서비스]** → **[사용자 인증 정보]**.
-2. 상단 **[+ 사용자 인증 정보 만들기]** → **[서비스 계정]** 선택.
-3. **이름:** 식별하기 좋은 이름 (예: `n8n-bot`) 입력 → **[만들기 및 계속]**.
-4. **역할(Role):** 선택하지 않고 **[계속]** → **[완료]** (역할은 필수가 아닙니다).
-
-##### 4️⃣ 키(JSON) 생성 및 이메일 확인 (★중요)
-
-1. 생성된 **서비스 계정 이메일 주소** (예: `n8n-bot@project-id.iam.gserviceaccount.com`)를 **따로 복사해둡니다.**
-2. 해당 서비스 계정 클릭.
-3. 상단 **[키(Keys)]** 탭 클릭 → **[키 추가]** → **[새 키 만들기]**.
-4. **JSON** 선택 → **[만들기]** (자동으로 파일이 다운로드됩니다).
-* ⚠️ **주의:** 이 파일은 비밀번호와 같습니다. 절대 타인에게 공유하지 마세요.
-
-
-
-##### 5️⃣ Google Drive 폴더를 Service Account에 공유
-
-로봇(서비스 계정)은 내 구글 드라이브를 볼 수 없습니다. **봇을 내 드라이브에 공유 해줘야 합니다.**
-
-1. 개인 Google Drive 접속
-2. 접근시키고 싶은 **폴더 우클릭 → 공유**
-3. 이메일에 **Service Account 이메일** 입력
-   예:
-   ```
-   n8n-drive-bot@your-project-id.iam.gserviceaccount.com
-   ```
-4. 권한:
-   * 업로드/수정 → Editor
-5. **완료**
-👉 이 폴더 안의 모든 파일/하위폴더에 접근 가능해진다.
-
-
-##### 6️⃣ n8n에서 연결하기
-
-1. n8n의 **Google Sheets** 노드 → Credentials.
-2. **[Create New]** → **[Google Service Account]** 선택.
-3. `Service Account Email`: (자동 입력되거나 비워둬도 됨).
-4. `Service Account Key`: 다운로드 받은 **JSON 파일의 내용 전체**를 메모장으로 열어 복사 후 붙여넣기. (또는 파일 업로드)
-5. **[Save]** → Connection Tested 확인.
-
----
-
-#### Part B. 메일 전송 준비 ( 알람 발송용. Slack 등으로 대체 가능)
-
-"알람"을 보내는 목적으로 **Gmail SMTP(앱 비밀번호)** 방식을 사용합니다.
-
-* **보내는 사람:** 본인의 Gmail 주소
-* **장점:** 서비스 계정처럼 토큰 만료 걱정 없이 한 번 설정하면 계속 사용 가능합니다.
-
-#### 설정 순서
-
-##### 1️⃣ Google 계정에서 '앱 비밀번호' 생성
-
-1. [Google 계정 관리](https://myaccount.google.com/) 접속.
-2. 좌측 **[보안]** 탭 클릭.
-3. 'Google에 로그인' 항목에서 **[2단계 인증]**이 켜져 있어야 합니다. (안 켜져 있다면 켜주세요).
-4. 검색창에 **`앱 비밀번호`** 검색 또는 [앱 비밀번호 페이지](https://myaccount.google.com/apppasswords) 직접 접속.
-5. **앱 이름:** `n8n-alarm` 입력 후 **[만들기]**.
-6. 생성된 **16자리 비밀번호(기기용 앱 비밀번호)**를 복사해 둡니다. (띄어쓰기 무시하고 사용)
-
-##### 2️⃣ n8n에서 이메일 노드 설정 (Gmail Node 아님)
-
-n8n에서는 `Gmail` 노드 대신 **`Send Email`** 노드(SMTP)를 사용하는 것이 훨씬 간편합니다.
-
-1. n8n 캔버스에서 **`Send Email`** 노드 추가.
-2. **Credentials** → **[Create New]** → **[SMTP]** 선택.
-3. 설정 값 입력:
-* **User:** 본인의 Gmail 주소 (예: `myname@gmail.com`)
-* **Password:** 아까 복사한 **16자리 앱 비밀번호**
-* **Host:** `smtp.gmail.com`
-* **Port:** `465`
-* **SSL/TLS:** 켜기 (On)
-
-
-4. **[Save]** 클릭하여 연결 확인.
-
-##### 3️⃣ 메일 발송 테스트
-
-1. `Send Email` 노드 설정:
-* **From Email:** 본인 Gmail 주소
-* **To Email:** 알람 받을 주소
-* **Subject:** 테스트 알람
-* **Text:** 내용 입력
-
-
-2. 실행하여 메일이 잘 오는지 확인.
-
----
-
-
-
 #### 1단계: Switch 노드 설정하기 (Rules)
 
 `Switch` 노드를 더블 클릭하여 설정창을 엽니다.
@@ -287,3 +172,119 @@ n8n에서는 `Gmail` 노드 대신 **`Send Email`** 노드(SMTP)를 사용하는
 3. **결과:** 이번엔 `Switch` 노드의 **아래쪽 선(Google Sheets)** 만 초록색으로 빛나고, 시트에 행이 추가되어야 합니다.
 
 ---
+
+### Part A. Google Drive & Sheets 연동 준비 (Service Account 방식)
+
+서버나 백그라운드 자동화에서 가장 안정적인 **서비스 계정(Service Account)** 방식입니다.
+
+#### 1️⃣ Google Cloud 프로젝트 생성
+
+1. [Google Cloud Console](https://console.cloud.google.com) 접속.
+2. 상단 프로젝트 선택 창 클릭 → **[새 프로젝트]** 클릭.
+3. 프로젝트 이름 입력 (예: `n8n-automation`) → **[만들기]**.
+4. 알림창에서 **[프로젝트 선택]** 클릭하여 해당 프로젝트로 이동.
+
+#### 2️⃣ API 활성화 (Drive & Sheets)
+
+1. 좌측 메뉴 **[API 및 서비스]** → **[라이브러리]**.
+2. 검색창에 **`Google Sheets API`** 검색 → **[사용 설정]** 클릭.
+3. 다시 라이브러리로 돌아가서 **`Google Drive API`** 검색 → **[사용 설정]** 클릭.
+* *(Drive API는 시트 파일 자체를 찾거나 접근할 때 필요합니다.)*
+4. 다시 라이브러리로 돌아가서 **`Gmail API`** 검색 → **[사용 설정]** 클릭.
+
+
+
+#### 3️⃣ Service Account(서비스 계정) 생성
+
+1. 좌측 메뉴 **[API 및 서비스]** → **[사용자 인증 정보]**.
+2. 상단 **[+ 사용자 인증 정보 만들기]** → **[서비스 계정]** 선택.
+3. **이름:** 식별하기 좋은 이름 (예: `n8n-bot`) 입력 → **[만들기 및 계속]**.
+4. **역할(Role):** 선택하지 않고 **[계속]** → **[완료]** (역할은 필수가 아닙니다).
+
+#### 4️⃣ 키(JSON) 생성 및 이메일 확인 (★중요)
+
+1. 생성된 **서비스 계정 이메일 주소** (예: `n8n-bot@project-id.iam.gserviceaccount.com`)를 **따로 복사해둡니다.**
+2. 해당 서비스 계정 클릭.
+3. 상단 **[키(Keys)]** 탭 클릭 → **[키 추가]** → **[새 키 만들기]**.
+4. **JSON** 선택 → **[만들기]** (자동으로 파일이 다운로드됩니다).
+* ⚠️ **주의:** 이 파일은 비밀번호와 같습니다. 절대 타인에게 공유하지 마세요.
+
+
+
+#### 5️⃣ Google Drive 폴더를 Service Account에 공유
+
+로봇(서비스 계정)은 내 구글 드라이브를 볼 수 없습니다. **봇을 내 드라이브에 공유 해줘야 합니다.**
+
+1. 개인 Google Drive 접속
+2. 접근시키고 싶은 **폴더 우클릭 → 공유**
+3. 이메일에 **Service Account 이메일** 입력
+   예:
+   ```
+   n8n-drive-bot@your-project-id.iam.gserviceaccount.com
+   ```
+4. 권한:
+   * 업로드/수정 → Editor
+5. **완료**
+👉 이 폴더 안의 모든 파일/하위폴더에 접근 가능해진다.
+
+
+#### 6️⃣ n8n에서 연결하기
+
+1. n8n의 **Google Sheets** 노드 → Credentials.
+2. **[Create New]** → **[Google Service Account]** 선택.
+3. `Service Account Email`: (자동 입력되거나 비워둬도 됨).
+4. `Service Account Key`: 다운로드 받은 **JSON 파일의 내용 전체**를 메모장으로 열어 복사 후 붙여넣기. (또는 파일 업로드)
+5. **[Save]** → Connection Tested 확인.
+
+---
+
+### Part B. 메일 전송 준비 ( 알람 발송용. Slack 등으로 대체 가능)
+
+"알람"을 보내는 목적으로 **Gmail SMTP(앱 비밀번호)** 방식을 사용합니다.
+
+* **보내는 사람:** 본인의 Gmail 주소
+* **장점:** 서비스 계정처럼 토큰 만료 걱정 없이 한 번 설정하면 계속 사용 가능합니다.
+
+### 설정 순서
+
+#### 1️⃣ Google 계정에서 '앱 비밀번호' 생성
+
+1. [Google 계정 관리](https://myaccount.google.com/) 접속.
+2. 좌측 **[보안]** 탭 클릭.
+3. 'Google에 로그인' 항목에서 **[2단계 인증]**이 켜져 있어야 합니다. (안 켜져 있다면 켜주세요).
+4. 검색창에 **`앱 비밀번호`** 검색 또는 [앱 비밀번호 페이지](https://myaccount.google.com/apppasswords) 직접 접속.
+5. **앱 이름:** `n8n-alarm` 입력 후 **[만들기]**.
+6. 생성된 **16자리 비밀번호(기기용 앱 비밀번호)**를 복사해 둡니다. (띄어쓰기 무시하고 사용)
+
+#### 2️⃣ n8n에서 이메일 노드 설정 (Gmail Node 아님)
+
+n8n에서는 `Gmail` 노드 대신 **`Send Email`** 노드(SMTP)를 사용하는 것이 훨씬 간편합니다.
+
+1. n8n 캔버스에서 **`Send Email`** 노드 추가.
+2. **Credentials** → **[Create New]** → **[SMTP]** 선택.
+3. 설정 값 입력:
+* **User:** 본인의 Gmail 주소 (예: `myname@gmail.com`)
+* **Password:** 아까 복사한 **16자리 앱 비밀번호**
+* **Host:** `smtp.gmail.com`
+* **Port:** `465`
+* **SSL/TLS:** 켜기 (On)
+
+
+4. **[Save]** 클릭하여 연결 확인.
+
+#### 3️⃣ 메일 발송 테스트
+
+1. `Send Email` 노드 설정:
+* **From Email:** 본인 Gmail 주소
+* **To Email:** 알람 받을 주소
+* **Subject:** 테스트 알람
+* **Text:** 내용 입력
+
+
+2. 실행하여 메일이 잘 오는지 확인.
+
+---
+
+
+
+
