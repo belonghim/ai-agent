@@ -78,7 +78,7 @@ Podman Desktop 내에서 LLM을 쉽게 다운로드하고 실행할 수 있는 `
 1. AI Lab -> **Services** (또는 Local Server) 탭 클릭
 2. **New Model Service** 클릭 -> 다운로드한 Gemma 모델 선택
 3. **Container port** 임의 지정 (예: 38080 포트)
-4. **Start Service** 클릭
+4. **Create Service** 클릭
 5. **Open Service Details** 클릭 후, **Endpoint 확인:** `http://localhost:38080/v1`
 * *이 주소는 추후 n8n 설정 시 'OpenAI Chat Model' 노드에서 사용됩니다.*
 6. 예제 Client code 를 사용하여, Service 응답을 테스트 해 볼 수 있습니다.
