@@ -80,7 +80,7 @@ Podman Desktop 내에서 LLM을 쉽게 다운로드하고 실행할 수 있는 `
 3. **Container port** 임의 지정 (예: 38080 포트)
 4. **Create Service** 클릭
 5. **Open Service Details** 클릭 후, **Endpoint 확인:** `http://localhost:38080/v1`
-* *이 주소는 추후 n8n 설정 시 'OpenAI Chat Model' 노드에서 사용됩니다.*
+* * n8n 'OpenAI Chat Model' 노드를 위한 설정 시에는 컨테이너 내에서 호출되므로, http://host.containers.internal:38080/v1 로 바꿔서 기록해놓으세요.*
 6. 예제 Client code 를 사용하여, Service 응답을 테스트 해 볼 수 있습니다.
 
 
