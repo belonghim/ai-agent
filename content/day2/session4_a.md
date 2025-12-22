@@ -102,7 +102,7 @@
 
 #### Step 4: 결과 내보내기
 
-  * **Node:** `Send Mail` or `Slack`
+  * **Node:** `Send Email` or `Slack`
   * **Content:** Step 3(LLM)에서 나온 `text`를 본문에 넣습니다.
 
 -----
