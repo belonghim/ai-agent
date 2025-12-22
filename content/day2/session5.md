@@ -237,7 +237,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 
 * **Node:** `AI Agent` (LangChain 기반)
 * **Model:** `OpenAI Chat Model`
-* **Prompt Instructions (System):**
+* **Prompt Instructions (System):** (Expression 모드)
   ```text
   [Current Date]
   Today is {{ $now.format('yyyy년 MM월 dd일') }}.
