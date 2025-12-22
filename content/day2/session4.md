@@ -120,7 +120,7 @@ return result;
 * **모든 이슈:** Google Sheets (n8n)feedback) 에 기록
 
 
-**Google Sheets 연동(Service Account)**과 **Gmail 알림**을 위한 상세 실습 가이드 입니다.
+**Google Sheets 연동(Service Account)**과 **Gmail 알림** 을 위한 상세 실습 가이드 입니다.
 
 ---
 #### 1단계: Switch 노드 설정하기 (Rules)
