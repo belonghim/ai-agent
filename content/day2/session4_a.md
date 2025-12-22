@@ -117,8 +117,16 @@
 
 #### Step 5: 결과 내보내기
 
-  * **Node:** `Send Email` or `Slack`
-  * **Content:** Step 3(LLM)에서 나온 `text`를 본문에 넣습니다.
+* **Node:** `Send Email` or `Slack`
+* **Subject (Expression):** [n8n 알리미] 회의 녹음본 {{$('Download file').item.json.name}} 요약 정리
+* **HTML (Expression):** Step 3(LLM)에서 나온 text 를 포함한 아래내용을 `HTML` 에 넣습니다.
+  ```html
+  {{$('Download file').item.json.name}} : https://drive.google.com/file/d/{{ $('Download file').item.json.id }}
+  <br>
+  <pre>
+  {{ $json.text }}
+  </pre>
+  ```
 
 -----
 
@@ -126,7 +134,7 @@
 
 **Q. 오디오 파일이 너무 크면 어떻게 하나요?**
 
-> A. Whisper API는 파일 크기 제한(약 25MB)이 있습니다. 실습 때는 1\~2분 내외의 짧은 녹음 파일이나 `m4a`, `mp3` 포맷(압축률 좋음)을 사용하는 것이 좋습니다.
+> A. Whisper API는 파일 크기 제한(약 25MB)이 있습니다. 실습 때는 1\~2분 내외의 짧은 녹음 파일이고 `mp3` 포맷(압축률 좋음)을 사용하는 것이 좋습니다.
 
 **Q. 사투리나 전문 용어도 알아듣나요?**
 
