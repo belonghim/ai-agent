@@ -184,28 +184,35 @@ return {
 
 * **저장** 합니다.
 
-##### Step 1.3: Sub_Web_Scraper 서브 워크플로우 만들기
+##### Step 1.3: Sub_Send_Email_Report 서브 워크플로우 만들기
 
-AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭니다.
+AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 만듭니다.
 
 1.  **새 워크플로우 생성:**
 
-* n8n 대시보드에서 `Add workflow`를 눌러 `Sub_Web_Scraper` workflow 를 만듭니다.
+* n8n 대시보드에서 `Add workflow`를 눌러 `Sub_Send_Email_Report` workflow 를 만듭니다.
+**[노드 구성]**
+`Execute Workflow Trigger` → **`Send Email`**
 
 2.  **Trigger 설정:**
 
 * 노드 검색창에 `Execute Workflow Trigger`를 검색하여 추가합니다.
-* `url`라는 변수에 내용을 담아 보낸다고 가정합니다.
+    * **Fields:**
+    * `text` (본문 내용)
+    * `subject` (메일 제목) **← 추가!**
 
 3.  **Action 설정:**
 
-      * `Slack` 노드를 추가하고 Trigger와 연결합니다.
-      * **Operation:** `Post a Message`
-      * **Message Text:** 입력창 옆의 설정(기어 아이콘 또는 Expression)을 켜고, 아래와 같이 수식으로 입력합니다.
-        ```javascript
-        {{ $json.text }}
-        ```
-      * *(해설: Trigger로 들어온 데이터 중 `text`라는 이름의 값을 슬랙 메시지로 보내겠다는 뜻입니다.)*
+* `Send Email` 노드를 추가하고 Trigger와 연결합니다.
+    * `From` 과 `To` Email 을 모두 자신의 이메일 주소를 입력한다.
+    * **Subject:** (Expression 모드)
+      ```javascript
+      {{ $json.subject }}
+      ```
+    * **HTML:** (Expression 모드)
+      ```javascript
+      {{ $json.text }}
+      ```
 
 4.  **저장(Save):**
 
