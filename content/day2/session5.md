@@ -71,7 +71,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Google_Search** 를 만듭
 
 * 노드 검색창에 `Execute Workflow Trigger`를 검색하여 추가합니다.
 * 이 노드는 \*\*"누군가 나를 부르면(Call) 실행된다"\*\*는 뜻입니다.
-* **[중요]** AI가 데이터를 넘겨줄 때 어떤 변수명을 쓸지 정해야 합니다. `keyword`라는 변수에 내용을 담아 보낸다고 가정합니다.
+* **[중요]** AI가 데이터를 넘겨줄 때 어떤 변수명을 쓸지 정해야 합니다. `keywords`라는 변수에 내용을 담아 보낸다고 가정합니다.
 
 3.  **Action 설정 (하는 일):**
 
@@ -86,7 +86,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Google_Search** 를 만듭
 
 | Name | Value | 설명 |
 | --- | --- | --- |
-| **`q`** | `{{ $json.keyword }} -site:finance.yahoo.com` | 검색어 (이전 노드에서 받아온 값 매핑) |
+| **`q`** | `{{ $json.keywords }} -site:finance.yahoo.com` | 검색어 (이전 노드에서 받아온 값 매핑) |
 | **`cx`** | `0123456789...` | **검색 엔진 ID** (Programmable Search Engine에서 복사한 값) |
 | **`key`** | `AIzaSy...` | **GCP API Key** (Google Cloud Platform에서 발급받은 키) |
 | **`num`** | `10` | **검색 결과 개수를 제한** (기본값이 10) |
@@ -106,7 +106,7 @@ if (items.length === 0) {
 
 // JSON을 AI가 읽기 쉬운 '텍스트'로 변환
 const textOutput = items.map((item, index) => {
-  return `[기사 ${index + 1}]\n- 제목: ${item.title}\n- 요약: ${item.snippet}\n- 링크: ${item.link}`;
+  return `[정보 ${index + 1}]\n- 제목: ${item.title}\n- 요약: ${item.snippet}\n- URL: ${item.link}`;
 }).join("\n\n");
 
 // 'result'라는 이름의 단순 텍스트로 반환
@@ -210,12 +210,12 @@ return {
   
   [행동 지침]
   1. 피드백 반영: 만약 입력값에 "[반려 사유(피드백)]"이 포함되어 있다면, 이전 리포트가 반려된 것입니다. 반드시 피드백 내용을 최우선으로 반영하여 내용을 보강하세요.
-  2. 'google_search'를 사용하여 현재 주가, 기업 뉴스, 재무 정보 등을 'keyword' 리스트에 모두 담아 한번에 탐색하세요.
+  2. 'google_search'를 사용하여 현재 주가, 기업 뉴스, 재무 정보 등을 'keywords' 리스트에 모두 담아 한번에 탐색하세요.
   
   [중요한 규칙]
-  1. 'google_search'는 단 한번만 호출하세요.
-  2. 요약만 읽지마세요. 한 건 이상의 정보의 상세 전문을 확인해야만 합니다.
-  3. 상세 전문까지 확인한 후에는, 자료가 부족하더라도 확보된 정보만으로 최선을 다해 결론을 내리고 리포트를 작성하세요.
+  1. 중복된 키워드는 절대 검색하지 마세요.
+  2. 검색 자료만 읽지마세요. 한 건 이상의 URL 의 상세 전문을 확인해야만 합니다.
+  3. 상세 전문까지 확인한 후에는, 자료가 부족하더라도 확보된 정보만으로 최선을 다해 리포트를 작성하세요.
   
   [리포트 작성 포맷]
   1. 기업 개요 (Ticker & Price)
