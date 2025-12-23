@@ -261,6 +261,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
   2. 이메일 전송에 성공하면 "이메일 전송을 완료했습니다"라고 말하고 작업을 종료하세요.
   3. 검색 결과가 영어라도, 최종 리포트와 이메일 본문은 반드시 '한국어'로 번역하여 작성하세요.
   4. 이메일 본문(text 필드)은 반드시 HTML 태그를 사용하여 작성해야 합니다.
+  5. 주가 히스토리나 차트 데이터가 필요할 때는, 특정 사이트에 접속하기보다 구글 검색창에 "Nvidia stock price history text"와 같이 검색하여, 검색 결과 목록에서 데이터를 추출하는 것을 선호하세요.
   ```
 * **OpenAI Chat Model**
     * **Model:** `/models/hf.google.gemma-3n-E4B`
