@@ -125,6 +125,8 @@ return [
 
 1. `Basic LLM Chain` 노드의 `Model` 입력 단자(작은 원)를 클릭하고 드래그하여 놓습니다.
 2. 메뉴에서 **`OpenAI Chat Model`**을 선택하여 연결합니다.
+* **OpenAI Chat Model**
+    * **Model:** `/models/hf.google.gemma-3n-E4B`
 * *핵심:* 우리는 OpenAI를 쓰지 않지만, Podman의 Local LLM이 OpenAI와 통신 방식(규격)이 같으므로 이 노드를 빌려서 사용합니다.
 
 
