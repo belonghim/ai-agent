@@ -128,7 +128,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
 * 아래 3개 노드를 순서대로 연결하세요.
 
 **[Flow 구조]**
-`Execute Workflow Trigger` → `HTTP Request` → `HTML Extract`
+`Execute Workflow Trigger` → `HTTP Request` → `HTML Extract` → `Code`
 
 2.  **Trigger 설정:**
 
@@ -140,19 +140,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
 * **Method:** `GET`
 * **URL:** `{{ $json.url }}` (Expression 모드)
 * *(설명: 트리거로 들어온 url 주소로 접속합니다.)*
-
-
 * **Authentication:** `None` (일반 웹페이지는 인증 불필요)
-
-4. **HTML Extract (알맹이만 꺼내기)**
-
-* `HTTP Request`의 결과는 지저분한 HTML 코드(`<div>...</div>`) 덩어리입니다. 여기서 글자만 발라내야 AI가 읽을 수 있습니다.
-    * **Source Data:** `JSON`
-    * **JSON Property:** `data` (HTTP Request가 가져온 내용이 담긴 변수명)
-    * **Extraction Values (추출 설정):**
-    * **Key:** `content` (결과를 담을 변수 이름)
-    * **CSS Selector:** `p` (본문 단락만 가져오기)
-    * **Return Value:** `Text` (**가장 중요!** HTML 태그 제거)
 
 * **"사람인 척" 위장하기 (User-Agent 설정)**
     * Header (헤더) 추가
@@ -165,6 +153,16 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
 
 * **Follow Redirects 끄기**
     * `Options > Follow Redirects` 스위치를 OFF 로 끕니다.
+
+4. **HTML Extract (알맹이만 꺼내기)**
+
+* `HTTP Request`의 결과는 지저분한 HTML 코드(`<div>...</div>`) 덩어리입니다. 여기서 글자만 발라내야 AI가 읽을 수 있습니다.
+    * **Source Data:** `JSON`
+    * **JSON Property:** `data` (HTTP Request가 가져온 내용이 담긴 변수명)
+    * **Extraction Values (추출 설정):**
+    * **Key:** `content` (결과를 담을 변수 이름)
+    * **CSS Selector:** `p` (본문 단락만 가져오기)
+    * **Return Value:** `Text` (**가장 중요!** HTML 태그 제거)
 
 5. **Code 노드 추가** (Scraper 데이터 줄이기)
 
