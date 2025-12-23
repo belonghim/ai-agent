@@ -25,7 +25,6 @@ n8n의 최신 `AI Agent` 노드는 LangChain 기반으로 동작합니다.
   * **Agent Type:** 보통 `Tools Agent` (OpenAI Functions 등)를 사용합니다.
   * **Tools:** 에이전트가 사용할 수 있는 도구들입니다.
       * *예: Calculator(계산), Wikipedia(검색), Custom n8n Workflow(사내 API)*
-  * **Memory:** 대화의 맥락을 기억하기 위한 저장소. (`Window Buffer Memory` 등)
   * **System Prompt 심화:** 에이전트에게 페르소나와 '생각하는 법(Chain of Thought)'을 주입합니다.
 
 기본 제공 도구(계산기 등) 외에, 우리가 만든 로직도 도구로 쓸 수 있습니다.
@@ -34,10 +33,6 @@ n8n의 최신 `AI Agent` 노드는 LangChain 기반으로 동작합니다.
 
 **시나리오:** 사용자가 "엔비디아(Nvidia)의 최근 1주간 주가 흐름과 주요 뉴스를 찾아서 투자 의견을 써줘"라고 하면, 에이전트가 **웹 검색 → 뉴스 읽기 → 분석 → 리포트 작성**을 수행합니다.
 
-#### Step 0: Memory 준비 (Agent의 기억 공간)
-
-에이전트 노드에 연결할 메모리를 준비합니다. Simple Memory 노드를 생성하여 붙입니다.
-* `Context Window Length` 는 5 정도로 낮춰줍니다. (로컬 PC 의 성능 고려) 
 
 #### Step 1: 도구(Tools) 준비 (Agent의 손과 발)
 
