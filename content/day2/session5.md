@@ -98,7 +98,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Google_Search** 를 만듭
 | **`cx`** | `0123456789...` | **검색 엔진 ID** (Programmable Search Engine에서 복사한 값) |
 | **`key`** | `AIzaSy...` | **GCP API Key** (Google Cloud Platform에서 발급받은 키) |
 
-> **팁:** `num` 파라미터를 추가하고 값을 `5`로 주면 검색 결과 개수를 제한할 수 있습니다. (기본값은 10개)
+> **추가** `num` 파라미터를 추가하고 값을 `4`로 주고 결과 개수를 제한합니다. (기본값은 10개)
 
 4. **Code 노드:**
 * `HTTP Request` 노드 바로 뒤에 붙여서, 복잡한 JSON을 심플하게 바꿉니다.
@@ -168,12 +168,13 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
     * **Header Parameters** 아래 **[Add Parameter]** 클릭:
     * **Name:** `User-Agent`
     * **Value:** `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36`
-
-* **[하나 더 추가]**
     * **Name:** `Accept`
-    * **Value:** `text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8`
+    * **Value:** `*/*`
 
-5. **(옵션) Code 노드 추가** (Scraper 데이터 줄이기)
+* **Follow Redirects 끄기**
+    * `Options > Follow Redirects` 스위치를 OFF 로 끕니다.
+
+5. **Code 노드 추가** (Scraper 데이터 줄이기)
 
 * 웹페이지 전체를 다 긁어오면 불필요한 약관, 댓글, 광고까지 딸려와서 수천 토큰을 잡아먹습니다.
 **서브 워크플로우(`Sub_Web_Scraper`)**를 수정해서 **글자 수를 강제로 자르세요.**
