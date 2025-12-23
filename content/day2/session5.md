@@ -242,7 +242,6 @@ return {
     * **Options:**
         * **Timeout:** `600000`
         * **Response Format:** `Text`
-        * **Max Retries:** `1`
 
 
 ##### Step 2.1: 메인 워크플로우에 google_search 연결하기 (도구 쥐여주기)
@@ -263,9 +262,10 @@ return {
 * **Name:** `google_search` (AI가 인식할 도구의 이름입니다. 영문 소문자 권장)
 * **Description (설명서):** **여기가 핵심입니다.** AI에게 이 도구를 언제, 어떻게 써야 하는지 자연어로 설명해줘야 합니다.
     ```text
-    Use this tool to search for real-time information, news, or stock prices on the internet.
-    The input must be a JSON object with a "keyword" field.
-    Example: { "keyword": "Nvidia stock news today" }
+    이 도구를 사용하여 Google Search 에서 여러 주제 또는 키워드를 동시에 검색할 수 있습니다.
+    입력은 "keywords" 필드가 있는 JSON 객체여야 하며, 이 필드는 문자열 목록입니다.
+    예: { "keywords": '"Nvidia stock price", "Nvidia latest news", "AI chip market share"' }
+    다양한 관점에서 정보를 한 번에 수집해야 할 때 유용합니다.
     ```
 
 3. 작동 원리 (설명용)
@@ -292,31 +292,12 @@ return {
 * **Name:** `web_scraper`
 * **Description (설명서):**
     ```text
-    Use this tool to read/scrape the full content of a specific webpage.
-    Useful when you need detailed information from a search result link.
-    The input must be a JSON object with a "url" field.
-    Example: { "url": "https://www.bbc.com/news/..." }
+    이 도구를 사용하여 특정 웹페이지의 전체 콘텐츠를 읽을 수 있습니다.
+    특정 링크에서 자세한 정보를 얻어야 할 때 유용합니다.
+    입력값은 "url" 필드를 포함하는 JSON 객체여야 합니다.
+    예시: { "url": "https://www.bbc.com/news/..." }
     ```
 
-##### Step 2.3: 메인 워크플로우에 email_sender 연결하기 (도구 쥐여주기)
-
-1.  **도구 추가:**
-
-* `AI Agent` 노드의 **Tools** 항목에서 `+` 버튼을 누릅니다.
-* `Call n8n Workflow Tool` 을 선택합니다.
-
-2.  **도구 설정:**
-
-* **Source:** `Database` 선택
-* **Workflow:** `Sub_Send_Email_Report`를 선택합니다.
-* **Workflow Inputs:** `text` 와 `subject` 오른쪽의 반짝이는 별 아이콘을 누릅니다.
-* **Name:** `email_sender`
-* **Description (설명서):**
-    ```text
-    Use this tool to send a final report via email.
-    The input must be a JSON object with "subject" and "text" fields.
-    Example: { "subject": "Nvidia Analysis Report", "text": "Here is the summary..." }
-    ```
 
 -----
 
