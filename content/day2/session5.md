@@ -280,7 +280,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
   subject: [투자 분석] 엔비디아(NVDA) 주간 동향 보고
   text: 
   <h2>엔비디아 투자 분석 보고서</h2>
-  <p>DateTime: ...</p>
+  <p>날짜/시간: ...</p>
   <p>최근 <b>엔비디아(NVDA)</b>의 주가는 ...</p>
   <ul>
     <li><b>현재 주가:</b> $182.27</li>
