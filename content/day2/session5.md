@@ -294,6 +294,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
     * **Model:** `/models/hf.google.gemma-3n-E4B`
     * **Options:**
         * **Timeout:** `600000`
+        * **Response Format:** `Text`
+        * **Max Retries:** `1`
 
 
 ##### Step 2.1: 메인 워크플로우에 google_search 연결하기 (도구 쥐여주기)
