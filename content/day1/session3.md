@@ -137,7 +137,7 @@ return [
 2. `Credential for OpenAI API`에서 **Create New**를 선택합니다.
 3. **설정 값 입력:**
 * **API Key:** `sk-any-key` (아무거나 입력해도 됩니다. Local이라 검증하지 않음)
-* **URL (Base URL):** `http://localhost:8080/v1` (또는 Podman에서 확인한 주소)
+* **URL (Base URL):** `http://host.containers.internal:38080/v1` (또는 Podman에서 확인한 주소)
 * **Save**를 누릅니다.
 
 
