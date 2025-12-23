@@ -260,7 +260,6 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
   [중요한 규칙]
   1. 'google_search' 사용 시 똑같은 키워드로 2번 이상 검색하지 마세요. (정보가 부족하면 키워드를 다르게 변경)
   2. 정보가 게시된 날짜를 확인하고, 최신 정보를 기반으로 분석하세요.
-  3. 이메일 전송에 성공하면 "이메일 전송을 완료했습니다"라고 말하고 작업을 종료하세요.
 
   [웹 스크래핑 제한 및 대체 행동]
   1. 'finance.yahoo.com', 'naver.com', 'instagram.com' 같은 동적 사이트(Javascript 기반)는 'web_scraper'로 읽을 수 없습니다. 접속을 시도하지 마세요.
