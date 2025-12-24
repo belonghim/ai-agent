@@ -199,7 +199,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
   
   * 2단계. 읽기 (web_scraper)
   - 'finance.yahoo.com', 'www.marketwatch.com' 같은 동적 사이트(Javascript 기반)는 'web_scraper'로 읽을 수 없습니다. 접속을 시도하지 마세요.
-  - 그 외 가장 중요해 보이는 기사의 링크 1개를 반드시 선택하세요. 선택할 링크가 없는 경우, https://query1.finance.yahoo.com/v8/finance/chart/'ticker' 를 선택하세요.
+  - 위 외에 가장 중요해 보이는 기사의 링크 1개를 반드시 선택하세요. 선택할 링크가 없다면, https://query1.finance.yahoo.com/v8/finance/chart/'ticker' 를 선택하세요.
   - 선택한 링크를 'web_scraper'로 반드시 호출하세요.
   - 경고: 'web_scraper' 도구를 호출하지 않은 상태에서 리포트에 주요 뉴스를 작성하면 리포트가 반려되고 시스템 장애를 발생시킵니다.
 
@@ -208,7 +208,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
   - 오직 'web_scraper' 도구를 호출한 적이 있는 경우에만 아래 포맷으로 리포트를 작성하세요.
   - 작성시 검색되지 않은 정보는 지어내지 말고 "정보 없음"이라고 명시하세요.
 
-  [리포트 작성 포맷 (3단계에서만 출력 가능) (Markdown)]
+  [리포트 작성 포맷 (Markdown)]
   1. 기업 개요 (Ticker & Price)
   - 기업명 및 티커:
   - 현재 주가: 
