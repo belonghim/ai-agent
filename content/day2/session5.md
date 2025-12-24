@@ -193,14 +193,13 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
   당신은 자신의 지식을 믿지 말고, 반드시 도구를 사용하여 최신 정보를 확인한 뒤 아래와 같은 순서를 지켜야 합니다.
   
   * 1단계. 탐색 (google_search)
-  - 최초 탐색 시에는, 'ticker stock price market cap' 키워드를 포함하여 탐색하세요.
-  - 주의: 탐색 결과의 '요약' 내용은 현재 단계에서는 신뢰할 수 없는 데이터로 간주합니다. 절대 현재 단계에서 리포트를 작성하지 마세요.
+  - 최초 탐색 시에 "ticker", "stock price", "market cap" 키워드를 포함하여 탐색하세요.
+  - 주의: 탐색 결과의 '요약' 내용은 현재 단계에서는 신뢰할 수 없는 데이터로 간주합니다. 절대 1단계에서 리포트를 작성하지 마세요.
   
   * 2단계. 읽기 (web_scraper)
-  - 'finance.yahoo.com', 'www.marketwatch.com' 같은 동적 사이트(Javascript 기반)는 'web_scraper'로 읽을 수 없습니다. 접속을 시도하지 마세요.
-  - 위 외에 가장 중요해 보이는 기사의 링크 1개를 반드시 선택하세요. 선택할 링크가 없다면, https://query1.finance.yahoo.com/v8/finance/chart/'ticker' 를 선택하세요.
+  - 'finance.yahoo.com', 'www.marketwatch.com' 사이트는 'web_scraper'로 읽을 수 없습니다. 접속을 시도하지 마세요.
+  - 위 사이트 외에 가장 중요해 보이는 기사의 링크 1개를 반드시 선택하세요. 선택할 링크가 없다면, "https://query1.finance.yahoo.com/v8/finance/chart/'ticker'" URL로 선택하세요.
   - 선택한 링크를 'web_scraper'로 반드시 호출하세요.
-  - 경고: 'web_scraper' 도구를 호출하지 않은 상태에서 리포트에 주요 뉴스를 작성하면 리포트가 반려되고 시스템 장애를 발생시킵니다.
 
   * 3단계. 보고 (리포트 작성)
   - 'web_scraper' 도구를 호출한 적이 없으면 1단계로 다시 돌아가세요.
@@ -218,14 +217,14 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
   - ...
 
   3. 투자 매력도 및 리스크
-  - 긍정적 요인: (한 줄)
-  - 부정적 요인/리스크: (한 줄)
+  - 긍정적 요인: (짧게 요약)
+  - 부정적 요인/리스크: (짧게 요약)
   
   4. 결론 (매수/매도/보류 의견)
-  - 분석과 최종 의견: (한 줄)
+  - 분석과 최종 의견: (짧게 요약)
 
   [금지 사항]
-  - 'web_scraper' 도구를 호출한 기록이 없다면, 절대 리포트를 출력하지 마세요.
+  - 'web_scraper' 도구를 호출한 기록이 없다면, 절대 리포트를 작성하지 마세요.
   ```
 
 * **OpenAI Chat Model**
@@ -253,10 +252,9 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
 * **Name:** `google_search` (AI가 인식할 도구의 이름입니다. 영문 소문자 권장)
 * **Description (설명서):** **여기가 핵심입니다.** AI에게 이 도구를 언제, 어떻게 써야 하는지 자연어로 설명해줘야 합니다.
     ```text
-    이 도구를 사용하여 Google Search 에서 여러 주제 또는 키워드를 동시에 검색할 수 있습니다.
-    입력은 "keywords" 필드가 있는 JSON 객체여야 하며, 이 필드는 문자열 목록입니다.
-    예: { "keywords": '"Nvidia stock price", "Nvidia latest news", "AI chip market share"' }
-    다양한 관점에서 정보를 한 번에 수집해야 할 때 유용합니다.
+    이 도구를 사용하여 Google Search 에서 탐색하여 요약을 얻을 수 있습니다.
+    입력은 "keyword" 필드를 포함하는 JSON 객체여야 합니다.
+    예시: { "keywords": "Nvidia ticker stock price market cap" }
     ```
 
 3. 작동 원리 (설명용)
@@ -266,7 +264,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
     2.  **판단:** 에이전트는 본인의 도구 상자를 봅니다.
           * *"어? `google_search`라는 도구가 있네? 설명서를 보니 '실시간 정보 검색에 써라'고 되어있고, `keyword`라는 봉투에 내용을 담아주면 된다고 하네."*
     3.  **실행:** 에이전트는 `Sub_Goole_Search` 워크플로우를 호출하면서 `{ "keyword": "오늘 엔비디아 주가 뉴스" }` 라는 데이터를 던집니다.
-    4.  **결과:** 서브 워크플로우가 대신 구글 검색을 전달하고, 에이전트에게 "성공했어\!"라고 신호를 줍니다.
+    4.  **결과:** 서브 워크플로우가 대신 구글 검색을 전달하고, 에이전트에게 결과를 넘겨줍니다.
 
 ##### Step 2.2: 메인 워크플로우에 web_scraper 연결하기 (도구 쥐여주기)
 
@@ -283,10 +281,10 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
 * **Name:** `web_scraper`
 * **Description (설명서):**
     ```text
-    이 도구를 사용하여 특정 웹페이지의 상세 콘텐츠를 읽을 수 있습니다.
-   링크에서 자세한 정보를 얻어야 할 때 유용합니다.
-   입력값은 "url" 필드를 포함하는 JSON 객체여야 합니다.
-   예시: { "url": "https://www.bbc.com/news/..." }
+    이 도구를 사용하여 특정 웹페이지의 상세 내용을 읽을 수 있습니다.
+    링크에서 상세 내용 정보를 얻어야 할 때 유용합니다.
+    입력은 "url" 필드를 포함하는 JSON 객체여야 합니다.
+    예시: { "url": "https://www.bbc.com/news/..." }
     ```
 
 
@@ -305,11 +303,15 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
 
   * **Log 예시:**
     1.  *Thought:* 사용자가 엔비디아 정보를 원하네. 검색 도구를 써야지.
-    2.  *Action:* Google Search ("Nvidia stock news this week")
+    2.  *Action:* Google Search ("Nvidia stock price 1 week chart news")
     3.  *Observation:* 검색 결과 3개를 찾음. 근데 내용이 좀 부실해.
     4.  *Thought:* 상세 내용 파악을 위해 1번 기사 URL을 스크랩해야겠어.
     5.  *Action:* Web Scraper (URL...)
-    6.  *Final Answer:* 리포트 작성 완료.
+    6.  *Observation:* 내용을 확인함. 근데 내용이 부실해.
+    7.  *Thought:* 다른 키워드로 재검색해야 겠어.
+    8.  *Action:* Google Search ("Nvidia stock price chart recent week")
+    9.  *Observation:* 검색 결과 3개를 찾음. 이제 리포트 써 보자.
+    10. *Final Answer:* 리포트 작성 완료.
 
 -----
 
@@ -325,6 +327,6 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
 **내일(3일차) 예고**
 
   * 이제 텍스트를 넘어 \*\*이미지(도면, 문서)\*\*를 처리합니다.
-  * 복잡한 데이터를 DB에 쌓고, \*\*사람이 중간에 승인(Human-in-the-loop)\*\*하는 고도화된 워크플로우를 만듭니다.
+  * 복잡한 데이터를 AI 를 통해 확인하고 DB에 쌓고, \*\*사람이 중간에 승인(Human-in-the-loop)\*\*하는 고도화된 워크플로우를 만듭니다.
 
 -----
