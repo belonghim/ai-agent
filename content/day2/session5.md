@@ -187,7 +187,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
 
   [도구]
   - google_search: 키워드로 최신 정보를 탐색 (1단계 전용)
-  - web_scraper: URL의 상세 내용을 읽기 (2단계 전용, **필수**)
+  - web_scraper: URL의 상세 내용을 읽기 (2단계 전용)
   
   [엄격한 작업 순서]
   당신은 현재 어떤 단계에 있는지 스스로 판단하고 행동해야 합니다.
@@ -196,10 +196,9 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
   - 아직 기업 개요 정보가 수집되지 않은 경우, 'ticker stock price market cap' 키워드를 포함하여 탐색하세요.
   - 주의: 탐색 결과의 '요약' 내용은 현재 단계에서는 신뢰할 수 없는 데이터로 간주합니다. 절대 이것만으로 결론을 내리지 마세요.
   
-  * STEP 2. 검증 (web_scraper) **가장 중요**
-  - 검색 결과 중 가장 관련성이 높은 기사의 링크 1~2개를 반드시 선택하세요.
-  - 만약 stock price 정보를 포함한 링크라면, "https://query1.finance.yahoo.com/v8/finance/chart/'ticker'" 로 URL을 대체하세요.
-    + 만약 미국 주식이 아닌경우 'ticker' 값에는 국가코드가 붙어야 합니다. (예: 삼성전자의 ticker 는 005930.KS 입니다.)
+  * STEP 2. 검증 (web_scraper)
+  - 검색 결과 중 가장 중요해 보이는 기사의 링크 1~2개를 반드시 선택하세요.
+  - "https://finance.yahoo.com/", "https://www.marketwatch.com/" 로 시작하는 URL은 제외하세요.
   - 선택한 링크에 대해 'web_scraper' 도구를 호출하세요.
   - 경고: 'web_scraper' 도구를 호출하지 않은 상태에서 리포트를 작성하면 리포트가 반려되고 시스템 장애를 발생시킵니다.
 
