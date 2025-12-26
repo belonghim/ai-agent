@@ -107,37 +107,6 @@ API Key를 발급받기 위한 과정입니다.
 
 ---
 
-### 3단계: n8n 연결 (HTTP Request 노드)
-
-이제 n8n 에서 위에서 얻은 두 가지 키를 사용하는 예시입니다.
-
-#### 1. **노드 추가:** **`HTTP Request`** 노드를 추가합니다.
-* **Method:** `GET`
-* **URL:** `https://www.googleapis.com/customsearch/v1`
-* **Authentication:** `None` (API Key를 파라미터로 보낼 것이므로 여기선 끕니다.)
-
-#### 2. Query Parameters 설정 (핵심)
-
-**`Send Query Parameters`** 스위치를 켜고, 아래 3가지 값을 추가합니다.
-
-| Name | Value | 설명 |
-| --- | --- | --- |
-| **`q`** | `{{ $json.keyword }}` | 검색어 (이전 노드에서 받아온 값 매핑) |
-| **`cx`** | `0123456789...` | **검색 엔진 ID** (Programmable Search Engine에서 복사한 값) |
-| **`key`** | `AIzaSy...` | **GCP API Key** (Google Cloud Platform에서 발급받은 키) |
-
-> **팁:** `num` 파라미터를 추가하고 값을 `3`이나 `5`로 주면 검색 결과 개수를 제한할 수 있습니다. (기본값은 10개)
-
-#### 3. 결과 데이터 확인 (Parsing)
-
-이 방식으로 호출하면 결과가 JSON으로 나옵니다. 에이전트가 참고할 실제 내용은 `items` 배열 안에 있습니다.
-
-* **제목:** `items[0].title`
-* **링크:** `items[0].link`
-* **요약:** `items[0].snippet`
-
----
-
 #### Step 1.1: Sub_Google_Search 서브 워크플로우 만들기
 
 AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Google_Search** 를 만듭니다.
