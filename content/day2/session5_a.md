@@ -113,7 +113,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 
 ---
 
-### Step 2.1: Set 노드 추
+### Step 2.1: Set 노드 추가
 
 > **역할:** 이 노드는 Agent AI 가 방금 뱉어낸 리포트를 "박제"하는 역할입니다.
 * **Node Name:** `Save_Report`
@@ -124,32 +124,41 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 
 ### Step 3: 팀장(Supervisor) 노드 추가하기
 
-작성자 에이전트(Agent 1) 뒤에 검토 역할을 할 새로운 LLM 노드를 붙입니다. 여기서는 도구를 쓸 필요 없이 텍스트만 판단하면 되므로 `Basic LLM Chain`을 사용합니다.
+작성자 에이전트(AI Agent) 뒤에 검토 역할을 할 새로운 LLM 노드를 붙입니다. 여기서는 도구를 쓸 필요 없이 텍스트만 판단하면 되므로 `Basic LLM Chain`을 사용합니다.
 
 1. **Node 추가:** `Basic LLM Chain` (또는 `OpenAI Chat Model`)
-2. **연결:** `[Agent 1] 작성자` 노드의 뒤에 연결합니다.
-3. **Prompt (System):** 팀장의 페르소나를 부여합니다.
-```text
-당신은 까다로운 금융 리포트 편집장(Senior Editor)입니다.
-입력된 '주식 분석 리포트'를 읽고 다음 기준을 엄격히 심사하세요.
+2. **연결:** `[Save_Report]` 노드의 뒤에 연결합니다.
+3. **Prompt (User Message):** `{{ $json.output }}` 앞 노드의 output 을 입력받습니다.
+4. **Prompt (System):** 팀장의 페르소나를 부여합니다.
+    ```text
+    당신은 까다로운 금융 리포트 편집장(Senior Editor)입니다.
+    입력된 '주식 분석 리포트'를 읽고 심사 기준에 따라 엄격히 평가하세요.
+    
+    [심사 기준]
+    1. **팩트 검증:** 구체적인 수치(주가, 시가총액, 등락률 등)가 명시되어 있는가?
+    2. **명확성:** 투자의견(매수/매도/보류)이 결론에 확실히 드러나는가?
+    3. **전문성:** 비속어나 모호한 표현("~일 수도 있다", "~같다") 없이 전문적인 어조인가?
+    
+    [중요 행동 지침]
+    - **절대로 팩트(숫자, 데이터)를 직접 수정하거나 지어내지 마세요.**
+    - 수치가 누락되었거나 틀려 보인다면, 직접 고치지 말고 반드시 **반려(REJECT)** 하세요.
+    - 문맥, 맞춤법, 어조 수정은 가능합니다.
+    
+    [출력 형식]
+    반드시 마크다운(```json) 없이 순수한 JSON 텍스트만 출력하세요.
+    
+    {
+      "status": "APPROVE" 또는 "REJECT",
+      "reason": "승인 시 '적합', 거절 시 팀원에게 지시할 구체적인 수정 요청 사항 (예: '현재 주가가 누락되었습니다. 보강하세요.')"
+    }
+    ```
 
-[심사 기준]
-1. 팩트(구체적인 수치)가 포함되어 있는가?
-2. 투자의견(매수/매도/보류)이 명확한가?
-3. 비속어나 불확실한 표현("~일 수도 있다")이 없는가?
+5. **Model 설정:** `gemma` (AI Agent 와 분리)
+6. **Options:**
+    * **Response Format:** `JSON`
+    * **Timeout:** `600000`
 
-출력은 반드시 아래 JSON 형식으로만 하세요. (마크다운 없이)
-{
-  "status": "APPROVE" 또는 "REJECT",
-  "reason": "승인 이유 또는 거절 시 구체적인 피드백",
-  "refined_content": "수정이 필요하다면 수정한 본문, 아니면 원문 유지"
-}
-
-```
-
-
-4. **Model 설정:** `gpt-4o` 또는 `gpt-3.5-turbo` (검토는 3.5도 잘합니다).
-5. **Output Parsing:** 설정에서 `JSON Output` 옵션을 켜거나, 노드 뒤에 `Structured Output Parser`를 붙여 결과를 JSON 객체로 만듭니다.
+---
 
 #### Step 4: 심사 결과에 따른 분기 (Switch)
 
@@ -157,19 +166,15 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 
 1. **Node 추가:** `Switch`
 2. **Mode:** `Rules`
-3. **Rule 1 (합격):**
-* Condition: `String`
-* Value 1: `{{ $json.status }}` (팀장 노드의 출력값)
-* Operation: `Equal to`
-* Value 2: `APPROVE`
+3. **Routing Rules:**
+    * Value 1: `{{ $json.status }}` (팀장 노드의 출력값)
+    * Operation: `is equal to`
+    * Value 2: `APPROVE`
 
+4. **Options:**
+    * Fallback Output: `Extra Output`
 
-4. **Rule 2 (불합격):**
-* Value 1: `{{ $json.status }}`
-* Operation: `Equal to`
-* Value 2: `REJECT`
-
-
+---
 
 #### Step 5: 합격 라인 (Approve) - 전송
 
@@ -179,7 +184,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 2. **Message:** `{{ $json.refined_content }}`
 * *Tip:* "팀장 승인 완료" 뱃지를 달아주면 더 좋습니다.
 
-
+---
 
 #### Step 6: 불합격 라인 (Reject) - 피드백 루프 (Feedback Loop)
 
