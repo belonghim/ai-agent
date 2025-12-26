@@ -119,21 +119,21 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
     ```
 
 
-### Step 4: DB 저장 (Google Sheets)
-
-* **Switch 노드** 의 **출력 1(승인)**에 `Google Sheets` 노드를 연결합니다.
-* **Append or update row in sheet** 노드에서 `Document` 와 `Sheet` 는 도면용으로 만든 시트를 선택합니다.
-    * **Mapping Column Mode** 는 `Map Automatically` 로 선택합니다.
-    * **Column to match on** 는 `Draing link` 로 선택합니다.
-
-* **출력 0(반려)**에는 아무것도 연결하지 않거나, `Slack/Email` 노드를 연결해 "취소되었습니다" 알림을 보냅니다.
-
-* `Switch 노드` 와 `Google Sheets` 노드 사이에 `Code` 노드를 추가 합니다.
+### Step 4: Code 노드
+* **Switch 노드** 의 **출력 1(승인)**에 `Code` 노드를 연결합니다.
+* LLM 이 출력했던 내용을 다시 가져오는 역할을 합니다.
 * **JavaScript:**
   ```
   return $items("Basic LLM Chain");
   ```
 
+
+### Step 5: DB 저장 (Google Sheets)
+
+* `Code` 노드 다음에 `Google Sheets` 노드를 연결합니다.
+* **Append or update row in sheet** 노드에서 `Document` 와 `Sheet` 를 도면용으로 만든 파일과 시트를 선택합니다.
+    * **Mapping Column Mode** 는 `Map Automatically` 로 선택합니다.
+    * **Column to match on** 는 `Drawing link` 로 선택합니다.
 
 * **출력 0(반려)**에는 아무것도 연결하지 않거나, `Email` 노드를 연결해 "취소되었습니다" 알림을 보낼 수도 있습니다.
 
