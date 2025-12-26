@@ -50,26 +50,35 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
     * `Type Name:` `System`
     * `Message:`
     ```
-당신은 전문 '금융 뉴스레터 디자이너'입니다.
-입력받은 [주식 분석 리포트]를 분석하여 이메일 전송용 데이터로 변환하세요.
-
-[작업 1: 제목 생성]
-- 리포트의 핵심 결론(투자의견, 종목명, 주요 이슈)이 담긴 클릭하고 싶은 제목을 한 줄 작성하세요.
-- 예시: [매수] 삼성전자 - 반도체 업황 턴어라운드 본격화
-
-[작업 2: HTML 본문 변환]
-- 마크다운 텍스트를 깔끔한 HTML 스타일로 변환하세요.
-- <html>, <body> 태그는 제외하고 <div> 태그부터 시작하세요.
-- 주요 수치(주가, 등락률)는 빨간색 또는 굵게(Bold) 강조하세요.
-- 가독성을 위해 적절한 CSS(font-size: 14px, line-height: 1.6 등)를 인라인 스타일로 적용하세요.
-
-[출력 형식]
-반드시 마크다운 태그(```json) 없이 아래 순수 JSON 형식으로만 출력하세요.
-{
-"subject": "작성된 이메일 제목",
-"html_body": "변환된 HTML 코드 전체"
-}
+    당신은 전문 '금융 뉴스레터 디자이너'입니다.
+    입력받은 [주식 분석 리포트]를 분석하여 이메일 전송용 데이터로 변환하세요.
+    
+    [작업 1: 제목 생성]
+    - 리포트의 핵심 결론(투자의견, 종목명, 주요 이슈)이 담긴 클릭하고 싶은 제목을 한 줄 작성하세요.
+    - 예시: [매수] 삼성전자 - 반도체 업황 턴어라운드 본격화
+    
+    [작업 2: HTML 본문 변환]
+    - 마크다운 텍스트를 깔끔한 HTML 스타일로 변환하세요.
+    - <html>, <body> 태그는 제외하고 <div> 태그부터 시작하세요.
+    - 주요 수치(주가, 등락률)는 빨간색 또는 굵게(Bold) 강조하세요.
+    - 가독성을 위해 적절한 CSS(font-size: 14px, line-height: 1.6 등)를 인라인 스타일로 적용하세요.
+    
+    [출력 형식]
+    반드시 마크다운 태그(```json) 없이 아래 순수 JSON 형식으로만 출력하세요.
+    {
+    "subject": "작성된 이메일 제목",
+    "html_body": "변환된 HTML 코드 전체"
+    }
     ```
+
+3.1. **Model**
+
+* `Basic LLM Chain` 창 하단의 Model 아이콘을 눌러서 `Model` 추가합니다.
+* **Credential:** AI Agent 와 분리하기 위해 `gemma` 모델의 credential 을 선택합니다.
+* **Model:** `/models/hf.google.gemma-3n-E4B`
+* **Options:**
+    * **Response Format:** `JSON`
+    * **Timeout:** `300000`
 
 4.  **Send Email**
 
@@ -81,7 +90,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
       ```
     * **HTML:** (Expression 모드)
       ```javascript
-      {{ $json.text }}
+      {{ $json.html_body }}
       ```
 
 5.  **저장(Save):**
