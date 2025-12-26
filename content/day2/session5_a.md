@@ -37,8 +37,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 2. **Trigger 설정:**
 
 * 노드 검색창에 `Execute Workflow Trigger`를 검색하여 추가합니다.
-* **Fields:**
-* `text` (본문 내용)
+* **Fields:** `text` (본문 내용)
 
 3. **Basic LLM Chain**
 
