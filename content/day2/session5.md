@@ -154,8 +154,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
     * **Name:** `Accept`
     * **Value:** `*/*`
 
-* **Follow Redirects 끄기**
-    * `Options > Follow Redirects` 스위치를 OFF 로 끕니다.
+* **Follow Redirects 켜기**
+    * `Options > Follow Redirects` 스위치를 ON 로 킵니다.
 
 4. **HTML Extract (알맹이만 꺼내기)**
 
