@@ -72,8 +72,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 4. **Model**
 
 * `Basic LLM Chain` 창 하단의 Model 아이콘을 눌러서 `Model` 추가합니다.
-* **Credential:** `granite`
-* **Model:** `granite`
+* **Credential:** `gemma`
+* **Model:** `gemma`
 * **Options:**
     * **Response Format:** `JSON`
     * **Timeout:** `600000`
