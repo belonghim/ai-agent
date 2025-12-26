@@ -125,3 +125,85 @@ OCR API는 보통 방대한 양의 "원문 텍스트"나 "좌표 정보"를 줍�
       * `합계` 는 *{{ $json.output.total_amount }}* 표현식으로 입력
 
 -----
+
+## 🛠️ [사전 준비] Google Search API 연동 가이드
+
+n8n의 `Google` 노드를 통해 실제 구글 검색 결과를 가져오기 위해서는 **1. GCP(Google Cloud Platform) 프로젝트 설정**과 **2. 검색 엔진(CSE) 생성** 두 가지 작업이 모두 필요합니다.
+
+### 1단계: Google Cloud Platform (GCP) 설정
+
+API Key를 발급받기 위한 과정입니다.
+
+1. **GCP 콘솔 접속:** [https://console.cloud.google.com/](https://console.cloud.google.com/) 에 접속하여 로그인합니다.
+2. **새 프로젝트 생성:**
+* 상단 로고 옆의 프로젝트 선택창을 누르고 **[새 프로젝트]**를 클릭합니다.
+* 이름을 입력(예: `n8n-search-agent`)하고 **[만들기]**를 누릅니다.
+
+
+3. **API 라이브러리 활성화:**
+* 좌측 메뉴(햄버거 버튼)에서 **[API 및 서비스] > [라이브러리]**로 이동합니다.
+* 검색창에 `Custom Search API`를 검색합니다.
+* **[Google Custom Search API]**를 클릭하고 **[사용(Enable)]** 버튼을 누릅니다.
+
+
+4. **API Key 발급:**
+* 좌측 메뉴에서 **[API 및 서비스] > [사용자 인증 정보(Credentials)]**로 이동합니다.
+* 상단의 **[+ 사용자 인증 정보 만들기]** > **[API 키]**를 선택합니다.
+* 생성된 **`API Key`**를 복사하여 메모장에 저장해 둡니다.
+
+> **주의:** GCP는 최초 사용 시 결제 계정(신용카드) 등록을 요구할 수도 있습니다. (Custom Search API는 하루 100회 무료입니다.)
+
+---
+
+### 2단계: Programmable Search Engine (검색 엔진 ID) 만들기
+
+"무엇을 검색할지" 정의하는 검색 엔진을 만들고 ID(CX)를 얻는 과정입니다.
+
+1. **설정 사이트 접속:** [https://programmablesearchengine.google.com/](https://programmablesearchengine.google.com/) 에 접속합니다.
+2. **검색 엔진 추가:**
+* **[추가]** 또는 **[검색엔진 만들기]** 버튼을 클릭합니다.
+* **이름:** 원하는 이름 입력 (예: `n8n-agent-search`).
+* **검색할 대상:** **'전체 웹 검색'** 옵션을 선택합니다. (만약 이 옵션이 안 보인다면, 일단 아무 사이트나 등록하고 생성 후 설정에서 수정해야 합니다.)
+* **[만들기]**를 완료합니다.
+
+
+3. **검색 엔진 ID (CX) 확인:**
+* 생성 완료 화면 혹은 좌측 메뉴의 **[개요]**에서 **`검색엔진 ID`** (cx 값)를 복사하여 메모장에 저장해 둡니다.
+
+
+
+> **Tip (전체 웹 검색 설정):**
+> 간혹 '특정 사이트 검색'으로만 생성되는 경우가 있습니다. 이 경우 생성 후 **[설정] > [검색 기능]** 메뉴에서 **'전체 웹 검색'** 토글을 켜야 Agent가 인터넷 전체를 뒤질 수 있습니다.
+
+---
+
+### 3단계: n8n 연결 (HTTP Request 노드)
+
+이제 n8n 에서 위에서 얻은 두 가지 키를 사용하는 예시입니다.
+
+#### 1. **노드 추가:** **`HTTP Request`** 노드를 추가합니다.
+* **Method:** `GET`
+* **URL:** `https://www.googleapis.com/customsearch/v1`
+* **Authentication:** `None` (API Key를 파라미터로 보낼 것이므로 여기선 끕니다.)
+
+#### 2. Query Parameters 설정 (핵심)
+
+**`Send Query Parameters`** 스위치를 켜고, 아래 3가지 값을 추가합니다.
+
+| Name | Value | 설명 |
+| --- | --- | --- |
+| **`q`** | `{{ $json.keyword }}` | 검색어 (이전 노드에서 받아온 값 매핑) |
+| **`cx`** | `0123456789...` | **검색 엔진 ID** (Programmable Search Engine에서 복사한 값) |
+| **`key`** | `AIzaSy...` | **GCP API Key** (Google Cloud Platform에서 발급받은 키) |
+
+> **팁:** `num` 파라미터를 추가하고 값을 `3`이나 `5`로 주면 검색 결과 개수를 제한할 수 있습니다. (기본값은 10개)
+
+#### 3. 결과 데이터 확인 (Parsing)
+
+이 방식으로 호출하면 결과가 JSON으로 나옵니다. 에이전트가 참고할 실제 내용은 `items` 배열 안에 있습니다.
+
+* **제목:** `items[0].title`
+* **링크:** `items[0].link`
+* **요약:** `items[0].snippet`
+
+---
