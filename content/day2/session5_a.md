@@ -77,7 +77,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 * **Model:** `/models/hf.google.gemma-3n-E4B`
 * **Options:**
     * **Response Format:** `JSON`
-    * **Timeout:** `300000`
+    * **Timeout:** `600000`
 
 5.  **Send Email**
 
