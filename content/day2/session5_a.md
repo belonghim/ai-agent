@@ -176,54 +176,23 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 
 ---
 
-#### Step 5: 합격 라인 (Approve) - 전송
+#### Step 5: 합격 라인 (0) - 전송
 
-합격 판정을 받은 경우, 팀장이 다듬어준 글(`refined_content`)을 슬랙으로 보냅니다.
+합격 판정을 받은 경우, 원문을 Email 로 보냅니다.
 
-1. **연결:** `Switch` 노드의 **첫 번째 출력(Output 0)**에 `Slack` (또는 `Call n8n Workflow`) 노드 연결.
-2. **Message:** `{{ $json.refined_content }}`
-* *Tip:* "팀장 승인 완료" 뱃지를 달아주면 더 좋습니다.
+1. **연결:** `Switch` 노드의 **첫 번째 출력(Output 0)**에 ``Call n8n Workflow` 노드 연결.
+* **Source:** `Database` 
+* **Workflow:** `Sub_Send_Email_Report`를 선택합니다.
+* **Workflow Inputs:**
+    * `text:` `{{ $('Save Report').last().json.output }}`
 
 ---
 
-#### Step 6: 불합격 라인 (Reject) - 피드백 루프 (Feedback Loop)
+#### Step 6: 불합격 라인 (Fallback) - 피드백 루프 (Feedback Loop)
 
 불합격 시, 팀장의 피드백(`reason`)을 가지고 다시 작성자 에이전트에게 일을 시킵니다. **(이 부분이 핵심 기술입니다)**
 
-1. **연결:** `Switch` 노드의 **두 번째 출력(Output 1)**에서 선을 뽑아 **`[Agent 1] 작성자` 노드의 입력(Input)**으로 연결합니다. (뒤에서 앞으로 선을 연결)
-2. **데이터 조작 (Prompt 수정):**
-* 그냥 연결하면 똑같은 질문을 또 하게 됩니다.
-* 작성자 에이전트의 프롬프트 입력창(`Expression` 모드)을 다음과 같이 수정해야 합니다.
-
-
-```javascript
-// 만약 팀장의 피드백(reason)이 있다면 그걸 포함해서 지시하고, 없으면(첫 실행이면) 원래 질문을 씁니다.
-{{ $json.reason ? 
-   "팀장님이 다음 이유로 반려했어: " + $json.reason + ". 이 피드백을 반영해서 리포트를 다시 작성해." : 
-   $fromAI("TriggerNode").message }} 
-
-```
+1. **연결:** `Switch` 노드의 **두 번째 출력(Output Fallback)**에서 선을 뽑아 **`[AI Agent] 작성자` 노드의 입력(Input)**으로 연결합니다. (뒤에서 앞으로 선을 연결)
 
 ---
 
-### Step 7: 메인 워크플로우에 email_sender 연결하기 (도구 쥐여주기)
-
-1.  **도구 추가:**
-
-* `AI Agent` 노드의 **Tools** 항목에서 `+` 버튼을 누릅니다.
-* `Call n8n Workflow Tool` 을 선택합니다.
-
-2.  **도구 설정:**
-
-* **Source:** `Database` 선택
-* **Workflow:** `Sub_Send_Email_Report`를 선택합니다.
-* **Workflow Inputs:** `text` 와 `subject` 오른쪽의 반짝이는 별 아이콘을 누릅니다.
-* **Name:** `email_sender`
-* **Description (설명서):**
-    ```text
-    Use this tool to send a final report via email.
-    The input must be a JSON object with "subject" and "text" fields.
-    Example: { "subject": "Nvidia Analysis Report", "text": "Here is the summary..." }
-    ```
-
------
