@@ -92,7 +92,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
       {{ $json.html_body }}
       ```
 
-6.  **저장(Save):**
+6.  **저장(Save) 및 출판(Publish):**
 
 * **저장** 합니다.
 
