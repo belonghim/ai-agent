@@ -33,7 +33,7 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
 
 * **Duplicate** 이전 workflow 의 오른쪽 세점을 누른 뒤, `Duplicate` 를 수행합니다.
 * **구글 시트** 도면 분석을 위한 새 구글 시트를 공유한 구글 드라이브 안에 준비합니다.
-    * "Drawing link",	"Product code",	"Sectional area (mm²)",	"Approximate mass (kg/m)", "Drawing title", "File name", "Drawing number", "Date" 을 첫번째 행의 각 열에 입력합니다.
+    * "Drawing link" 를 첫번째 행의 임의의 열에 입력합니다.
 * **Basic LLM Chain** 노드를 수정합니다.
   * `Require Specific Output Format` 는 끄고, `Structured Output Parser` 는 제거합니다.
   * `system message` 는 `너는 도면 OCR 텍스트를 단일 계층(Flat)의 Key-Value JSON으로 변환하는 데이터 정제 엔진이야.` 라고 입력합니다.
@@ -43,38 +43,15 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
   제공된 여러 들여쓰기로 분리된 텍스트에서 **Target Keys**에 해당하는 값만 찾아 JSON으로 추출해.
 
   # Rules
-  1. **Target Keys:**
-   - "Product code","Sectional area (mm²)","Approximate mass (kg/m)","Drawing title","File name","Drawing number","Date","Page","Scale".
-  2. **Noise Filter:**위 키에 해당하지 않는 단순 치수(예: 159.5 mm)나 라벨은 절대 포함하지 마.
-  3. **Key-Value 는 다른 들여쓰기 일 수 없음:** Key와 Value가 서로 다른 줄인 경우, 반드시 Value는 Key의 바로 아랫줄이여야만 하고 같은 들여쓰기여야만 한다.
+  1. "Drawing link" 의 값은 "https://drive.google.com/file/d/{{ $('Download file').item.json.id }}" 이다.
+  2. Target Keys:
+   - "Drawing link","Product code","Sectional area (mm²)","Approximate mass (kg/m)","Drawing title","File name","Drawing number","Date","Page","Scale".
+  3. Noise Filter: 위 키에 해당하지 않는 단순 치수(예: 159.5 mm)나 라벨은 절대 포함하지 마.
+  4. Key-Value 는 다른 들여쓰기 일 수 없음: Key와 Value가 서로 다른 줄인 경우, 반드시 Value는 Key의 바로 아랫줄이여야만 하고 같은 들여쓰기여야만 한다.
 
   # Input Text
   {{ $json.text }}
   ```
-
-* **Code in JavaScript** 노드를 `Basic LLM Chain` 뒤에 추가합니다.
-    ```
-    // 입력된 모든 아이템의 개수만큼 반복 (인덱스 i 사용)
-    for (let i = 0; i < items.length; i++) {
-      try {
-        let item = items[i];
-        let fileId = $('Download file').all()[i].json.id;
-        let drawingLink = fileId ? `https://drive.google.com/file/d/${fileId}` : "File ID not found";
-
-        item.json = {
-          "Drawing link": drawingLink,
-          ...item.json
-        };
-
-      } catch (error) {
-        console.error("처리 에러:", error);
-        items[i].json.error = "처리 실패: " + error.message;
-      }
-    }
-
-    return items;
-    ```
-
 
 ### Step 1: 승인 요청 이메일 보내기 (SendAndWait email Node)
 
@@ -83,7 +60,7 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
 * **Node 추가** `Send Email` (n8n 기본 노드)
 * **From Email:** 본인 이메일
 * **To Email:** 본인 이메일 (테스트용)
-* **Subject:** `[승인요청] {{ $json.output.product_code }} 도면 처리 건`
+* **Subject:** `[n8n] {{ $json['Product code'] }} 도면 처리 승인 요청건`
 * **HTML Message:** (Expression)
 
 ```html
@@ -144,12 +121,21 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
 
 ### Step 4: DB 저장 (Google Sheets)
 
-* **Switch 노드**의 **출력 1(승인)**에 `Google Sheets` 노드를 연결합니다.
+* **Switch 노드** 의 **출력 1(승인)**에 `Google Sheets` 노드를 연결합니다.
 * **Append or update row in sheet** 노드에서 `Document` 와 `Sheet` 는 도면용으로 만든 시트를 선택합니다.
     * **Mapping Column Mode** 는 `Map Automatically` 로 선택합니다.
     * **Column to match on** 는 `Draing link` 로 선택합니다.
 
 * **출력 0(반려)**에는 아무것도 연결하지 않거나, `Slack/Email` 노드를 연결해 "취소되었습니다" 알림을 보냅니다.
+
+* `Switch 노드` 와 `Google Sheets` 노드 사이에 `Code` 노드를 추가 합니다.
+* **JavaScript:**
+  ```
+  return $items("Basic LLM Chain");
+  ```
+
+
+* **출력 0(반려)**에는 아무것도 연결하지 않거나, `Email` 노드를 연결해 "취소되었습니다" 알림을 보낼 수도 있습니다.
 
 
 ### Step 5: Respond to Webhook 노드(브라우저에 "처리되었습니다" 메시지 표시)
