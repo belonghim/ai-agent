@@ -339,7 +339,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
 
 **요약**
 
-1.  **Dynamic Prompt:** 데이터(`{{json}}`)와 지시문(System Prompt)을 결합하여 AI에게 일을 시킨다.
+1.  **Dynamic Prompt:** 데이터(`{{ $json }}`)와 지시문(System Prompt)을 결합하여 AI에게 일을 시킨다.
 2.  **JSON Output:** 자동화를 위해 AI의 출력은 반드시 정형화된 데이터여야 한다.
 3.  **Agent:** 정해진 길이 아니라, 도구(Tools)를 판단하여 사용하는 자율적인 AI다.
 
