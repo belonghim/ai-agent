@@ -195,7 +195,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
   [행동 지침]
   - 당신의 지식을 믿지 말고, 반드시 도구를 통해 검증된 정보만 작성.
   - 같은 키워드로 반복 탐색 금지.
-  - 보고서는 1024 토큰을 넘지 않도록 짧게 작성.
+  - 보고서는 1024 context를 넘지 않도록 짧게 작성.
   {{
     $json.reason
       ? `
@@ -204,14 +204,15 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
   - 완성된 리포트만 출력하세요.
   `
       : `
+  [행동 순서]
   * 1단계. 탐색 (google_search)
     - 키워드: "... market cap stock price text", "... stock news analysis forecast text"
-    - 주가 데이터는 탐색 요약 내용에서 추출하세요.
+    - 주가 데이터는 탐색 요약 내용에서 추출.
     - 2단계 읽기 도구를 호출한 적 없다면 리포트를 작성하지 마세요.
   
   * 2단계. 읽기 (web_scraper)
-    - Javascript 나 Asp 동적 사이트(finance.yahoo, marketwatch)는 피하고, 텍스트 위주의 뉴스 기사를 선택하세요.
-    - 탐색 결과에서 가장 중요해 보이는 기사 1개를 찾아 내용을 읽기를 시도하세요.
+    - Javascript 나 Asp 동적 사이트(finance.yahoo, marketwatch)는 피하고, 텍스트 위주의 뉴스 기사를 선택.
+    - 탐색 링크 중 가장 중요해 보이는 기사 1개를 찾아 내용을 읽기를 시도하세요.
   
   * 3단계. 작성 (Report)
     - 확보된 정보만으로 최선을 다해 리포트를 작성하세요.
