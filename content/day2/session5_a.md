@@ -4,7 +4,7 @@
 앞서 만든 '주식 분석 에이전트(Junior Analyst)'가 쓴 리포트를 무조건 신뢰하는 것이 아니라, **'팀장 에이전트(Senior Editor)'**가 한 번 더 검토하고, **합격(Approve)**일 때만 발송하거나 **불합격(Reject)**이면 수정을 지시하는 고급 패턴입니다.
 
 > **실습 목표**
-> * **Multi-Agent System:** 하나의 AI가 아니라, '작성자(Writer)'와 '검토자(Reviewer)' 두 개의 AI가 협업하는 구조를 만듭니다.
+> * **Multi-Agent System:** 하나의 AI가 아니라, '작성자(Writer)'와 '검토자(Reviewer)' 두 개 이상의 AI가 협업하는 구조를 만듭니다.
 > * **Quality Control:** AI의 환각(Hallucination)이나 부적절한 말투를 2차 검증으로 걸러냅니다.
 > * **Conditional Logic:** 검토 결과에 따라 전송할지, 다시 쓰게 할지 분기 처리합니다.
 > 
@@ -112,22 +112,86 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 
 ---
 
-### Step 3: User Message (사용자 입력) **(추가)**
+### Step 3: 팀장(Supervisor) 노드 추가하기
 
-> **역할:** 처음 실행인지, 피드백을 받고 재실행하는 것인지 **동적으로 입력**을 넣어주는 부분입니다.
-> 메인 워크플로우로 돌아와서 AI-Agent 노드를 수정합니다.
-> n8n의 User Message 를 **Define Below** 로 변경하고 아래 코드를 입력하세요.
+작성자 에이전트(Agent 1) 뒤에 검토 역할을 할 새로운 LLM 노드를 붙입니다. 여기서는 도구를 쓸 필요 없이 텍스트만 판단하면 되므로 `Basic LLM Chain`을 사용합니다.
 
-이 코드는 **"피드백이 있으면 피드백을 포함해서 명령하고, 없으면 원래 질문만 던지는"** 로직입니다.
+1. **Node 추가:** `Basic LLM Chain` (또는 `OpenAI Chat Model`)
+2. **연결:** `[Agent 1] 작성자` 노드의 뒤에 연결합니다.
+3. **Prompt (System):** 팀장의 페르소나를 부여합니다.
+```text
+당신은 까다로운 금융 리포트 편집장(Senior Editor)입니다.
+입력된 '주식 분석 리포트'를 읽고 다음 기준을 엄격히 심사하세요.
+
+[심사 기준]
+1. 팩트(구체적인 수치)가 포함되어 있는가?
+2. 투자의견(매수/매도/보류)이 명확한가?
+3. 비속어나 불확실한 표현("~일 수도 있다")이 없는가?
+
+출력은 반드시 아래 JSON 형식으로만 하세요. (마크다운 없이)
+{
+  "status": "APPROVE" 또는 "REJECT",
+  "reason": "승인 이유 또는 거절 시 구체적인 피드백",
+  "refined_content": "수정이 필요하다면 수정한 본문, 아니면 원문 유지"
+}
+
+```
+
+
+4. **Model 설정:** `gpt-4o` 또는 `gpt-3.5-turbo` (검토는 3.5도 잘합니다).
+5. **Output Parsing:** 설정에서 `JSON Output` 옵션을 켜거나, 노드 뒤에 `Structured Output Parser`를 붙여 결과를 JSON 객체로 만듭니다.
+
+#### Step 4: 심사 결과에 따른 분기 (Switch)
+
+팀장의 평가(`APPROVE` vs `REJECT`)에 따라 길을 나눕니다.
+
+1. **Node 추가:** `Switch`
+2. **Mode:** `Rules`
+3. **Rule 1 (합격):**
+* Condition: `String`
+* Value 1: `{{ $json.status }}` (팀장 노드의 출력값)
+* Operation: `Equal to`
+* Value 2: `APPROVE`
+
+
+4. **Rule 2 (불합격):**
+* Value 1: `{{ $json.status }}`
+* Operation: `Equal to`
+* Value 2: `REJECT`
+
+
+
+#### Step 5: 합격 라인 (Approve) - 전송
+
+합격 판정을 받은 경우, 팀장이 다듬어준 글(`refined_content`)을 슬랙으로 보냅니다.
+
+1. **연결:** `Switch` 노드의 **첫 번째 출력(Output 0)**에 `Slack` (또는 `Call n8n Workflow`) 노드 연결.
+2. **Message:** `{{ $json.refined_content }}`
+* *Tip:* "팀장 승인 완료" 뱃지를 달아주면 더 좋습니다.
+
+
+
+#### Step 6: 불합격 라인 (Reject) - 피드백 루프 (Feedback Loop)
+
+불합격 시, 팀장의 피드백(`reason`)을 가지고 다시 작성자 에이전트에게 일을 시킵니다. **(이 부분이 핵심 기술입니다)**
+
+1. **연결:** `Switch` 노드의 **두 번째 출력(Output 1)**에서 선을 뽑아 **`[Agent 1] 작성자` 노드의 입력(Input)**으로 연결합니다. (뒤에서 앞으로 선을 연결)
+2. **데이터 조작 (Prompt 수정):**
+* 그냥 연결하면 똑같은 질문을 또 하게 됩니다.
+* 작성자 에이전트의 프롬프트 입력창(`Expression` 모드)을 다음과 같이 수정해야 합니다.
+
 
 ```javascript
-// Expression 모드. 한 줄 주의.
-{{ $json.reason ? "**⚠️ 긴급: 수정 요청 사항 (Supervisor Feedback)**\n   - 이전 리포트가 반려되었습니다. 다음 피드백을 반영하여 리포트를 **처음부터 다시** 완벽하게 작성하세요.\n   - **반려 사유(피드백):** " + $json.reason + "\n\n[이전 리포트] (아래 리포트를 수정하세요)\n" + $('Save Report').last().json.output : $json.chatInput }}
+// 만약 팀장의 피드백(reason)이 있다면 그걸 포함해서 지시하고, 없으면(첫 실행이면) 원래 질문을 씁니다.
+{{ $json.reason ? 
+   "팀장님이 다음 이유로 반려했어: " + $json.reason + ". 이 피드백을 반영해서 리포트를 다시 작성해." : 
+   $fromAI("TriggerNode").message }} 
+
 ```
 
 ---
 
-### Step 4: 메인 워크플로우에 email_sender 연결하기 (도구 쥐여주기)
+### Step 7: 메인 워크플로우에 email_sender 연결하기 (도구 쥐여주기)
 
 1.  **도구 추가:**
 
