@@ -6,7 +6,7 @@
 n8n은 Podman을 통해 로컬에  쉽게 설치할 수 있습니다.
 
 ```bash
-podman run -d --name n8n -p 5678:5678 -e N8N_PROTOCOL=http -e WEBHOOK_URL=http://localhost:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n:1.116.2
+podman run -d --name n8n -p 5678:5678 -e GENERIC_TIMEZONE=Asia/Seoul -e TZ=Asia/Seoul -e N8N_RUNNERS_ENABLED=true -e N8N_PROTOCOL=http -e WEBHOOK_URL=http://localhost:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
 ```
 
 -----
