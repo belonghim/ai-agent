@@ -37,48 +37,11 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 2. **Trigger 설정:**
 
 * 노드 검색창에 `Execute Workflow Trigger`를 검색하여 추가합니다.
-* **Fields:** `text` (본문 내용)
+* **Fields:**
+    * `text` (본문 내용)
+    * `subject` (제목)
 
-3. **Basic LLM Chain**
-
-* 노드 검색창에 `Basic LLM Chain`을 검색하여 추가합니다.
-* **Source for Prompt:** `Define below`
-* **Prompt:** `{{ $json.text }}`
-
-* **Chat Messages**
-    * `Type Name:` `System`
-    * `Message:`
-    ```
-    당신은 전문 '금융 뉴스레터 디자이너'입니다.
-    입력받은 [주식 분석 리포트]를 분석하여 이메일 전송용 데이터로 변환하세요.
-    
-    [작업 1: 제목 생성]
-    - 리포트의 핵심 결론(투자의견, 종목명, 주요 이슈)이 담긴 클릭하고 싶은 제목을 한 줄 작성하세요.
-    - 예시: [매수] 삼성전자 - 반도체 업황 턴어라운드 본격화
-    
-    [작업 2: HTML 본문 변환]
-    - 마크다운 텍스트를 깔끔한 HTML 스타일로 변환하세요.
-    - <html>, <body> 태그는 제외하고 <div> 태그부터 시작하세요.
-    - 주요 수치(주가, 등락률)는 빨간색 또는 굵게(Bold) 강조하세요.
-    
-    [출력 형식]
-    반드시 마크다운 태그(```json) 없이 아래 순수 JSON 형식으로만 출력하세요.
-    {
-    "subject": "작성된 이메일 제목",
-    "html_body": "변환된 HTML 코드 전체"
-    }
-    ```
-
-4. **Model**
-
-* `Basic LLM Chain` 창 하단의 Model 아이콘을 눌러서 `Model` 추가합니다.
-* **Credential:** `gemma`
-* **Model:** `gemma`
-* **Options:**
-    * **Response Format:** `JSON`
-    * **Timeout:** `600000`
-
-5.  **Send Email**
+3.  **Send Email**
 
 * `Send Email` 노드를 추가하고 Trigger와 연결합니다.
     * `From` 과 `To` Email 을 모두 자신의 이메일 주소를 입력한다.
@@ -88,10 +51,10 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
       ```
     * **HTML:** (Expression 모드)
       ```javascript
-      {{ $json.html_body }}
+      {{ $json.text }}
       ```
 
-6.  **저장(Save) 및 출판(Publish):**
+4.  **저장(Save) 및 출판(Publish):**
 
 * **저장** 합니다.
 
@@ -134,24 +97,25 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
     입력된 '주식 분석 리포트'를 읽고 심사 기준에 따라 엄격히 평가하세요.
     
     [심사 기준]
-    1. **팩트 검증:** 구체적인 수치(주가, 시가총액, 등락률 등)가 명시되어 있는가?
-    2. **명확성:** 투자의견(매수/매도/보류)이 결론에 확실히 드러나는가?
-    3. **전문성:** 비속어나 모호한 표현("~일 수도 있다", "~같다") 없이 전문적인 어조인가?
+    1. 팩트 검증: 구체적인 수치(주가, 시가총액, 등락률 등)가 명시되어 있는가?
+    2. 명확성: 투자의견(매수/매도/보류)이 결론에 확실히 드러나는가?
+    3. 전문성: 비속어나 모호한 표현("~일 수도 있다", "~같다") 없이 전문적인 어조인가?
     
     [중요 행동 지침]
-    - **절대로 팩트(숫자, 데이터)를 직접 수정하거나 지어내지 마세요.**
-    - 수치가 누락되었거나 틀려 보인다면, 직접 고치지 말고 반드시 **반려(REJECT)** 하세요.
+    - 절대로 팩트(숫자, 데이터)를 직접 수정하거나 지어내지 마세요.
+    - 수치가 누락되었거나 틀려 보인다면, 직접 고치지 말고 반드시 반려(REJECT) 하세요.
     
     [출력 형식]
     반드시 마크다운(```json) 없이 순수한 JSON 텍스트만 출력하세요.
     
     {
       "status": "APPROVE" 또는 "REJECT",
-      "reason": "승인 시 '적합', 거절 시 팀원에게 지시할 구체적인 수정 요청 사항 (예: '현재 주가가 누락되었습니다. 보강하세요.')"
+      "reason": "승인 시, '적합'. 거절 시, 팀원에게 지시할 구체적인 수정 요청 사항 작성",
+      "subject:" "거절 시, ''. 승인 시, 리포트의 핵심 결론(투자의견, 종목명, 주요 이슈)이 담긴 제목을 한 줄 작성 (예시: [매수] 삼성전자 - 반도체 업황 턴어라운드 본격화)"
     }
     ```
 
-5. **Model 설정:** AI Agent 와 분리하기 위해 `gemma` 모델의 Credential 및 Model 을 선택합니다.
+5. **Model 설정:** AI Agent 와 분리하기 위해 `qwen/Qwen3-4B-Thinking-2507-GGUF` 모델의 Credential 및 Model 을 선택합니다.
 6. **Options:**
     * **Response Format:** `JSON`
     * **Timeout:** `600000`
