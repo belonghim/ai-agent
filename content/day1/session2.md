@@ -28,7 +28,6 @@ n8n의 캔버스(Editor UI)는 직관적입니다.
 
 1. Trigger 추가: Manual Trigger 노드 검색 및 추가.
 2. Action 추가: Code 노드 또는 Edit Fields 노드 추가.
-    * Tip: n8n 1.0 이상에서는 Edit Fields (Set) 노드가 데이터를 설정하는 기본입니다.
 3. 데이터 입력:
     * Name: message
     * Value: Hello n8n Agent!
