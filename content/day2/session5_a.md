@@ -12,14 +12,14 @@
 
 ### 🏗️ 전체 워크플로우 구조
 
-`User Input` → **`[Agent 1] 작성자`** → **`[LLM Node] 팀장(감수)`** → `Switch(판단)` → `(합격 시) Email 전송` / `(불합격 시) 피드백 루프`
+`User Input` → **`[AI Agent] 작성자`** → **`[LLM Node] 팀장(감수)`** → `Switch(판단)` → `(합격 시) Email 전송` / `(불합격 시) 피드백 루프`
 
-1. **Agent 1 (주니어):** 리포트 작성 -\> 출력.
+1. **AI Agent (주니어):** 리포트 작성 -\> 출력.
 2. **LLM Node (팀장):**
-     * 입력: Agent 1의 글.
+     * 입력: AI Agent의 글.
      * 프롬프트 예: "이 글의 팩트 체크와 톤앤매너를 점검해. 만약 부족하면 'REJECT', 괜찮으면 'APPROVE'라고 출력해."
 3. **Switch Node (분기):**
-     * `REJECT`일 경우 → 다시 Agent 1에게 수정 요청(Loop back).
+     * `REJECT`일 경우 → 다시 AI Agent에게 수정 요청(Loop back).
      * `APPROVE`일 경우 → Slack 전송.
 
 -----
