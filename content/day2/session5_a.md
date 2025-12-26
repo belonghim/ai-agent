@@ -4,7 +4,7 @@
 앞서 만든 '주식 분석 에이전트(Junior Analyst)'가 쓴 리포트를 무조건 신뢰하는 것이 아니라, **'팀장 에이전트(Senior Editor)'**가 한 번 더 검토하고, **합격(Approve)**일 때만 발송하거나 **불합격(Reject)**이면 수정을 지시하는 고급 패턴입니다.
 
 > **실습 목표**
-> * **Multi-Agent System:** 하나의 AI가 아니라, '작성자(Writer)'와 '검토자(Reviewer)' 두 개 이상의 AI가 협업하는 구조를 만듭니다.
+> * **Multi-Agent System:** 하나의 AI가 아니라, '작성자(Writer)'와 '검토자(Reviewer)' 등의 두 개 이상의 AI가 협업하는 구조를 만듭니다.
 > * **Quality Control:** AI의 환각(Hallucination)이나 부적절한 말투를 2차 검증으로 걸러냅니다.
 > * **Conditional Logic:** 검토 결과에 따라 전송할지, 다시 쓰게 할지 분기 처리합니다.
 > 
