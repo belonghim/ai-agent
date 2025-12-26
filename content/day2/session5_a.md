@@ -72,8 +72,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 4. **Model**
 
 * `Basic LLM Chain` 창 하단의 Model 아이콘을 눌러서 `Model` 추가합니다.
-* **Credential:** AI Agent 와 분리하기 위해 `gemma` 모델의 credential 을 선택합니다.
-* **Model:** `/models/hf.google.gemma-3n-E4B`
+* **Credential:** `granite`
+* **Model:** `granite`
 * **Options:**
     * **Response Format:** `JSON`
     * **Timeout:** `600000`
@@ -151,7 +151,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
     }
     ```
 
-5. **Model 설정:** `gemma` (AI Agent 와 분리)
+5. **Model 설정:** AI Agent 와 분리하기 위해 `gemma` 모델의 Credential 및 Model 을 선택합니다.
 6. **Options:**
     * **Response Format:** `JSON`
     * **Timeout:** `600000`
