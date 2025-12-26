@@ -112,7 +112,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 
 ---
 
-### Step 2.1: Set 노드 추가
+### Step 2.1: Edit Fields (Set) 노드 추가
 
 > **역할:** 이 노드는 Agent AI 가 방금 뱉어낸 리포트를 "박제"하는 역할입니다.
 * **Node Name:** `Save_Report`
