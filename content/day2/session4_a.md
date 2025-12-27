@@ -67,7 +67,7 @@
 
 * **Node:** `HTTP Request`
 * **Method:** `POST`
-* **URL:** `http://localhost:22222/inference` (Podman에서 확인한 주소)
+* **URL:** `http://host.containers.internal:22222/inference` (Podman에서 확인한 포트)
 * **Send Body:** `On` 켜기
 * **Body Content Type:** `Form-Data` **(중요!)**
 * API 서버로 파일을 전송할 때는 반드시 이 옵션을 써야 합니다.
