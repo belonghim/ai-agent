@@ -27,7 +27,7 @@ n8n의 캔버스(Editor UI)는 직관적입니다.
 목표: "버튼을 누르면 'Hello World'를 출력한다."
 
 1. Trigger 추가: Manual Trigger 노드 검색 및 추가.
-2. Action 추가: Code 노드 또는 Edit Fields 노드 추가.
+2. Action 추가: Edit Fields 노드 추가.
 3. 데이터 입력:
     * Name: message
     * Value: Hello n8n Agent!
