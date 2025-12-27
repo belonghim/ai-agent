@@ -156,7 +156,7 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
     ```
     <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
     <h1 style="color: #4CAF50;">❌ 반려 되었습니다.</h1>
-    <p>{{ $('Code in JavaScript').item.json['Drawing link'] }}</p>
+    <p>{{ $('Basic LLM Chain').item.json['Drawing link'] }}</p>
     <button onclick="window.close()" style="padding: 10px 20px; cursor: pointer;">창 닫기</button>
     </div>
     ```
