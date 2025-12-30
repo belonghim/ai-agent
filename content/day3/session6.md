@@ -47,7 +47,7 @@
 
 * **Node:** `HTTP Request`
 * **Method:** `POST`
-* **URL:** 사용하려는 OCR 서비스의 API 주소 (예: `http://host.containers.internal:63470/ocr`)
+* **URL:** 사용하려는 OCR 서비스의 API 주소 (예: `http://host.containers.internal:12222/ocr`)
 * **Send Body:** `On` 켜기
 * **Body Content Type:** `Form-Data` **(중요!)**
 * API 서버로 파일을 전송할 때는 반드시 이 옵션을 써야 합니다.
