@@ -53,12 +53,8 @@ n8n의 데이터는 **'Item'**이라는 택배 상자에 담겨 컨베이어 벨
 
 ```json
 [
-  {
-    "json": {
-      "product": "Laptop",
-      "price": 1200
-    }
-  }
+  { "json": { "product": "Laptop", "price": 1200 } },
+  { "json": { "product": "Mouse", "price": 20 } }
 ]
 
 ```
