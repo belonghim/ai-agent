@@ -31,13 +31,13 @@
 #### 2.2. Agent가 일하는 방식 (ReAct)
 
 Agent는 단순히 명령을 따르는 것이 아니라, 목표를 달성하기 위해 **추론(Reasoning)** 하고 **행동(Acting)** 합니다.
-* *ReAct(Reasoning + Acting)*는 “생각 → 행동 → 결과 확인 → 다시 생각”의 **사이클**
 
 1. 지각 (Perception): 사용자 요청 및 환경 인식
 2. 계획 (Planning): 어떤 도구를 어떤 순서로 쓸지 결정
 3. 행동 (Action): API 호출, 검색, 데이터베이스 조회
 4. 피드백 (Feedback): 결과 확인 및 수정
 
+* *ReAct(Reasoning + Acting)*는 “생각 → 행동 → 결과 확인 → 다시 생각”의 **사이클**
 
 #### 2.3. 왜 n8n 인가?
 
