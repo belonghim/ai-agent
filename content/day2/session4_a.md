@@ -51,13 +51,14 @@
 
   * **Node:** `Google Drive` Trigger
   * **On changes involving a specific folder**
-  * **Folder:** `From list` 에서 권한 있는 folder 선택. (오디오용 폴더 선택)
+  * **Folder:** `From list` 에서 권한 있는 folder 선택. (오디오용 폴더 새성 및 선택)
+  * **Watch For:** `File Created` 선택.
+  * **mp3** 파일로 된 대화 레코딩 파일을 준비하세요.
 
 #### Step 2: 오디오 파일 가져오기 (Download file)
 * **Google Drive Download** 노드에서 'Operation` 을 **Download** 를 선택합니다.
   * **File:** 은 `By ID` 로 선택한 뒤, {{ $json.id }} 표현식으로 File 을 다운로드 받게 됩니다.
   * *Put Output File in Field:* 는 `data` 라는 이름으로 바이너리를 전달합니다.
-  * mp3 파일로 된 대화 레코딩 파일을 준비하세요.
 
   * **핵심:** 오디오 파일은 n8n 내부에서 **Binary Data**로 처리됨을 이해해야 합니다.
     * 음성 Binary Data 를 STT 에게 전달해주면 글로 된 데이터를 돌려받을 수 있게 됩니다.
