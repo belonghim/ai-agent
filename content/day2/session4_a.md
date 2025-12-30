@@ -38,9 +38,9 @@
 
 1. AI Lab -> **Services** (또는 Local Server) 탭 클릭
 2. **New Model Service** 클릭 -> 다운로드한 whisper 모델 선택
-3. **Container port** 임의 지정 (예: 22222 포트)
+3. **Container port** 임의 지정 (예: 11111 포트)
 4. **Create Service** 클릭
-5. **Open Service Details** 클릭 후, **Endpoint 확인:** `http://host.containers.internal:22222/inference`
+5. **Open Service Details** 클릭 후, **Endpoint 확인 및 기록** `http://host.containers.internal:11111/inference (localhost -> host.containers.internal 로 수정 필요)`
 * *이 주소는 'OpenAI' 노드에서 사용됩니다.*
 
 
@@ -67,7 +67,7 @@
 
 * **Node:** `HTTP Request`
 * **Method:** `POST`
-* **URL:** `http://host.containers.internal:22222/inference` (Podman에서 확인한 포트)
+* **URL:** `http://host.containers.internal:11111/inference` (Podman에서 확인한 포트)
 * **Send Body:** `On` 켜기
 * **Body Content Type:** `Form-Data` **(중요!)**
 * API 서버로 파일을 전송할 때는 반드시 이 옵션을 써야 합니다.
