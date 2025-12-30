@@ -11,6 +11,7 @@
 ### 1\. 워크플로우 전체 흐름 (Flow)
 
 이 워크플로우는 \*\*듣고(Listen) -\> 쓰고(Transcribe) -\> 요약(Summarize)\*\*하는 3단계로 이루어집니다.
+* STT 란 “음성을 텍스트로 바꾸는 기술”
 
 1.  **Trigger:** 오디오 파일 감지 (예: Telegram 음성 메시지, Google Drive 업로드)
 2.  **Action 1 (STT):** OpenAI Whisper 모델이 음성을 텍스트로 받아쓰기
@@ -51,15 +52,15 @@
   * **Node:** `Google Drive` Trigger
   * **On changes involving a specific folder**
   * **Folder:** `From list` 에서 권한 있는 folder 선택. (오디오용 폴더 선택)
-  * **Options:**
-      * File Type: `Audio` 선택
-      * **핵심:** 오디오 파일은 n8n 내부에서 **Binary Data**로 처리됨을 이해해야 합니다.
 
 #### Step 2: 오디오 파일 가져오기 (Download file)
 * **Google Drive Download** 노드에서 'Operation` 을 **Download** 를 선택합니다.
-    * **File:** 은 `By ID` 로 선택한 뒤, {{ $json.id }} 표현식으로 File 을 다운로드 받게 됩니다.
-    * *Put Output File in Field:* 는 `data` 라는 이름으로 바이너리를 전달합니다.
-    * mp3 파일로 된 대화 레코딩 파일을 준비하세요.
+  * **File:** 은 `By ID` 로 선택한 뒤, {{ $json.id }} 표현식으로 File 을 다운로드 받게 됩니다.
+  * *Put Output File in Field:* 는 `data` 라는 이름으로 바이너리를 전달합니다.
+  * mp3 파일로 된 대화 레코딩 파일을 준비하세요.
+
+  * **핵심:** 오디오 파일은 n8n 내부에서 **Binary Data**로 처리됨을 이해해야 합니다.
+    * 음성 Binary Data 를 STT 에게 전달해주면 글로 된 데이터를 돌려받을 수 있게 됩니다.
 
 #### Step 3: 음성을 텍스트로 변환 (Whisper API)
 
@@ -70,7 +71,7 @@
 * **URL:** `http://host.containers.internal:11111/inference` (Podman에서 확인한 포트)
 * **Send Body:** `On` 켜기
 * **Body Content Type:** `Form-Data` **(중요!)**
-* API 서버로 파일을 전송할 때는 반드시 이 옵션을 써야 합니다.
+* API 서버로 바이너리 파일을 전송하기 위해서, 반드시 이 옵션을 써야 합니다.
 
 * **Body Parameters:**
 * **file:** `data`
