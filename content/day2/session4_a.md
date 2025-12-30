@@ -50,7 +50,7 @@
 실습 편의를 위해 지난 시간 연동해둔 **Google Drive**을 사용합니다. (또는 로컬 파일을 읽는 `Read Binary File` 노드도 사용 가능)
 
   * **Node:** `Google Drive` Trigger
-  * **On changes involving a specific folder**
+  * **On changes involving a specific folder** 로 선택.
   * **Folder:** `From list` 에서 권한 있는 folder 선택. (오디오용 폴더 새성 및 선택)
   * **Watch For:** `File Created` 선택.
   * **mp3** 파일로 된 대화 레코딩 파일을 준비하세요.
