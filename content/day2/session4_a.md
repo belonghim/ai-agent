@@ -72,7 +72,7 @@
 * **URL:** `http://host.containers.internal:11111/inference` (Podman에서 확인한 포트)
 * **Send Body:** `On` 켜기
 * **Body Content Type:** `Form-Data` **(중요!)**
-* API 서버로 바이너리 파일을 전송하기 위해서, 반드시 이 옵션을 써야 합니다.
+  * API 서버로 바이너리 파일을 전송하기 위해서, 반드시 위 옵션을 써야 합니다.
 
 * **Body Parameters:**
 * **file:** `data`
