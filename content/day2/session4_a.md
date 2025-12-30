@@ -47,7 +47,7 @@
 
 #### Step 1: 오디오 파일 (Trigger)
 
-실습 편의를 위해 **Google Drive**나 **Telegram**을 많이 사용합니다. 지난 시간 연동해둔 **Google Drive**을 사용합니다. (또는 로컬 파일을 읽는 `Read Binary File` 노드도 사용 가능)
+실습 편의를 위해 지난 시간 연동해둔 **Google Drive**을 사용합니다. (또는 로컬 파일을 읽는 `Read Binary File` 노드도 사용 가능)
 
   * **Node:** `Google Drive` Trigger
   * **On changes involving a specific folder**
