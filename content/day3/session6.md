@@ -57,6 +57,15 @@
 * **Parameter Name:** `file` (API 문서에서 요구하는 파일 필드명 확인 필수)
 * **Input Data Field:** Step 1에서 넘어온 바이너리 데이터 속성명: `data`
 
+#### 3.1: OCR 컨테이너 설정
+OCR 컨테이너를 12222 포트로 띄웁니다.
+
+```bash
+podman run -d -p 12222:8000 --name ocr quay.io/joopark/ocr:vector
+```
+
+-----
+
 #### Step 4: 텍스트 구조화 및 요약 (LLM)
 
 OCR API는 보통 방대한 양의 "원문 텍스트"나 "좌표 정보"를 줍니다. 이를 우리가 원하는 깔끔한 JSON으로 만듭니다.
