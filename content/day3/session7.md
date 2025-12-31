@@ -68,9 +68,7 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
   <p>AI가 분석한 도면의 결과는 아래와 같습니다. DB에 저장을 승인하시겠습니까?</p>
 
   <ul style="background-color: #f9f9f9; padding: 15px; list-style: none;">
-    {{ Object.entries($json).map(([key, value]) => `
-      <li><b>${key}:</b> ${value}</li>
-    `).join('') }}
+    {{ Object.entries($json).map(([key, value]) => `<li><b>${key}:</b> ${value}</li>`).join('') }}
   </ul>
 
   <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
