@@ -61,15 +61,15 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
 * **To Email:** 본인 이메일 (테스트용)
 * **Subject:** `[n8n] {{ $json['Product code'] }} 도면 처리 승인 요청건`
 * **HTML Message:** (Expression)
+
+   {% raw %}
    ```js
    <div style="font-family: sans-serif; border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
      <h2 style="color: #333;">📋 승인 요청</h2>
      <p>AI가 분석한 도면의 결과는 아래와 같습니다. DB에 저장을 승인하시겠습니까?</p>
    
      <ul style="background-color: #f9f9f9; padding: 15px; list-style: none;">
-   {% raw %}
        {{ Object.entries($json).map(([key, value]) => `<li><b>${key}:</b> ${value}</li>`).join('') }}
-   {% endraw %}
      </ul>
    
      <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
@@ -87,6 +87,7 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
      </a>
    </div>
    ```
+   {% endraw %}
 
 > **💡 핵심 포인트:** `{{ $execution.resumeUrl }}`은 n8n이 자동으로 만들어주는 **"이 워크플로우를 깨우는 주소"**입니다. 뒤에 `/?action=approve`와 `/?action=reject`를 붙여서 동작을 구분합니다.
 
