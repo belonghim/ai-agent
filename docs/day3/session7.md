@@ -173,12 +173,12 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
 * **Credential:** 불필요.
 * **Webhook URL:** 복사한 URL 붙여넣기.
 * **Message:**
-```text
-[승인요청] {{ $json.project_name }}
-승인: {{ $execution.resumeUrl }}?action=approve&id={{ $('Loop Over Items').item.json.id }}
-반려: {{ $execution.resumeUrl }}?action=reject
-
-```
+   ```text
+   [승인요청] {{ $json.project_name }}
+   승인: {{ $execution.resumeUrl }}?action=approve&id={{ $('Loop Over Items').item.json.id }}
+   반려: {{ $execution.resumeUrl }}?action=reject
+   
+   ```
 
 
 * *Google Chat은 HTML 버튼을 지원하지 않으므로, 텍스트 링크 형태로 보냅니다.*
