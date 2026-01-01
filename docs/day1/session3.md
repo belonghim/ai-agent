@@ -129,12 +129,13 @@ return [
 
 **Step 3. Credential(자격 증명) 설정 - ★중요**
 
-1. `OpenAI Chat Model` 노드를 더블 클릭합니다.
-2. `Credential for OpenAI API`에서 **Create New**를 선택합니다.
+1. `OpenAI Chat Model` 노드를 구성합니다.
+2. `Credential to connect with`에서 **Create New**를 선택합니다.
 3. **설정 값 입력:**
-* **API Key:** `sk-any-key` (아무거나 입력해도 됩니다. Local이라 검증하지 않음)
-* **URL (Base URL):** `http://host.containers.internal:11000/v1` (또는 Podman에서 확인한 주소)
-* **Save**를 누릅니다.
+  * **API Key:** `sk-any-key` (아무거나 입력해도 됩니다. Local이라 검증하지 않음)
+  * **URL (Base URL):** `http://host.containers.internal:11000/v1` (또는 Podman에서 확인한 주소)
+  * **Save**를 누릅니다.
+4. `Model:` 클릭하면 자동으로 해당 자격증명을 통해 확인되는 모델을 선택할 수 있습니다. 
 
 
 
