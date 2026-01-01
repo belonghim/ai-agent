@@ -119,7 +119,7 @@ return [
 
 **Step 2. Model 연결 (OpenAI Chat Model 노드 활용)**
 
-1. `Basic LLM Chain` 노드의 `Model` 입력 단자(작은 원)를 클릭하고 드래그하여 놓습니다.
+1. `Basic LLM Chain` 노드의 `Model` 입력 단자에 붙은 더하기(+) 아이콘을 클릭합니다.
 2. 메뉴에서 **`OpenAI Chat Model`**을 선택하여 연결합니다.
 * **OpenAI Chat Model**
     * **Model:** `/models/hf.google.gemma-3n-E4B`
