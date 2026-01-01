@@ -68,8 +68,9 @@ n8n의 데이터는 **'Item'**이라는 택배 상자에 담겨 컨베이어 벨
 
 **Step 1. 가상의 데이터 만들기**
 
-1. `Manual Trigger` 노드 생성
-2. `Code` (javascript) 노드 연결 및 아래 코드 붙여넣기
+1. 새로운 Workflow 를 생성
+2. `Manual Trigger` 노드 생성
+3. `Code` (javascript) 노드 연결 및 아래 코드 붙여넣기
 
 ```javascript
 return [
@@ -80,7 +81,7 @@ return [
 
 ```
 
-3. `Execute Node`를 눌러 데이터 3개가 생성된 것을 확인.
+4. `Execute Node`를 눌러 데이터 3개가 생성된 것을 확인.
 
 **Step 2. 가격 인상하기 (Edit Fields 노드)**
 
@@ -136,6 +137,7 @@ return [
 3. **설정 값 입력:**
   * **API Key:** `sk-any-key` (아무거나 입력해도 됩니다. Local이라 검증하지 않음)
   * **URL (Base URL):** `http://host.containers.internal:11000/v1` (또는 Podman에서 확인한 주소)
+  * OpenAi Credential 의 이름을 gemma 라고 바꿉니다.
   * **Save**를 누릅니다.
 4. `Model:` 클릭하면 자동으로 해당 자격증명을 통해 확인되는 모델을 선택할 수 있습니다. 
 
