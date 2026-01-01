@@ -112,8 +112,8 @@ return [
 
 
 2. **Prompt(질문) 입력:**
-* 입력창에 다음 내용을 작성하고 `product` 변수를 매핑합니다.
-* `"너는 마케팅 전문가야. {{ $json.product }} 제품을 팔기 위한 매력적인 한 줄 광고 문구를 한국어로 작성해줘."`
+* Source for Prompt (User Message) 를 `Define below` 로 수정하고, 다음 내용을 작성하여 `product` 변수를 매핑합니다.
+* `너는 마케팅 전문가야. {{ $json.product }} 제품을 팔기 위한 매력적인 한 줄 광고 문구를 한국어로 작성해줘.`
 
 
 
