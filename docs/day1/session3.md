@@ -69,7 +69,7 @@ n8n의 데이터는 **'Item'**이라는 택배 상자에 담겨 컨베이어 벨
 **Step 1. 가상의 데이터 만들기**
 
 1. `Manual Trigger` 노드 생성
-2. `Code` 노드 연결 및 아래 코드 붙여넣기
+2. `Code` (javascript) 노드 연결 및 아래 코드 붙여넣기
 
 ```javascript
 return [
@@ -85,13 +85,12 @@ return [
 **Step 2. 가격 인상하기 (Edit Fields 노드)**
 
 1. `Edit Fields` (구 Set 노드) 연결.
-2. **Mode 설정:** 값을 입력할 필드 옆의 작은 설정 아이콘을 눌러 **`Expression`** 모드로 바꿉니다. (입력창이 회색으로 변함)
-3. **변수 연결 (Drag & Drop):**
+2. **변수 연결 (Drag & Drop):**
 * 왼쪽 `Input` 패널에서 `price` 값을 마우스로 잡아서
 * 오른쪽 `Value` 입력창에 끌어다 놓습니다. (`{{ $json.price }}` 생성됨)
 
 
-4. **수식 적용:**
+3. **수식 적용:**
 * 입력된 값 뒤에 `* 1.1`을 덧붙입니다.
 * 최종 수식: `{{ $json.price * 1.1 }}`
 
