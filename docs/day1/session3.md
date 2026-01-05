@@ -127,7 +127,8 @@ return [
 * **OpenAI Chat Model**
     * **Model:** `/models/hf.google.gemma-3n-E4B`
 * *핵심:* 우리는 OpenAI를 쓰지 않지만, Podman의 Local LLM이 OpenAI와 통신 방식(규격)이 같으므로 이 노드를 빌려서 사용합니다.
-3. `Options:`
+3. `Use Responses API:` 비활성화
+4. `Options:`
   * `Timeout:` 300000 (응답 시간을 늘립니다.)
 
 
