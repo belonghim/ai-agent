@@ -54,9 +54,9 @@ n8n에서 AI를 다루는 방식은 크게 두 가지가 있습니다. 이번 �
 JSON 외의 어떤 텍스트도 출력하지 마세요.
 
 {
-  "summary": "3줄 요약",
   "category": "문의 유형",
-  "priority": 1 (숫자 1~5)
+  "priority": 1 (숫자 1~5),
+  "summary": "3줄 요약"
 }
 
 ```
@@ -103,20 +103,13 @@ return result;
 
 **Step 5. Google Sheets 노드 생성**
 
-* 생성된 이슈들을 로그로 보관합니다. ( drive.google.com 에서 미리 권한 있는 Google Sheets Document 를 만들어 둡니다. )
-* Code 노드에서 연결 
+* 생성된 이슈들을 로그로 보관합니다.
+* Code 노드 다음에 연결합니다. ( 준비 Part A 진행 필요합니다. )
 * **Google Sheets** 의 `Append or update row in sheet` 노드를 선택합니다.
 * **Document:** 의 `From list` 중에 사용할 Google Sheets Document 를 선택합니다. (예: n8n_feedback)
 * **Sheet:** 의 `From list` 중에 사용할 Sheet 를 선택합니다. (예: feedback)
 * **Mapping Column Mode:** 중에 `Map Automatically` 를 선택합니다.
 * **Column to match on** 중에 `id` 를 선택합니다.
-
-**Step 6. 분기 처리 (Switch)**
-
-* Code 노드에서 `Switch` 노드로 추가(병렬) 연결.
-* **Condition:** `priority` (Number) `>=` 4
-* **True:** `Send Mail` 노드 연결 (🚨 긴급 채널 알림)
-* **False:** `Google Sheets` 노드 연결 (📝 일반 로그 기록)
 
 
 
@@ -127,26 +120,31 @@ return result;
 **목표:**
 
 * **긴급(Priority 4 이상) 이슈:** 알림으로 메시지 전송 (True)
-* **모든 이슈:** Google Sheets (n8n)feedback) 에 기록
+* **모든 이슈:** Google Sheets (feedback) 에 기록
 
 
-**Google Sheets 연동(Service Account)**과 **Gmail 알림** 을 위한 상세 실습 가이드 입니다.
+**Gmail 알림** 을 위한 상세 실습 가이드 입니다.
 
 ---
 #### 1단계: Switch 노드 설정하기 (Rules)
 
-`Switch` 노드를 더블 클릭하여 설정창을 엽니다.
+Google Sheets 노드 다음에 `Switch` 노드를 생성니다.
 
-1. **Mode:** `Rules`를 선택합니다. (가장 직관적입니다.)
-2. **Routing Rules:** `{{ $json.priority }}` 를 선택합니다. 
-
-
-3. **Routing Rules (규칙 정의):**
+1. **Mode:** `Rules`를 선택합니다. (기본)
+2. **Routing Rules (규칙 정의):**
 * **Value 1 (검사할 값):** 입력창 옆의 변수 아이콘을 누르거나 드래그하여 이전 노드의 `priority` 값을 넣습니다. (`{{ $json.priority }}`)
 * **Operation (조건):** `Number` 중에 **is greater than or equal to** (>=, 크거나 같다) 를 선택합니다.
 * *(주의: 여기서 String을 선택하면 숫자 5를 문자 "5"로 처리하여 크기 비교가 안 됩니다.)*
 * **Value 2 (기준 값):** `4`를 입력합니다.
 
+3. Subject: `[n8n 알림] 고객 불만 {{ $('Code in JavaScript').item.json.id }}`
+4. Email Format: Text
+  ```
+  아이디: {{ $('Code in JavaScript').item.json.id }}
+  카테고리:  {{ $('Code in JavaScript').item.json.category }}
+  우선순위:  {{ $('Code in JavaScript').item.json.priority }}
+  요약:  {{ $('Code in JavaScript').item.json.summary }}
+  ```
 
 ---
 
@@ -156,11 +154,9 @@ return result;
 
 1. **첫 번째 구멍 (Output 0):** **"조건 일치 (True)"**
 * 설정한 규칙(4 이상)에 맞는 데이터만 이 구멍으로 나옵니다.
-* 이 구멍을 드래그하여 **`Send mail`** 노드와 연결합니다.
+* 이 구멍에서 나온 선에 **`Send email`** 노드를 만들어 연결합니다.
 
-
-
-> **Tip:** 마우스를 Output 구멍 위에 올리면 `0` 같은 라벨이 뜹니다. 이를 보고 확인하세요.
+> **Tip:** 준비 Part B 를 참고하여 Google email 을 준비해야 합니다.
 
 ---
 
@@ -171,7 +167,7 @@ return result;
 **CASE A: 긴급 상황 테스트**
 
 1. 앞단의 `Chat Trigger` 노드로 돌아갑니다.
-2. 테스트 데이터를 전달합니다: "상품이나 배송에 대한 강한 불만을 표현하는 메세지 전달"
+2. 테스트 데이터를 전달합니다: (상품이나 배송에 대한 강한 불만을 표현하는 메세지를 작성하세요)
 3. **Send (종이비행기)** 아이콘 클릭.
 4. **결과:** `Switch` 노드의 **윗쪽 선(Slack)** 과 **아래쪽 선(Google Sheets)** 이 초록색으로 빛나고, Gmail 메시지가 와야 합니다.
 
@@ -194,6 +190,7 @@ return result;
 3. 프로젝트 이름 입력 (예: `n8n-automation`) → **[만들기]**.
 4. 알림창에서 **[프로젝트 선택]** 클릭하여 해당 프로젝트로 이동.
 
+
 #### 2️⃣ API 활성화 (Drive & Sheets)
 
 1. 좌측 메뉴 **[API 및 서비스]** → **[라이브러리]**.
@@ -203,13 +200,13 @@ return result;
 4. 다시 라이브러리로 돌아가서 **`Gmail API`** 검색 → **[사용 설정]** 클릭.
 
 
-
 #### 3️⃣ Service Account(서비스 계정) 생성
 
 1. 좌측 메뉴 **[API 및 서비스]** → **[사용자 인증 정보]**.
 2. 상단 **[+ 사용자 인증 정보 만들기]** → **[서비스 계정]** 선택.
 3. **이름:** 식별하기 좋은 이름 (예: `n8n-bot`) 입력 → **[만들기 및 계속]**.
 4. **역할(Role):** 선택하지 않고 **[계속]** → **[완료]** (역할은 필수가 아닙니다).
+
 
 #### 4️⃣ 키(JSON) 생성 및 이메일 확인 (★중요)
 
@@ -218,7 +215,6 @@ return result;
 3. 상단 **[키(Keys)]** 탭 클릭 → **[키 추가]** → **[새 키 만들기]**.
 4. **JSON** 선택 → **[만들기]** (자동으로 파일이 다운로드됩니다).
 * ⚠️ **주의:** 이 파일은 비밀번호와 같습니다. 절대 타인에게 공유하지 마세요.
-
 
 
 #### 5️⃣ Google Drive 폴더를 Service Account에 공유
@@ -248,6 +244,7 @@ return result;
 
 ---
 
+
 ### 준비 Part B. 메일 전송 준비 ( 알람 발송용. Slack 등으로 대체 가능)
 
 "알람"을 보내는 목적으로 **Gmail SMTP(앱 비밀번호)** 방식을 사용합니다.
@@ -266,6 +263,7 @@ return result;
 5. **앱 이름:** `n8n-alarm` 입력 후 **[만들기]**.
 6. 생성된 **16자리 비밀번호(기기용 앱 비밀번호)**를 복사해 둡니다. (띄어쓰기 무시하고 사용)
 
+
 #### 2️⃣ n8n에서 이메일 노드 설정 (Gmail Node 아님)
 
 n8n에서는 `Gmail` 노드 대신 **`Send Email`** 노드(SMTP)를 사용하는 것이 훨씬 간편합니다.
@@ -279,8 +277,8 @@ n8n에서는 `Gmail` 노드 대신 **`Send Email`** 노드(SMTP)를 사용하는
 * **Port:** `465`
 * **SSL/TLS:** 켜기 (On)
 
-
 4. **[Save]** 클릭하여 연결 확인.
+
 
 #### 3️⃣ 메일 발송 테스트
 
