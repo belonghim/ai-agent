@@ -79,8 +79,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 
 > **역할:** 이 노드는 Agent AI 가 방금 뱉어낸 리포트를 "박제"하는 역할입니다.
 * **Node Name:** `Save_Report`
-* **Mode:** JSON
-    * **JSON:** `{{ $json.output }}`
+* **Fields to Set:**
+    * **output:** `{{ $json.output }}`
 
 ---
 
@@ -149,7 +149,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 * **Source:** `Database` 
 * **Workflow:** `Sub_Send_Email_Report`를 선택합니다.
 * **Workflow Inputs:**
-    * `text:` `{{ $('Save Report').last().json.output }}`
+    * `text:` `{{ $('Save_Report').last().json.output }}`
     * `subject:` `{{ $('Basic LLM Chain').last().json.subject }}`
 
 ---
