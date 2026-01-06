@@ -13,7 +13,7 @@ podman run -d --name n8n -p 5678:5678 -e GENERIC_TIMEZONE=Asia/Seoul -e TZ=Asia/
 
 ### 2. n8n 인터페이스 훑어보기
 
-n8n의 캔버스(Editor UI)는 직관적입니다.
+n8n의 캔버스(Editor UI)는 직관적입니다. ( 브라우저 http://localhost:5678/ )
 
 * Workflow: 하나의 자동화 작업 단위 (파일 하나라고 생각하면 됩니다).
 * Nodes Panel: 사용할 수 있는 기능(앱)들을 검색하는 곳.
