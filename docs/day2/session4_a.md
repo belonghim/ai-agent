@@ -45,7 +45,7 @@
 * *이 주소는 'OpenAI' 노드에서 사용됩니다.*
 
 
-#### Step 1: 오디오 파일 (Trigger)
+#### Step 2: 오디오 파일 (Trigger)
 
 실습 편의를 위해 지난 시간 연동해둔 **Google Drive**을 사용합니다. (또는 로컬 파일을 읽는 `Read/Write Files from Disk` 노드도 사용 가능)
 
@@ -55,14 +55,14 @@
   * **Watch For:** `File Created` 선택.
   * **mp3** 파일로 된 대화 레코딩 파일을 준비하세요.
 
-#### Step 2: 오디오 파일 가져오기 (Download file)
+#### Step 3: 오디오 파일 가져오기 (Download file)
 * **Google Drive Download file** 노드를 추가합니다.
   * **File:** 은 `By ID` 로 선택한 뒤, `{{ $json.id }}` 표현식(Expression)으로 File 을 다운로드 받게 됩니다.
     * `data` 라는 이름으로 바이너리를 전달하게 됩니다.
     * **핵심:** 오디오 파일은 n8n 내부에서 **Binary Data**로 처리됨을 이해해야 합니다.
     * 음성 Binary Data 를 STT 에게 전달해주면 글로 된 데이터를 돌려받을 수 있게 됩니다.
 
-#### Step 3: 음성을 텍스트로 변환 (Whisper API)
+#### Step 4: 음성을 텍스트로 변환 (Whisper API)
 
 사람의 귀 역할을 하는 단계입니다.
 
@@ -88,7 +88,7 @@
     * **Value:** `false`
 
 
-#### Step 4: 회의록 요약 및 구조화 (LLM)
+#### Step 5: 회의록 요약 및 구조화 (LLM)
 
 단순히 받아쓴 글은 줄글이라 읽기 힘듭니다. 이를 깔끔하게 정리합니다.
 
@@ -116,7 +116,7 @@
   * **Node 추가 및 연결** `OpenAI Chat Model`
 
 
-#### Step 5: 결과 내보내기
+#### Step 6: 결과 내보내기
 
 * **Node:** `Send Email` (or `Slack`)
 * **Subject (Expression):** `[n8n 알리미] 회의 녹음본 {{$('Download file').item.json.name}} 요약 정리`
