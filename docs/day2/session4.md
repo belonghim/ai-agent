@@ -77,7 +77,7 @@ JSON 외의 어떤 텍스트도 출력하지 마세요.
 
 **Step 2. AI 두뇌 연결**
 
-* `Basic LLM Chain` 연결 + `OpenAI Chat Model` 부착.
+* `Basic LLM Chain` 연결 + `OpenAI Chat Model`(Use Responses API: Off) 부착.
 * 위에서 배운 **JSON 포맷 프롬프트** 를 System Message 로 입력.
 
 **Step 3. Code 노드에서 ID "찍어내기"**
