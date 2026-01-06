@@ -113,7 +113,7 @@
   * **Prompt (User):** 사용자 정의 및 Expression 모드 사용
       * `{{ $json.text }}` (이전 Whisper 노드에서 나온 텍스트 결과)
 
-  * **Node 추가 및 연결** `OpenAI Chat Model`
+  * **Node 추가 및 연결** `OpenAI Chat Model` (Use Responses API: Off)
 
 
 #### Step 6: 결과 내보내기
