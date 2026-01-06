@@ -44,7 +44,7 @@ n8n의 데이터는 **'Item'**이라는 택배 상자에 담겨 컨베이어 벨
 만약 Trigger에서 **100개의 데이터(Item)**가 들어왔다면?
 
 * 다음 노드는 **알아서 100번 작동**합니다.
-* 반복문(For-loop)을 짤 필요가 없습니다. 이것이 n8n이 강력한 이유입니다.
+* 반복문(For-loop)을 짤 필요 없이 n8n이 기본적으로 동작합니다.
 
 #### ③ JSON 구조와 Binary(파일)
 
@@ -124,7 +124,7 @@ return [
 
 1. `Basic LLM Chain` 노드의 `Model` 입력 단자에 붙은 더하기(+) 아이콘을 클릭합니다.
 2. 메뉴에서 **`OpenAI Chat Model`**을 선택하여 연결합니다.
-* **OpenAI Chat Model**
+* **OpenAI Chat Model** (Credential 이후)
     * **Model:** `/models/hf.google.gemma-3n-E4B`
 * *핵심:* 우리는 OpenAI를 쓰지 않지만, Podman의 Local LLM이 OpenAI와 통신 방식(규격)이 같으므로 이 노드를 빌려서 사용합니다.
 3. `Use Responses API:` 비활성화
@@ -140,7 +140,7 @@ return [
 3. **설정 값 입력:**
   * **API Key:** `any-key` (아무거나 입력해도 됩니다. Local이라 검증하지 않음)
   * **URL (Base URL):** `http://host.containers.internal:11000/v1` (또는 Podman에서 확인한 주소)
-  * OpenAi Credential 의 이름을 gemma 라고 바꿉니다.
+  * OpenAi Credential 의 이름을 gemma 라고 바꿉니다. (선택사항)
   * **Save**를 누릅니다.
 4. `Model:` 클릭하면 자동으로 해당 자격증명을 통해 확인되는 모델을 선택할 수 있습니다.
 
