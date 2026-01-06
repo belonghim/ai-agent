@@ -79,8 +79,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 
 > **역할:** 이 노드는 Agent AI 가 방금 뱉어낸 리포트를 "박제"하는 역할입니다.
 * **Node Name:** `Save_Report`
-* **Fields to Set:**
-    * **output:** `{{ $json.output }}`
+* **Mode:** JSON
+    * **JSON:** `{{ $json.output }}`
 
 ---
 
@@ -115,10 +115,11 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
     }
     ```
 
-5. **Model 설정:** AI Agent 와 분리하기 위해 `qwen/Qwen3-4B-Thinking-2507-GGUF` 모델의 Credential 및 Model 을 선택합니다.
-6. **Options:**
+5. **Model 설정:** AI Agent 와 분리하기 위해 `qwen/Qwen3-4B-Thinking-2507-GGUF` 모델의 Credential 및 Model 을 추가 구성하여 선택합니다.
+6. **Use Responses API:** Off
+7. **Options:**
     * **Response Format:** `JSON`
-    * **Timeout:** `600000`
+    * **Timeout:** `300000`
     * **Sampling Temperature:** `0.2`
     * **Top P:** `0.3`
 
@@ -149,6 +150,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 * **Workflow:** `Sub_Send_Email_Report`를 선택합니다.
 * **Workflow Inputs:**
     * `text:` `{{ $('Save Report').last().json.output }}`
+    * `subject:` `{{ $('Basic LLM Chain').last().json.subject }}`
 
 ---
 
