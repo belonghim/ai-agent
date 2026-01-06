@@ -78,8 +78,9 @@ Podman Desktop 내에서 LLM을 쉽게 다운로드하고 실행할 수 있는 `
 
 
 1. AI Lab 메뉴 -> **Catalog** 선택
-2. 모델 검색창에 `google/gemma-3n-E4B (Unsloth quantization)` 입력
-* *Tip: Unsloth로 파인튜닝된 특정 모델 파일(GGUF)을 가지고 있다면 'Import Model' 기능을 통해 직접 파일을 불러올 수 있습니다.*
+2. `google/gemma-3n-E4B (Unsloth quantization)` 오른쪽에 다운로드 아이콘 클릭
+3. Download 가 완료될 때까지 대기
+* ( *Tip: Unsloth로 파인튜닝된 특정 모델 파일(GGUF)을 가지고 있다면 'Import Model' 기능을 통해 직접 파일을 불러올 수도 있습니다.* )
 
 
 
@@ -87,7 +88,7 @@ Podman Desktop 내에서 LLM을 쉽게 다운로드하고 실행할 수 있는 `
 
 다운로드한 모델을 n8n이 접속할 수 있도록 API 서버로 띄웁니다.
 
-1. AI Lab -> **Services** (또는 Local Server) 탭 클릭
+1. AI Lab -> **Services** 탭 클릭
 2. **New Model Service** 클릭 -> 다운로드한 Gemma 모델 선택
 3. **Container port** 임의 지정 (예: 11000 포트)
 4. **Create Service** 클릭
@@ -110,6 +111,35 @@ Podman Desktop 내에서 LLM을 쉽게 다운로드하고 실행할 수 있는 `
 
 * **Local LLM:** 내 노트북의 자원에 따라 성능이 달라집니다. 자원이 부족한 경우 동작이 불가능할 수 있습니다.
   * Podman 으로 LLM 실행하기 위해서 최소 16GB의 메모리와 최소 4개의 CPU를 권장합니다. 
-* 클라우드 LLM: 외부 서비스 제공자에 의해서 관리되는 LLM 입니다. 유료 서비스이므로 가입 및 구독 절차가 필요합니다.
+* 클라우드 LLM: 외부 서비스 제공자에 의해서 관리되는 LLM 입니다. 비용이 발생할 수 있고, 가입 및 구독 절차가 필요합니다.
 
 ---
+
+### Local LLM 대안: 전용 'Google Gemini' 노드 사용 (비용 없이 사용 가능)
+
+Google은 개발자가 Gemini API를 쉽게 테스트할 수 있도록 **Google AI Studio**라는 웹 기반 IDE를 제공합니다. 여기에는 **무료 티어(Free Tier)**가 존재합니다.
+
+* **접근 방법:** [Google AI Studio (aistudio.google.com)](https://aistudio.google.com/)에 개인 계정으로 로그인.
+* **비용:** 무료 (Free of charge).
+* **제약 사항 (중요):**
+1. **속도 제한 (Rate Limits):** 분당 요청 횟수(RPM), 일일 요청 횟수(RPD)에 제한이 있습니다. (예: Gemini 1.5 Pro 기준 분당 2회 요청 등, 변동 가능)
+2. **데이터 프라이버시 (가장 중요):** 무료 티어를 사용할 경우, **입력한 데이터와 출력 결과가 Google의 모델 학습 및 개선에 사용될 수 있습니다.**
+3. **관리자 설정:** 회사 보안 정책에 따라 관리자가 AI Studio 접근을 막아두었을 수 있습니다.
+
+> **⚠️ 주의:** 회사 내부 기밀 데이터나 개인정보를 다루는 경우, 무료 티어 사용은 **보안 규정 위반**이 될 수 있으므로 반드시 IT 보안팀에 확인해야 합니다.
+> 1. **데이터 프라이버시 재강조:** 앞서 말씀드렸듯, **Google AI Studio의 무료 API 키**를 사용하면 n8n을 통해 처리되는 **사내 데이터(이메일 본문, 슬랙 대화 등)가 구글의 모델 학습에 사용**될 수 있습니다.
+> 2. **민감 정보 필터링:** 따라서 n8n 워크플로우 상에서 개인정보나 기밀 데이터가 Gemini 노드로 들어가지 않도록 주의해야 합니다.
+
+
+### n8n LLM model 구성시 차이
+
+n8n에는 이미 Gemini API를 쓰기 위한 노드가 별도로 있습니다.
+
+1. **API 키 발급:** 앞서 말씀드린 [Google AI Studio](https://aistudio.google.com/)에서 API Key를 복사합니다.
+2. **n8n 노드 추가:** n8n 캔버스에서 `+` 버튼을 누르고 **'Google Gemini'**를 검색합니다.
+3. **Credential 설정:**
+* 노드 설정 창에서 `Credential for Google Gemini API`를 선택하고 `Create New`를 클릭합니다.
+* API Key 입력란에 복사한 키를 붙여넣습니다.
+
+> **💡 팁:** 이후에는 OpenAI 노드와 사용법이 거의 같습니다. 'Prompt' 에 원하는 질문을 넣으면 출력이 나옵니다.
+
