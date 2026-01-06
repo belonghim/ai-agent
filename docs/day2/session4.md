@@ -92,9 +92,18 @@ return result;
 
 ```
 
-**Step 4. Google Sheets 노드 생성**
+**Step 4. Google Sheets Document 생성**
 
-* 생성된 이슈들은 로그로 보관합니다. 미리 권한 있는 Google Sheets Document 를 만들어 둬야 합니다.
+* 로그를 보관하기 위한 Document 를 생성합니다.
+* drive.google.com 에 접속 후, 공유용 directory 및 Google Sheets Document 생성
+  * 디렉토리 예: ~/n8n/n8n_save/n8n_feedback
+* **n8n_feedback** Document 를 열고, sheet 명을 feedback 으로 수정합니다.
+* 첫번째 행에 id 라는 열을 만들어 둡니다.
+
+
+**Step 5. Google Sheets 노드 생성**
+
+* 생성된 이슈들을 로그로 보관합니다. ( drive.google.com 에서 미리 권한 있는 Google Sheets Document 를 만들어 둡니다. )
 * Code 노드에서 연결 
 * **Google Sheets** 의 `Append or update row in sheet` 노드를 선택합니다.
 * **Document:** 의 `From list` 중에 사용할 Google Sheets Document 를 선택합니다. (예: n8n_feedback)
@@ -102,7 +111,7 @@ return result;
 * **Mapping Column Mode:** 중에 `Map Automatically` 를 선택합니다.
 * **Column to match on** 중에 `id` 를 선택합니다.
 
-**Step 5. 분기 처리 (Switch)**
+**Step 6. 분기 처리 (Switch)**
 
 * Code 노드에서 `Switch` 노드로 추가(병렬) 연결.
 * **Condition:** `priority` (Number) `>=` 4
