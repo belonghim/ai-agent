@@ -70,7 +70,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 
 ```javascript
 // Expression 모드. 한 줄 주의.
-{{ $json.reason ? "**⚠️ 긴급: 수정 요청 사항 (Supervisor Feedback)**\n   - 이전 리포트가 반려되었습니다. 다음 피드백을 반영하여 리포트를 **처음부터 다시** 완벽하게 작성하세요.\n   - **반려 사유(피드백):** " + $json.reason + "\n\n[이전 리포트] (아래 리포트를 수정하세요)\n" + $('Save Report').last().json.output : $json.chatInput }}
+{{ $json.reason ? "**⚠️ 긴급: 수정 요청 사항 (Supervisor Feedback)**\n   - 이전 리포트가 반려되었습니다. 다음 피드백을 반영하여 리포트를 **처음부터 다시** 완벽하게 작성하세요.\n   - **반려 사유(피드백):** " + $json.reason + "\n\n[이전 리포트] (아래 리포트를 수정하세요)\n" + $('Save_Report').last().json.output : $json.chatInput }}
 ```
 
 ---
