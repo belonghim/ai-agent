@@ -23,7 +23,7 @@ Session 4에서 만든 것이 \*\*Chain(체인)\*\*이라면, 이제 만들 것�
 n8n의 최신 `AI Agent` 노드는 LangChain 기반으로 동작합니다.
 
   * **Agent Type:** 보통 `Tools Agent` (OpenAI Functions 등)를 사용합니다.
-  * **Tools:** 에이전트가 사용할 수 있는 도구들입니다.
+  * **Tools:** 에이전트는 다양한 도구들을 사용할 수 있습니다.
       * *예: Calculator(계산), Wikipedia(검색), Custom n8n Workflow(사내 API)*
   * **System Prompt 심화:** 에이전트에게 페르소나와 '생각하는 법(Chain of Thought)'을 주입합니다.
 
@@ -81,7 +81,7 @@ API Key를 발급받기 위한 과정입니다.
 * 상단의 **[+ 사용자 인증 정보 만들기]** > **[API 키]**를 선택합니다.
 * 생성된 **`API Key`**를 복사하여 메모장에 저장해 둡니다.
 
-> **주의:** GCP는 최초 사용 시 결제 계정(신용카드) 등록을 요구할 수도 있습니다. (Custom Search API는 하루 100회 무료입니다.)
+> **주의:** GCP는 사용 패턴에 따라 결제 계정(신용카드) 등록을 요구할 수도 있습니다. (Custom Search API는 하루 100회 무료입니다.)
 
 ---
 
@@ -122,7 +122,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Google_Search** 를 만듭
 
 * 노드 검색창에 `Execute Workflow Trigger`를 검색하여 추가합니다.
 * 이 노드는 \*\*"누군가 나를 부르면(Call) 실행된다"\*\*는 뜻입니다.
-* **[중요]** AI가 데이터를 넘겨줄 때 어떤 변수명을 쓸지 정해야 합니다. `keywords`라는 변수에 내용을 담아 보낸다고 가정합니다.
+* **[중요]** AI가 데이터를 넘겨줄 때 어떤 변수명을 쓸지 정해야 합니다. `keyword`라는 변수에 내용을 담아 보낸다고 가정합니다.
 
 3.  **Action 설정 (하는 일):**
 
@@ -137,7 +137,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Google_Search** 를 만듭
 
 | Name | Value | 설명 |
 | --- | --- | --- |
-| **`q`** | `{{ $json.keywords }} -site:finance.yahoo.com` | 검색어 (이전 노드에서 받아온 값 매핑) |
+| **`q`** | `{{ $json.keyword }} -site:finance.yahoo.com` | 검색어 (이전 노드에서 받아온 값 매핑) |
 | **`cx`** | `0123456789...` | **검색 엔진 ID** (Programmable Search Engine에서 복사한 값) |
 | **`key`** | `AIzaSy...` | **GCP API Key** (Google Cloud Platform에서 발급받은 키) |
 | **`num`** | `10` | **검색 결과 개수를 제한** (기본값이 10) |
@@ -197,18 +197,18 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
 * **"사람인 척" 위장하기 (User-Agent 설정)**
     * Header (헤더) 추가
     * **Send Headers:** 스위치 **ON**
-    * **Header Parameters** 아래 **[Add Parameter]** 클릭:
+    * **Header Parameters** 추가시 **[Add Parameter]** 클릭:
     * **Name:** `User-Agent`
     * **Value:** `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36`
     * **Name:** `Accept`
     * **Value:** `*/*`
 
 * **Follow Redirects 켜기**
-    * `Options > Follow Redirects` 스위치를 ON 로 킵니다.
+    * `Options > Directs > Follow Redirects` 스위치를 ON 로 킵니다.
 
-4. **HTML Extract (알맹이만 꺼내기)**
+4. **HTML Extract Content (알맹이만 꺼내기)**
 
-* `HTTP Request`의 결과는 지저분한 HTML 코드(`<div>...</div>`) 덩어리입니다. 여기서 글자만 발라내야 AI가 읽을 수 있습니다.
+* `HTTP Request`의 결과는 HTML 코드(`<div>...</div>`) 덩어리입니다. 여기서 글자만 발라내야 AI가 읽을 수 있습니다.
     * **Source Data:** `JSON`
     * **JSON Property:** `data` (HTTP Request가 가져온 내용이 담긴 변수명)
     * **Extraction Values (추출 설정):**
@@ -224,6 +224,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
 -----
 
 #### Step 2: AI Agent 노드 설정 (Brain)
+
+이제 다시 **AI Agent가 있는 메인 워크플로우**로 돌아옵니다.
 
 * **Node:** `AI Agent` (LangChain 기반)
 * **Model:** `OpenAI Chat Model`
@@ -292,7 +294,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
   ```
 
 * **OpenAI Chat Model**
-    * **Credential & Model:** `ibm-granite/granite-4.0-tiny-GGUF`
+    * **Credential & Model:** `ibm-granite/granite-4.0-tiny-GGUF` ( AI Lab 에서 추가 서비스 구성 )
+    * **Use Responses API:** Off
     * **Options:**
         * **Timeout:** `300000`
         * **Response Format:** `Text`
@@ -302,8 +305,6 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
 ---
 
 ##### Step 2.1: 메인 워크플로우에 google_search 연결하기 (도구 쥐여주기)
-
-이제 다시 **AI Agent가 있는 메인 워크플로우**로 돌아옵니다.
 
 
 * `AI Agent` 노드의 **Tools** 항목에서 `+` 버튼을 누릅니다.
@@ -316,12 +317,12 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
 * **Source:** `Database` 선택 (저장된 워크플로우 불러오기)
 * **Workflow:** 위에서 만든 `Sub_Goole_Search`를 선택합니다.
 * **Workflow Inputs:** `keyword` 오른쪽의 반짝이는 별 아이콘을 누릅니다. (AI 가 알아서 입력을 넣게 됩니다.)
-* **Name:** `google_search` (AI가 인식할 도구의 이름입니다. 영문 소문자 권장)
+* **(왼쪽 상단)Name:** `google_search` (AI가 인식할 도구의 이름입니다. 영문 소문자 권장)
 * **Description (설명서):** **여기가 핵심입니다.** AI에게 이 도구를 언제, 어떻게 써야 하는지 자연어로 설명해줘야 합니다.
     ```text
     이 도구를 사용하여 Google Search 에서 탐색하여 요약을 얻을 수 있습니다.
     입력은 "keyword" 필드를 포함하는 JSON 객체여야 합니다.
-    예시: { "keywords": "Nvidia stock price market cap" }
+    예시: { "keyword": "Nvidia stock price market cap" }
     ```
 
 3. 작동 원리 (설명용)
