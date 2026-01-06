@@ -59,6 +59,7 @@ Docker의 대안인 오픈소스 컨테이너 엔진 Podman을 설치합니다.
 * 인텔 기준 4세대 이상 프로세서 필요
 * **다운로드:** [Podman Desktop 공식 홈페이지](https://podman-desktop.io/)
 * **설치:** OS(Windows/Mac)에 맞는 설치 파일 실행 및 기본 설정 완료
+* **Podman** extention 추가 설치 필요
 * ( 윈도우인 경우 WSL 2 필요: https://learn.microsoft.com/en-us/windows/wsl/install-manual )
 
 #### 3.2. AI Lab 확장 프로그램 구성
