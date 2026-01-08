@@ -252,7 +252,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
       : `
   [행동 순서]
   * 1단계. 탐색 (google_search)
-    - 키워드 예: "market cap stock price text", "stock news analysis forecast"
+    - 키워드 예: "today market cap stock price", "today stock news analysis"
     - 주가 데이터는 탐색 요약 내용에서 추출.
   
   * 2단계. 읽기 (web_scraper)
