@@ -131,68 +131,19 @@ return [
 
 ---
 
-## 5️⃣ Google Chat – 결과 전송 (선택 사항 - 어려움)
+## 5️⃣ Code 노드 – 결과 확인
 
-Google Apps Script 기능을 사용하여 메시지를 보냅니다.
+Code 노드를 사용해서, LLM 의 메세지를 확인합니다.
 
-### 5-1. Google Apps Script 작성
-
-1. [Google Apps Script](https://script.google.com/)에 접속하여 **새 프로젝트**를 만듭니다.
-2. 아래 코드를 복사하여 붙여넣습니다. (이 코드는 n8n으로부터 데이터를 받아 내 계정 대신 메시지를 전달하는 역할을 합니다.)
+1. ollama 모델 응답의 일부만 content 로 추출합니다.
 
 ```javascript
-function doPost(e) {
-  var params = JSON.parse(e.postData.contents);
-  var spaceName = "spaces/XXXXXX"; // 여기에 스페이스 ID 입력
-  var text = params.text;
-
-  var message = {
-    "text": text
+return $input.all().map(item => {
+  return {
+    content: item.json.choices?.[0]?.message?.content || "내용 없음"
   };
-
-  // Google Chat API 직접 호출 (인증된 본인 권한 사용)
-  var options = {
-    "method": "post",
-    "contentType": "application/json",
-    "payload": JSON.stringify(message),
-    "headers": {
-      "Authorization": "Bearer " + ScriptApp.getOAuthToken()
-    },
-    "muteHttpExceptions": true
-  };
-  
-  var response = UrlFetchApp.fetch("https://chat.googleapis.com/v1/" + spaceName + "/messages", options);
-  return ContentService.createTextOutput(response.getContentText());
-}
-
+});
 ```
-
-### 5-2. 스페이스 ID 확인법
-
-* 웹 브라우저에서 Google Chat을 켭니다.
-* 메시지를 보낼 스페이스에 들어갑니다.
-* 주소창 URL을 보면 `https://mail.google.com/chat/u/0/#chat/space/XXXXXXX` 형태입니다.
-* 여기서 `XXXXXXX` 부분이 스페이스 ID입니다. 코드의 `spaces/XXXXXX` 부분에 대입하세요.
-
-### 5-3. 웹 앱으로 배포
-
-1. 상단 **배포(Deploy)** 버튼 > **새 배포** 클릭.
-2. 유형 선택에서 **웹 앱(Web App)** 선택.
-3. 설정:
-* **다음 사용자로 실행:** 나 (본인 계정)
-* **액세스 권한이 있는 사용자:** 모든 사용자 (Anyone) — *n8n에서 접근하기 위함*
-
-
----
-
-### 5-4. n8n에서 설정
-
-* **HTTP Request 노드**를 만듭니다.
-* **Method**: `POST`
-* **URL**: 방금 복사한 **GAS 웹 앱 URL**
-* **Body Parameters**: `text` : `전달할 메시지 내용`.
-
-
 ---
 
 ## ✅ 최종 결과 확인
