@@ -133,90 +133,64 @@ return [
 
 ## 5️⃣ Google Chat – 결과 전송 (선택 사항 - 어려움)
 
-개인 계정에서는 **Incoming Webhook(수신 웹훅)** 기능을 사용하여 메시지를 보냅니다.
+Google Apps Script 기능을 사용하여 메시지를 보냅니다.
 
-### 5-1. 프로젝트 생성 및 API 활성화
+### 5-1. Google Apps Script 작성
 
-1. [Google Cloud Console](https://console.cloud.google.com)에 접속합니다.
-2. 새 프로젝트를 생성합니다 (예: `n8n-chat-personal`).
-3. **[API 및 서비스]** > **[라이브러리]**로 이동합니다.
-4. **`Google Chat API`**를 검색하여 **[사용 설정(Enable)]**을 클릭합니다.
+1. [Google Apps Script](https://script.google.com/)에 접속하여 **새 프로젝트**를 만듭니다.
+2. 아래 코드를 복사하여 붙여넣습니다. (이 코드는 n8n으로부터 데이터를 받아 내 계정 대신 메시지를 전달하는 역할을 합니다.)
 
-### 5-2. OAuth 동의 화면 구성
+```javascript
+function doPost(e) {
+  var params = JSON.parse(e.postData.contents);
+  var spaceName = "spaces/XXXXXX"; // 여기에 스페이스 ID 입력
+  var text = params.text;
 
-1. **[API 및 서비스]** > **[OAuth 동의 화면]**으로 이동합니다.
-2. **User Type:** `외부(External)` 선택 > **[만들기]**.
-3. **앱 정보:** 앱 이름(예: `n8n-chat`), 사용자 지원 이메일, 개발자 연락처만 입력하고 저장합니다.
-4. **범위(Scopes):** **[범위 추가 또는 삭제]** 클릭 > 필터에 `chat.messages` 검색 > `.../auth/chat.messages` (메시지 및 반응 만들기) 체크 > 업데이트 > 저장.
-* *Tip: 목록에 없으면 수동으로 `https://www.googleapis.com/auth/chat.messages`를 입력하세요.*
+  var message = {
+    "text": text
+  };
 
-5. **테스트 사용자(Test Users):** **[+ ADD USERS]** 클릭 > **본인의 구글 이메일** 입력 > 저장. (이 단계가 없으면 작동하지 않습니다!)
-
-### 5-3. OAuth 클라이언트 ID 만들기
-
-1. **[사용자 인증 정보(Credentials)]** > **[+ 사용자 인증 정보 만들기]** > **[OAuth 클라이언트 ID]**.
-2. **애플리케이션 유형:** `웹 애플리케이션`.
-3. **승인된 리디렉션 URI:**
-* n8n의 **[Google OAuth2 API]** 자격 증명 설정 창에 있는 URL을 복사해 넣습니다.
-* 보통: `https://YOUR-N8N-URL/rest/oauth2-credential/callback`
-* (로컬 실행 시: `http://localhost:5678/rest/oauth2-credential/callback`)
-
-4. **[만들기]** 클릭 > **클라이언트 ID**와 **클라이언트 보안 비밀**을 복사해 둡니다.
-
----
-
-### 5-4. n8n에서 Credential 설정
-
-Google Chat 전용 노드 대신, 범용적인 **HTTP Request**와 **Google OAuth2** 자격 증명을 사용합니다.
-
-1. n8n에서 **Credentials** > **[Create New]** > **`Google OAuth2 API`** 선택.
-2. **Client ID / Secret:** 복사해둔 값 붙여넣기.
-3. **Scope (중요):** 아래 URL을 정확히 입력합니다.
-```text
-https://www.googleapis.com/auth/chat.messages
+  // Google Chat API 직접 호출 (인증된 본인 권한 사용)
+  var options = {
+    "method": "post",
+    "contentType": "application/json",
+    "payload": JSON.stringify(message),
+    "headers": {
+      "Authorization": "Bearer " + ScriptApp.getOAuthToken()
+    },
+    "muteHttpExceptions": true
+  };
+  
+  var response = UrlFetchApp.fetch("https://chat.googleapis.com/v1/" + spaceName + "/messages", options);
+  return ContentService.createTextOutput(response.getContentText());
+}
 
 ```
 
-4. **Auth URI / Token URI:** 기본값 유지.
-5. **[Sign in with Google]** 클릭 > 본인 계정 선택 > **[고급] > 이동(unsafe)** > **[허용]**.
+### 5-2. 스페이스 ID 확인법
+
+* 웹 브라우저에서 Google Chat을 켭니다.
+* 메시지를 보낼 스페이스에 들어갑니다.
+* 주소창 URL을 보면 `https://mail.google.com/chat/u/0/#chat/space/XXXXXXX` 형태입니다.
+* 여기서 `XXXXXXX` 부분이 스페이스 ID입니다. 코드의 `spaces/XXXXXX` 부분에 대입하세요.
+
+### 5-3. 웹 앱으로 배포
+
+1. 상단 **배포(Deploy)** 버튼 > **새 배포** 클릭.
+2. 유형 선택에서 **웹 앱(Web App)** 선택.
+3. 설정:
+* **다음 사용자로 실행:** 나 (본인 계정)
+* **액세스 권한이 있는 사용자:** 모든 사용자 (Anyone) — *n8n에서 접근하기 위함*
+
 
 ---
 
-### 5-5. 내 스페이스 ID 찾기
+### 5-4. n8n에서 설정
 
-메시지를 보낼 채팅방(스페이스)의 주소를 알아야 합니다.
-
-1. 웹브라우저로 Google Chat(Gmail)의 해당 스페이스에 들어갑니다.
-2. URL을 확인합니다.
-* 예: `https://mail.google.com/chat/u/0/#chat/space/AAAA1234abc`
-
-
-3. 맨 뒤의 **`AAAA1234abc`** 부분이 바로 **Space ID**입니다.
-
-### 5-6. HTTP Request 노드 설정
-
-마지막 단계인 **5번 노드**를 아래와 같이 설정합니다.
-
-* **Node:** `HTTP Request`
-* **Authentication:** `Predefined Credential Type` > **`Google OAuth2 API`** (방금 만든 것 선택)
-* **Method:** `POST`
-* **URL:** (아래 URL의 `SPACE_ID`를 본인 것으로 교체)
-```text
-https://chat.googleapis.com/v1/spaces/SPACE_ID/messages
-
-```
-
-
-* *예: `https://chat.googleapis.com/v1/spaces/AAAA1234abc/messages*`
-
-
-* **Send Body:** `ON`
-* **Body Content Type:** `JSON`
-* **Body Parameters:**
-* **Name:** `text`
-* **Value:** `{{ $json.choices?.[0]?.message?.content }}` (Ollama 의 요약 결과 변수)
-
-
+* **HTTP Request 노드**를 만듭니다.
+* **Method**: `POST`
+* **URL**: 방금 복사한 **GAS 웹 앱 URL**
+* **Body Parameters**: `text` : `전달할 메시지 내용`.
 
 
 ---
