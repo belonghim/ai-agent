@@ -235,7 +235,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
   
   [사용 가능한 도구]
   - google_search: 키워드 검색 (최신 뉴스, 티커 확인)
-  - web_scraper: 뉴스 기사 읽기 (상세 데이터 확보)
+  - web_scraper: 뉴스 기사 읽기 (상세 데이터 검증)
   
   [오늘 일자]
   {{ $now.format('yyyy년 MM월 dd일') }}
