@@ -87,7 +87,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 
 작성자 에이전트(AI Agent) 뒤에 검토 역할을 할 새로운 LLM 노드를 붙입니다. 여기서는 도구를 쓸 필요 없이 텍스트만 판단하면 되므로 `Basic LLM Chain`을 사용합니다.
 
-1. **Node 추가:** `Basic LLM Chain` (또는 `OpenAI Chat Model`)
+1. **Node 추가:** `Basic LLM Chain`
 2. **연결:** `[Save_Report]` 노드의 뒤에 연결합니다.
 3. **Prompt (User Message):** `{{ $json.output }}` 앞 노드의 output 을 입력받습니다.
 4. **Prompt (System):** 팀장의 페르소나를 부여합니다.
@@ -114,7 +114,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
     }
     ```
 
-5. **Model 설정:** AI Agent 와 분리하기 위해 `qwen/Qwen3-4B-Thinking-2507-GGUF` 모델의 Credential 및 Model 을 추가 구성하여 선택합니다.
+5. **Model 설정:** 이전 AI Agent 와 세션을 분리하기 위해 동일 LLM 의 Credential 을 분리해서 추가 구성하고 선택합니다.
 6. **Use Responses API:** Off
 7. **Options:**
     * **Response Format:** `JSON`
