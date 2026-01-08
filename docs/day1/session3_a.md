@@ -100,19 +100,18 @@ return [
 
 ---
 
-## 4️⃣ OpenAI 노드 – 요약하기
+## 4️⃣ Ollama 노드 – 요약하기
 
 합쳐진 뉴스 데이터를 바탕으로 요약을 수행합니다.
 
-* **Node:** `OpenAI Chat Model` (또는 Basic LLM Chain)
-* **Credential:** OpenAI API Key 연결
+* **Node:** `Ollama` (또는 Basic LLM Chain)
+* **Credential:** Ollama API Key 생성 및 연결
 * **Model:** `기존 모델 재사용`
 * **System Message:**
 ```text
 당신은 전문 뉴스 브리핑 비서입니다. 입력된 뉴스들을 종합하여 핵심만 간결하게 요약하세요.
 
 ```
-
 
 * **User Message:** (Expression 모드 켜기)
 ```text
@@ -127,6 +126,7 @@ return [
 
 ```
 
+* Simplify Output: Off
 
 
 ---
@@ -214,7 +214,7 @@ https://chat.googleapis.com/v1/spaces/SPACE_ID/messages
 * **Body Content Type:** `JSON`
 * **Body Parameters:**
 * **Name:** `text`
-* **Value:** `{{ $json.content }}` (OpenAI의 요약 결과 변수)
+* **Value:** `{{ $json.choices?.[0]?.message?.content }}` (Ollama 의 요약 결과 변수)
 
 
 
