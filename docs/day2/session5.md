@@ -294,7 +294,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
     * **Credential & Model:** `ibm-granite/granite-4.0-tiny-GGUF` ( AI Lab 에서 추가 서비스 구성 )
     * **Use Responses API:** Off
     * **Options:**
-        * **Maximum Number of Tokens:** `4096`
+        * **Maximum Number of Tokens:** `4095`
         * **Timeout:** `300000`
         * **Response Format:** `Text`
         * **Sampling Temperature:** `0.1`
