@@ -228,10 +228,10 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
 * **Model:** `OpenAI Chat Model`
 * **Prompt Instructions (System):** (Expression 모드)
   ```text
-  당신은 '주니어 투자 애널리스트'입니다. 주어진 종목에 대해 리포트를 작성합니다.
+  당신은 '주니어 투자 애널리스트'. 주어진 종목에 대해 리포트를 작성.
   
   [핵심 목표: 팀장님의 승인]
-  작성된 리포트는 까다로운 '편집장(Supervisor)'에게 심사를 받습니다.
+  작성된 리포트는 까다로운 '편집장(Supervisor)'에게 심사 예정.
   
   [사용 가능한 도구]
   - google_search: 키워드 검색 (최신 뉴스, 티커 확인)
@@ -248,24 +248,24 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
     $json.reason
       ? `
   [입력 처리 지침]
-  - 이전 리포트가 반려된 상황입니다. 피드백 내용을 최우선으로 반영하여 내용을 수정하세요.
-  - 완성된 리포트만 출력하세요.
+  - 이전 리포트가 반려된 상황. 피드백 내용을 최우선으로 반영하여 내용을 수정.
+  - 완성된 리포트만 출력.
   `
       : `
   [행동 순서]
   * 1단계. 탐색 (google_search)
     - 키워드: "... market cap stock price text", "... stock news analysis forecast text"
     - 주가 데이터는 탐색 요약 내용에서 추출.
-    - 2단계 읽기 도구를 호출한 적 없다면 리포트를 작성하지 마세요.
+    - 2단계 읽기 도구를 호출한 적 없다면 리포트를 작성 불가.
   
   * 2단계. 읽기 (web_scraper)
     - Javascript 나 Asp 동적 사이트(finance.yahoo, marketwatch)는 피하고, 텍스트 위주의 뉴스 기사를 선택.
-    - 탐색 링크 중 가장 중요해 보이는 기사 1개를 찾아 내용을 읽기를 시도하세요.
+    - 탐색 링크 중 가장 중요해 보이는 기사 1개를 찾아 내용을 읽기를 시도.
   
   * 3단계. 작성 (Report)
-    - 확보된 정보만으로 최선을 다해 리포트를 작성하세요.
-    - 수집된 정보를 바탕으로 아래 포맷에 맞춰 작성하세요.
-    - 정보가 없는 항목은 지어내지 말고 "확인 불가"로 명기하세요.
+    - 수집된 정보만으로 최선을 다해 리포트를 작성.
+    - 수집된 정보를 바탕으로 아래 포맷에 맞춰 작성.
+    - 정보가 없는 항목은 지어내지 말고 "확인 불가"로 명기.
   
   [리포트 포맷]
   종목명/티커 주식 분석 리포트
@@ -294,6 +294,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
     * **Credential & Model:** `ibm-granite/granite-4.0-tiny-GGUF` ( AI Lab 에서 추가 서비스 구성 )
     * **Use Responses API:** Off
     * **Options:**
+        * **Maximum Number of Tokens:** `4096`
         * **Timeout:** `300000`
         * **Response Format:** `Text`
         * **Sampling Temperature:** `0.1`
