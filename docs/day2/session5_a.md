@@ -65,11 +65,10 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 > **역할:** 처음 실행인지, 피드백을 받고 재실행하는 것인지 **동적으로 입력**을 넣어주는 부분입니다.
 > 메인 워크플로우로 돌아와서 AI-Agent 노드를 수정합니다.
 > n8n의 User Message 를 **Define Below** 로 변경하고 아래 코드를 입력하세요.
+> 이 코드는 **"피드백이 있으면 피드백을 포함해서 명령하고, 없으면 원래 질문만 던지는"** 로직입니다.
 
-이 코드는 **"피드백이 있으면 피드백을 포함해서 명령하고, 없으면 원래 질문만 던지는"** 로직입니다.
-
-```javascript
 // Expression 모드. 한 줄 주의.
+```javascript
 {{ $json.reason ? "**⚠️ 긴급: 수정 요청 사항 (Supervisor Feedback)**\n   - 이전 리포트가 반려되었습니다. 다음 피드백을 반영하여 리포트를 **처음부터 다시** 완벽하게 작성하세요.\n   - **반려 사유(피드백):** " + $json.reason + "\n\n[이전 리포트] (아래 리포트를 수정하세요)\n" + $('Save_Report').last().json.output : $json.chatInput }}
 ```
 
