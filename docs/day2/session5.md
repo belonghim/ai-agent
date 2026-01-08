@@ -234,8 +234,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
   작성된 리포트는 까다로운 '편집장(Supervisor)'에게 심사 예정.
   
   [사용 가능한 도구]
-  - google_search: 키워드 검색 (뉴스, 티커 확인)
-  - web_scraper: 뉴스 기사 읽기 (원문 내용 확인)
+  - google_search: 키워드 검색 (기사, 티커 확인)
+  - web_scraper: 기사 읽기 (원문 내용 확인)
   
   [행동 지침]
   - 오늘({{ $now.format('yyyy년 MM월 dd일') }})을 기준으로 수집 및 분석.
@@ -252,11 +252,11 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
       : `
   [행동 순서]
   * 1단계. 탐색 (google_search)
-    - 권장 키워드: ".. today market cap stock price" 와 ".. today stock news analysis"
+    - 권장 키워드: ".. today market cap stock price" 또는 ".. today stock news analysis"
     - 주가 데이터를 탐색 요약 내용에서 추출.
   
   * 2단계. 읽기 (web_scraper)
-    - Javascript 나 Asp 동적 사이트(finance.yahoo, marketwatch)는 피하고, 텍스트 위주의 뉴스 기사를 선택.
+    - Javascript 나 Asp 동적 사이트(finance.yahoo, marketwatch)는 피하고, 텍스트 위주의 기사를 선택.
     - 탐색 링크 중 가장 중요해 보이는 기사 1개를 찾아 내용 검증 시도.
   
   * 3단계. 작성 (Report)
