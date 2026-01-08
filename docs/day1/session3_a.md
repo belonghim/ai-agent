@@ -53,9 +53,12 @@ graph LR
 
 * **Node:** `HTTP Request`
 * **Method:** `GET`
-* **URL:** `https://newsapi.org/v2/top-headlines`
+* **URL:** `https://newsapi.org/v2/everything`
 * **Query Parameters:**
-* `country`: `kr`
+* `q`: `한국`
+* `language`: `ko`
+* `sortBy`: `publishedAt`
+* `pageSize`: `10`
 * `apiKey`: `(여러분의 NewsAPI Key)`
 
 
