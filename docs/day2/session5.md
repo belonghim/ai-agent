@@ -239,7 +239,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
   
   [행동 지침]
   - 기존 지식을 믿지 말고, 반드시 도구를 통해 검증된 정보만 작성.
-  - 오늘은 {{ $now.format('yyyy년 MM월 dd일') }}이다. 최신 정보를 수집.
+  - {{ $now.format('yyyy년 MM월 dd일') }} 오늘을 기준으로 정보를 제공.
   - 동일 키워드 사용 금지.
   - 보고서는 1000 context를 넘지 않도록 짧게 작성.
   {{
@@ -252,8 +252,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
       : `
   [행동 순서]
   * 1단계. 탐색 (google_search)
-    - 키워드 예: "today market cap stock price", "today stock news analysis"
-    - 주가 데이터는 탐색 요약 내용에서 추출.
+    - 키워드 사용법: "today market cap stock price", "today stock news analysis"
+    - 주가 데이터를 탐색 요약 내용에서 추출.
   
   * 2단계. 읽기 (web_scraper)
     - Javascript 나 Asp 동적 사이트(finance.yahoo, marketwatch)는 피하고, 텍스트 위주의 뉴스 기사를 선택.
