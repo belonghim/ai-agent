@@ -185,10 +185,7 @@ Google Sheets 노드 다음에 `Switch` 노드를 생성니다.
 
 #### 1️⃣ Google Cloud 프로젝트 생성
 
-1. [Google Cloud Console](https://console.cloud.google.com) 접속. (최초 접속시 결제 정보를 요구할 수 있습니다.) 
-2. 상단 프로젝트 선택 창 클릭 → **[새 프로젝트]** 클릭.
-3. 프로젝트 이름 입력 (예: `n8n-automation`) → **[만들기]**.
-4. 알림창에서 **[프로젝트 선택]** 클릭하여 해당 프로젝트로 이동.
+1. [Google Cloud Console](https://console.cloud.google.com) 접속. (최초 접속시 개인 정보를 요구할 수 있습니다.) 
 
 
 #### 2️⃣ API 활성화 (Drive & Sheets)
