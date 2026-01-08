@@ -51,7 +51,9 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
       ```
     * **HTML:** (Expression 모드)
       ```javascript
+      <pre>
       {{ $json.text }}
+      </pre>
       ```
 
 4.  **저장(Save) 및 출판(Publish):**
