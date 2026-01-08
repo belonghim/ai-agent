@@ -252,8 +252,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
       : `
   [행동 순서]
   * 1단계. 탐색 (google_search)
-    - 키워드 사용법: "today market cap stock price", "today stock news analysis"
-    - 주가 데이터를 탐색 요약 내용에서 추출.
+    - 다음 키워드 사용: "today market cap stock price" , "today stock news analysis"
+    - 주가 데이터는 탐색 요약 내용에서 추출.
   
   * 2단계. 읽기 (web_scraper)
     - Javascript 나 Asp 동적 사이트(finance.yahoo, marketwatch)는 피하고, 텍스트 위주의 뉴스 기사를 선택.
