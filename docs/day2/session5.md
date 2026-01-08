@@ -242,8 +242,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
   
   [행동 지침]
   - 기존 지식을 믿지 말고, 반드시 도구를 통해 검증된 정보만 작성.
-  - 같은 키워드로 반복 탐색 금지.
-  - 보고서는 1024 context를 넘지 않도록 짧게 작성.
+  - 동일 키워드 사용 금지.
+  - 보고서는 1000 context를 넘지 않도록 짧게 작성.
   {{
     $json.reason
       ? `
@@ -254,7 +254,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
       : `
   [행동 순서]
   * 1단계. 탐색 (google_search)
-    - 키워드: "market cap stock price text", "stock news analysis forecast"
+    - 키워드 예: "market cap stock price text", "stock news analysis forecast"
     - 주가 데이터는 탐색 요약 내용에서 추출.
   
   * 2단계. 읽기 (web_scraper)
@@ -263,8 +263,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
   
   * 3단계. 작성 (Report)
     - 2단계 읽기 도구를 호출한 적 없다면 리포트를 작성 불가.
-    - 정보가 없는 항목은 지어내지 말고 "확인 불가"로 명기.
     - 수집된 정보만으로 최선을 다해 아래 포맷에 맞춰 리포트 작성.
+    - 정보가 없는 항목은 지어내지 말고 "확인 불가"로 명기.
   
   [리포트 포맷]
   종목명/티커 주식 분석 리포트
