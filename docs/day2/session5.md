@@ -252,7 +252,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
       : `
   [행동 순서]
   * 1단계. 탐색 (google_search)
-    - 권장 키워드: ".. today market cap stock price" 또는 ".. today stock article analysis"
+    - 권장 키워드: ".. today market cap stock price volatility" 또는 ".. today stock article analysis"
     - 주가 데이터를 탐색 요약 내용에서 추출.
   
   * 2단계. 읽기 (web_scraper)
@@ -276,7 +276,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
   
   2. 종목 관련 최신 주요 기사
   - 기사 1: (제목, 게시 일자, 요약, URL링크)
-  - 기사 2 까지만
+  - 기사 2개 까지만 기록
   
   3. 투자 매력도 및 리스크
   - 긍정적 요인: (짧게 한줄 요약)
