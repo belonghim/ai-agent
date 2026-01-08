@@ -169,12 +169,7 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
 이메일 대신 메신저인 **Google Chat**도 가능합니다.
 
 1. **Google Chat 스페이스(방)** 생성.
-2. 스페이스 이름 클릭 -> **앱 및 통합** -> **Webhook 관리**.
-3. **이름:** `n8n-bot` 입력 -> **저장**.
-4. 생성된 **URL** 복사 (이게 비밀키입니다).
-5. n8n에서 `Google Chat` 노드 추가.
-* **Credential:** 불필요.
-* **Webhook URL:** 복사한 URL 붙여넣기.
+2. Session 3 추가 실습의 Google Chat 구성 방법 내용 참고
 * **Message:**
    ```text
    [승인요청] {{ $json.project_name }}
