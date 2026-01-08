@@ -29,7 +29,6 @@ graph LR
 3. **Google Chat 스페이스 생성**:
 * [Google Chat](https://mail.google.com/chat)
 * **새 스페이스 만들기** (이름 예: `내 뉴스 알림방`)
-* ⚠️ **중요:** 개인 계정에서는 '나와의 채팅'이 아닌 **'스페이스(Space)'**를 만들어야 웹훅을 쓸 수 있습니다.
 
 
 
