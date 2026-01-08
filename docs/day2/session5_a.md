@@ -147,7 +147,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 1. **연결:** `Switch` 노드의 **첫 번째 출력(Output 0)**에 ``Call n8n Workflow` 노드 연결.
 * **Source:** `Database` 
 * **Workflow:** `Sub_Send_Email_Report`를 선택합니다.
-* **Workflow Inputs:**
+* **Workflow Inputs:** // Expression 모드
     * `text:` `{{ $('Save_Report').last().json.output }}`
     * `subject:` `{{ $('Basic LLM Chain').last().json.subject }}`
 
