@@ -164,28 +164,7 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
 
 ---
 
-## 4. [옵션] Google Chat으로 알림 받기
-
-이메일 대신 메신저인 **Google Chat**도 가능합니다.
-
-1. **Google Chat 스페이스(방)** 생성.
-2. Session 3 추가 실습의 Google Chat 구성 방법 내용 참고
-* **Message:**
-   ```text
-   [승인요청] {{ $json.project_name }}
-   승인: {{ $execution.resumeUrl }}?action=approve&id={{ $('Loop Over Items').item.json.id }}
-   반려: {{ $execution.resumeUrl }}?action=reject
-   
-   ```
-
-
-* *Google Chat은 HTML 버튼을 지원하지 않으므로, 텍스트 링크 형태로 보냅니다.*
-
-
-
----
-
-## 5. 최종 실습 체크리스트
+## 4. 최종 실습 체크리스트
 
 1. [ ] **앱 비밀번호**를 발급받아 n8n SMTP Credential에 넣었나요?
 2. [ ] 이메일 본문(HTML)의 `href` 링크에 `{{ $execution.resumeUrl }}` 변수가 잘 들어갔나요?
