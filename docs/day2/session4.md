@@ -135,14 +135,6 @@ Google Sheets 노드 다음에 `Switch` 노드를 생성니다.
 * *(주의: 여기서 String을 선택하면 숫자 5를 문자 "5"로 처리하여 크기 비교가 안 됩니다.)*
 * **Value 2 (기준 값):** `4`를 입력합니다.
 
-3. Subject: `[n8n 알림] 고객 불만 {{ $('Code in JavaScript').item.json.id }}`
-4. Email Format: Text
-  ```
-  아이디: {{ $('Code in JavaScript').item.json.id }}
-  카테고리:  {{ $('Code in JavaScript').item.json.category }}
-  우선순위:  {{ $('Code in JavaScript').item.json.priority }}
-  요약:  {{ $('Code in JavaScript').item.json.summary }}
-  ```
 
 ---
 
@@ -155,6 +147,15 @@ Google Sheets 노드 다음에 `Switch` 노드를 생성니다.
 * 이 구멍에서 나온 선에 **`Send email`** 노드를 만들어 연결합니다.
 
 > **Tip:** 준비 Part B 를 참고하여 Google email 을 준비해야 합니다.
+
+2. Subject: `[n8n 알림] 고객 불만 {{ $('Code in JavaScript').item.json.id }}`
+3. Email Format: Text
+  ```
+  아이디: {{ $('Code in JavaScript').item.json.id }}
+  카테고리:  {{ $('Code in JavaScript').item.json.category }}
+  우선순위:  {{ $('Code in JavaScript').item.json.priority }}
+  요약:  {{ $('Code in JavaScript').item.json.summary }}
+  ```
 
 ---
 
