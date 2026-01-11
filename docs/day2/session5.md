@@ -331,9 +331,8 @@ return {
 * **(왼쪽 상단)Name:** `google_search` (AI가 인식할 도구의 이름입니다. 영문 소문자 권장)
 * **Description (설명서):** **여기가 핵심입니다.** AI에게 이 도구를 언제, 어떻게 써야 하는지 자연어로 설명해줘야 합니다.
     ```text
-    이 도구를 사용하여 Google Search 에서 탐색하여 요약을 얻을 수 있습니다.
-    입력은 "keyword" 필드를 포함하는 JSON 객체여야 합니다.
-    예시: { "keyword": "Nvidia market cap current price" }
+    Use this tool to search Google. Input must be a JSON with "keyword".
+    Example: { "keyword": "Nvidia market cap current price" }
     ```
 
 3. 작동 원리 (설명용)
@@ -362,10 +361,9 @@ return {
 * **Name:** `web_scraper`
 * **Description (설명서):**
     ```text
-    이 도구를 사용하여 특정 웹페이지의 상세 내용을 읽을 수 있습니다.
-    링크에서 상세 내용 정보를 얻어야 할 때 유용합니다.
-    입력은 "url" 필드를 포함하는 JSON 객체여야 합니다.
-    예시: { "url": "https://www.bbc.com/news/..." }
+    Use this tool to read the content of a specific webpage.
+    The input must be a JSON object with a "url" field.
+    Example: { "url": "https://www.google.com/..." }
     ```
 
 
