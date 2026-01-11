@@ -220,8 +220,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
 // 입력된 텍스트가 있으면 가져오고, 없으면 빈 문자열
 const content = $input.first().json.content || "";
 
-// 앞에서부터 2000글자만 자르고, 뒤에 '...생략됨' 붙이기
-const truncated = content.length > 2000 ? content.substring(0, 2000) + " ...(내용이 너무 길어 생략됨)" : content;
+// 3000글자만 자르고, 뒤에 '...생략됨' 붙이기
+const truncated = content.length > 4000 ? content.substring(1000, 3000) + " ...(생략됨)" : content;
 
 return {
   text: truncated
