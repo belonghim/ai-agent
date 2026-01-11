@@ -249,7 +249,7 @@ return {
   작성된 리포트는 까다로운 '편집장(Supervisor)'에게 심사 예정.
   
   [사용 가능한 도구]
-  - google_search: 키워드 검색 (기사, 티커 확인)
+  - google_search: 영어로 키워드 검색 (기사, 티커 확인)
   - web_scraper: 기사 읽기 (원문 내용 확인)
   
   [행동 지침]
