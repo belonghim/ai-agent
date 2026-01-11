@@ -333,7 +333,7 @@ return {
     ```text
     이 도구를 사용하여 Google Search 에서 탐색하여 요약을 얻을 수 있습니다.
     입력은 "keyword" 필드를 포함하는 JSON 객체여야 합니다.
-    예시: { "keyword": "Nvidia stock price market cap" }
+    예시: { "keyword": "Nvidia market cap current price" }
     ```
 
 3. 작동 원리 (설명용)
