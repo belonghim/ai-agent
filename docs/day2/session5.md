@@ -267,7 +267,7 @@ return {
       : `
   [행동 순서]
   * 1단계. 탐색 (google_search)
-    - 권장 키워드: ".. market cap current price" 와 ".. today stock volatility article analysis" 를 각각 따로 호출.
+    - 권장 키워드: ".. current price" 와 ".. volatility market cap article analysis" 를 각각 따로 호출.
     - 주가 데이터를 탐색 요약 내용에서 추출.
   
   * 2단계. 읽기 (web_scraper)
