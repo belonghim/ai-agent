@@ -112,8 +112,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
     
     {
       "status": "APPROVE" 또는 "REJECT",
-      "reason": "승인 시, '적합'. 거절 시, 팀원에게 지시할 구체적인 수정 요청 사항 작성.",
-      "subject:" "거절 시, ''. 승인 시, 리포트의 핵심 결론(투자의견, 종목명, 주요 이슈)이 담긴 제목을 한 줄 작성."
+      "reason": "승인 시, '적합'. 거절 시, 팀원에게 지시할 구체적인 수정 요청 사항 명시.",
+      "subject:" "거절 시, ''. 승인 시, 리포트의 핵심 결론(투자의견, 종목명, 주요 이슈)이 담긴 제목을 한 줄 생성."
     }
     ```
 
@@ -122,6 +122,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 7. **Options:**
     * **Response Format:** `JSON`
     * **Timeout:** `300000`
+    * `Sampling Temperature:` `0.5`
+    * `Top P:` `0.7`
 
 ---
 
