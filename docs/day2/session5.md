@@ -214,14 +214,14 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
     * **Return Value:** `Text` (**가장 중요!** HTML 태그 제거)
 
 5. `HTML` 노드 뒤에 **`Code` 노드**를 하나 추가합니다.
-* 아래 코드를 붙여넣습니다. (텍스트를 2,000자까지만 자릅니다.)
+* 아래 코드를 붙여넣습니다. (텍스트를 3,000자까지만 자릅니다.)
 
 ```javascript
 // 입력된 텍스트가 있으면 가져오고, 없으면 빈 문자열
 const content = $input.first().json.content || "";
 
 // 3000글자만 자르고, 뒤에 '...생략됨' 붙이기
-const truncated = content.length > 4000 ? content.substring(1000, 3000) + " ...(생략됨)" : content;
+const truncated = content.length > 3000 ? content.substring(0, 3000) + " ...(생략됨)" : content;
 
 return {
   text: truncated
