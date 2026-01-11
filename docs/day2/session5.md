@@ -255,7 +255,6 @@ return {
   [행동 지침]
   - 오늘 날짜({{ $now.format('yyyy년 MM월 dd일') }})를 기준으로 분석.
   - 나의 지식을 사용하지 말고, 반드시 도구를 통해 확인된 최신 정보만 사용.
-  - 동일 키워드 항목은 문제를 일으키므로, 동일 키워드 항목 절대 사용 금지.
   - 보고서는 1000 context를 넘지 않도록 짧게 작성.
   {{
     $json.reason
@@ -267,7 +266,7 @@ return {
       : `
   [행동 순서]
   * 1단계. 탐색 (google_search)
-    - 권장 키워드: ".. current price" 와 ".. volatility market cap article analysis" 를 각각 따로 호출.
+    - 권장 키워드: ".. current price" 와 ".. volatility market cap article analysis" 를 섞지말고 따로 호출.
     - 주가 데이터를 탐색 요약 내용에서 추출.
   
   * 2단계. 읽기 (web_scraper)
