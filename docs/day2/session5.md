@@ -328,8 +328,8 @@ return {
 * **(왼쪽 상단)Name:** `google_search` (AI가 인식할 도구의 이름입니다. 영문 소문자 권장)
 * **Description (설명서):** **여기가 핵심입니다.** AI에게 이 도구를 언제, 어떻게 써야 하는지 자연어로 설명해줘야 합니다.
     ```text
-    Use this tool to search Google. Input must be a JSON with "keyword" in English.
-    Example: { "keyword": "Nvidia market cap current price" }
+    Use this tool to search Google. Input must be a JSON with "keyword".
+    Example: { "keyword": "Samsung Electronics TICKER current" }
     ```
 
 3. 작동 원리 (설명용)
