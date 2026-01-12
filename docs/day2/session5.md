@@ -258,8 +258,8 @@ return {
   - 종목에 대해 완성된 리포트만 출력.` : `- 나의 지식을 사용하지 말고, 실제 데이터를 수집.
   
   [행동 절차]
-  * 1단계(= 도구를 호출한적 없음). 티커 검색
-    - "종목 site:google.com/finance" keyword로 google_search 도구 호출, URL 수집.
+  * 1단계(= 도구를 호출한적 없음). 기본 검색
+    - "종목 stock price site:google.com/finance" keyword로 google_search 도구 호출.
   * 2단계(= 1단계 아니고, web_scraper 호출한적 없음). 주가 데이터 조회
     - "https://www.google.com/finance/quote/TICKER:EXCHANGE" URL로 web_scraper 호출.
   * 3단계(= 1단계 아님). 분석 기사 검색
