@@ -138,7 +138,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Google_Search** 를 만듭
 | **`cx`** | `0123456789...` | **검색 엔진 ID** (Programmable Search Engine에서 복사한 값) |
 | **`key`** | `AIzaSy...` | **GCP API Key** (Google Cloud Platform에서 발급받은 키) |
 | **`num`** | `7` | **검색 결과 개수를 제한** (기본값 10) |
-| `hl` | `en` | `사용 언어` |
+| `gl` | `us` | `지역` |
 
 4. **Code 노드:**
 * `HTTP Request` 노드 바로 뒤에 붙여서, 복잡한 JSON을 심플하게 바꿉니다.
@@ -210,7 +210,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
     * **JSON Property:** `data` (HTTP Request가 가져온 내용이 담긴 변수명)
     * **Extraction Values (추출 설정):**
     * **Key:** `content` (결과를 담을 변수 이름)
-    * **CSS Selector:** `p, article, main` (본문 단락 또는 article 또는 main 가져오기)
+    * **CSS Selector:** `main, article` (main 또는 article 만 가져오기)
     * **Return Value:** `Text` (**가장 중요!** HTML 태그 제거)
 
 5. `HTML` 노드 뒤에 **`Code` 노드**를 하나 추가합니다.
