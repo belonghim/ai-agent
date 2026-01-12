@@ -303,7 +303,6 @@ return {
     * **Credential & Model:** `ibm-granite/granite-4.0-tiny-GGUF` ( AI Lab 에서 추가 서비스 구성 )
     * **Use Responses API:** Off
     * **Options:**
-        * **Maximum Number of Tokens:** `4095`
         * **Timeout:** `300000`
         * **Response Format:** `Text`
         * **Sampling Temperature:** `0.1`
