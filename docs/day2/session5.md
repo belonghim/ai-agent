@@ -257,7 +257,7 @@ return {
   * 1단계(= 도구를 호출한적 없음). google finance URL 검색
     - "종목 site:google.com/finance" keyword로 google_search 도구 호출, URL 수집.
   * 2단계(= 1단계 아니고, web_scraper 는 호출한적 없음). 주가 흐름 읽기
-    - "https://www.google.com/finance/quote/TICKER:EXCHANGE" 또는 "https://finance.yahoo.com/quote/TICKER.EXCHANGE/" URL(TICKER + EXCHANGE 순서 및 구분자 주의)로 web_scraper 호출.
+    - "https://www.google.com/finance/quote/TICKER:EXCHANGE" 또는 "https://finance.yahoo.com/quote/TICKER.EXCHANGE" URL(TICKER + EXCHANGE 순서 및 구분자 주의)로 web_scraper 호출.
   * 3단계(= 1,2단계 아님). 분석 기사 조회
     - "종목 stock analysis" keyword로 google_search 도구 호출.
   * 리포트 작성
