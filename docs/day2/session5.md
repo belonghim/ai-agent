@@ -319,7 +319,7 @@ return {
 * **Description (설명서):** **여기가 핵심입니다.** AI에게 이 도구를 언제, 어떻게 써야 하는지 자연어로 설명해줘야 합니다.
     ```text
     Use this tool to search Google.
-    Example: { "keyword": "SK하이닉스 stock analysis" }
+    The first call example: { "keyword": "SK하이닉스 site:google.com/finance" }
     ```
 
 3. 작동 원리 (설명용)
