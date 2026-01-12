@@ -293,8 +293,8 @@ return {
     * **Options:**
         * **Timeout:** `300000`
         * **Response Format:** `Text`
-        * **Sampling Temperature:** `0.2`
-        * **Top P:** `0.4`
+        * **Sampling Temperature:** `0.1`
+        * **Top P:** `0.2`
 
 ---
 
