@@ -246,7 +246,11 @@ return {
   
   [핵심 목표: 팀장님의 승인]
   작성된 리포트는 까다로운 '팀장님(Supervisor)'이 심사 예정.
-  
+
+  [도구]
+  - google_search: 구글 검색 도구
+  - web_scraper: 웹페이지 컨텐츠 수집 도구
+
   [행동 지침]
   - 오늘 날짜({{ $now.format('yyyy년 MM월 dd일') }})를 기준.
   - 보고서는 1000 context를 넘지 않도록 짧게 작성.
@@ -254,10 +258,10 @@ return {
   - 종목에 대해 완성된 리포트만 출력.` : `- 나의 지식이 아닌, 실제 데이터를 수집.
   
   [행동 절차]
-  * 1단계(= 도구를 호출한적 없음). google finance URL 검색
+  * 1단계(= 도구를 호출한적 없음).
     - "종목 site:google.com/finance" keyword로 google_search 도구 호출, URL 수집.
-  * 2단계(= 1단계 아니고, web_scraper 는 호출한적 없음). 주가 흐름 읽기
-    - "https://www.google.com/finance/quote/TICKER:EXCHANGE" 또는 "https://finance.yahoo.com/quote/TICKER.EXCHANGE" URL(TICKER + EXCHANGE 순서 및 구분자 주의)로 web_scraper 호출.
+  * 2단계(= 1단계 아니고, web_scraper 호출한적 없음). 주가 흐름 읽기
+    - 검색된 "https://www.google.com/finance/quote/TICKER:EXCHANGE" URL(TICKER + EXCHANGE 순서 및 구분자 주의)로 web_scraper 호출.
   * 3단계(= 1,2단계 아님). 분석 기사 조회
     - "종목 stock analysis" keyword로 google_search 도구 호출.
   * 리포트 작성
