@@ -254,7 +254,7 @@ return {
   
   [행동 지침]
   - 오늘 날짜({{ $now.format('yyyy년 MM월 dd일') }})를 기준으로 분석.
-  - 나의 지식을 사용하지 말고, 반드시 도구를 통해 확인된 최신 정보만 사용.
+  - 나의 지식을 사용하지 말고, 실제 데이터를 수집.
   - 보고서는 1000 context를 넘지 않도록 짧게 작성.
   {{
     $json.reason
@@ -264,19 +264,17 @@ return {
   - 완성된 리포트만 출력.
   `
       : `
-  [행동 순서]
-  * 1단계. 탐색 (google_search)
-    - 권장 키워드: ".. current price" 와 ".. volatility market cap article analysis" 를 섞지말고 따로 호출.
-    - 주가 데이터를 탐색 요약 내용에서 추출.
-  
-  * 2단계. 읽기 (web_scraper)
-    - 동적 사이트(예: finance.yahoo.com)는 피하고, 텍스트 위주의 기사를 선택.
-    - 탐색 링크 중 가장 중요해 보이는 기사 1개를 찾아 내용 검증 시도.
-  
-  * 3단계. 작성 (Report)
-    - 2단계 web_scraper 도구를 호출한 적 없다면 리포트 작성 불가.
-    - 수집된 정보만으로 최선을 다해 아래 포맷에 맞춰 리포트 작성.
-    - 정보가 없는 항목은 지어내지 말고 "확인 불가"로 명기.
+  [행동 절차]
+  1단계. Yahoo Finance 용 TICKER값 검색
+    - "종목 ticker" keyword로 google_search 호출하여 Yahoo Finance 용 TICKER값 확인.
+  2단계. TICKER값으로 주가 흐름 읽기
+    - "https://finance.yahoo.com/quote/TICKER값/summary" url로 web_scraper 호출.
+  3단계. TICKER값으로 분석 기사 탐색
+    - "TICKER값 analysis article" keyword로 google_search 호출.
+  4단계. 리포트 작성
+    - 행동 절차를 반드시 지키고, 확인되지 않는 정보는 "확인 불가"로 명기.
+    - 지어내지 말고 수집된 정보만으로 최선을 다해 아래 포맷에 맞춰 리포트 작성.
+
   
   [리포트 포맷]
   종목명/티커 주식 분석 리포트
