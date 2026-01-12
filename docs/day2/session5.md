@@ -138,7 +138,6 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Google_Search** 를 만듭
 | **`cx`** | `0123456789...` | **검색 엔진 ID** (Programmable Search Engine에서 복사한 값) |
 | **`key`** | `AIzaSy...` | **GCP API Key** (Google Cloud Platform에서 발급받은 키) |
 | **`num`** | `5` | **검색 결과 개수를 제한** (기본값 10) |
-| `gl` | `us` | `지역` |
 
 4. **Code 노드:**
 * `HTTP Request` 노드 바로 뒤에 붙여서, 복잡한 JSON을 심플하게 바꿉니다.
