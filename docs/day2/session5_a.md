@@ -87,9 +87,9 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 
 ### Step 3: 팀장(Supervisor) 노드 추가하기
 
-작성자 에이전트(AI Agent) 뒤에 검토 역할을 할 새로운 LLM 노드를 붙입니다. 여기서는 도구를 쓸 필요 없이 텍스트만 판단하면 되므로 `Basic LLM Chain`을 사용합니다.
+작성자 에이전트(AI Agent) 뒤에 검토 역할을 할 새로운 LLM 노드를 붙입니다. `AI Agent` 노드를 추가합니다.
 
-1. **Node 추가:** `Basic LLM Chain`
+1. **Node 추가:** `AI Agent`
 2. **연결:** `[Save_Report]` 노드의 뒤에 연결합니다.
 3. **Prompt (User Message):** `{{ $json.output }}` 앞 노드의 output 을 입력받습니다.
 4. **Prompt (System):** 팀장의 페르소나를 부여합니다.
