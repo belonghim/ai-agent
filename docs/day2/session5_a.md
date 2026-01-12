@@ -125,6 +125,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
     * `Sampling Temperature:` `0.5`
     * `Top P:` `0.7`
 
+8. 해당 AI Agent 의 Tool 에서 **web_scraper** 도구를 연결시켜 줍니다.
+
 ---
 
 #### Step 4: 심사 결과에 따른 분기 (Switch)
