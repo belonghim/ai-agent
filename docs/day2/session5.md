@@ -298,9 +298,9 @@ return {
         * **Frequency Penalty:** `0.3`
         * **Maximum Number of Tokens:** `4096`
         * **Response Format:** `Text`
-        * **Sampling Temperature:** `0.1`
+        * **Sampling Temperature:** `0.2`
         * **Timeout:** `300000`
-        * **Top P:** `0.2`
+        * **Top P:** `0.3`
 
 ---
 
