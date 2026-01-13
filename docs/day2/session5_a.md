@@ -122,7 +122,8 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Send_Email_Report** 를 �
 7. **Options:**
     * **Response Format:** `JSON`
     * **Timeout:** `300000`
-    * `Sampling Temperature:` `0.5`
+    * `Sampling Temperature:` `0.4`
+    * `Frequency Penalty:` `0.4`
 
 ---
 
