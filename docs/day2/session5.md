@@ -351,7 +351,7 @@ return {
 * **Description (설명서):**
     ```text
     Use this tool to read the content of a specific webpage.
-    Example: { "url": "https://www.google.com/finance/quote/000660:KRX" }
+    Example: { "url": "https://finance.yahoo.com/quote/000660.KS/" }
     ```
 
 
