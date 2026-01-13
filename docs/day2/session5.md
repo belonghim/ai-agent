@@ -248,8 +248,8 @@ return {
   작성된 리포트는 까다로운 '팀장님(Supervisor)'이 심사 예정.
 
   [도구]
-  - google_search
-  - web_scraper
+  - google_search: 정보 검색
+  - web_scraper: 정보 조회
 
   [행동 지침]
   - 리포트는 1000 context를 넘지 않도록 짧게 작성.
