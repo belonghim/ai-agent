@@ -252,31 +252,31 @@ return {
   - web_scraper
 
   [행동 지침]
-  - 오늘 날짜({{ $now.format('yyyy년 MM월 dd일') }})를 기준.
-  - 보고서는 1000 context를 넘지 않도록 짧게 작성.
+  - 리포트는 1000 context를 넘지 않도록 짧게 작성.
+  - 나의 지식을 믿지 말고, 도구를 순서대로 호출하여 정보 수집.
   {{ $json.reason ? `- 이전 리포트가 반려된 상황. 피드백 내용을 최우선으로 반영하여 내용을 수정.
-  - 종목에 대해 완성된 리포트만 출력.` : `- 나의 지식을 사용하지 말고, 실제 데이터를 수집.
+  - 종목에 대해 완성된 리포트만 출력.` : `- 1단계(google_search 호출) 후, 2단계(web_scraper 호출) 권장.
   
   [행동 절차]
-  * 1단계(= 도구를 호출한적 없음). 기본 검색
-    - "종목 stock price site:google.com/finance" keyword로 google_search 도구 호출.
-  * 2단계(= 1단계 아니고, web_scraper 호출한적 없음). 주가 데이터 조회
-    - "https://www.google.com/finance/quote/TICKER:EXCHANGE" URL로 web_scraper 호출.
-  * 3단계(= 1단계 아님). 분석 기사 검색
-    - "종목 stock analysis" keyword로 google_search 도구 호출.
+  * 1단계(= 도구를 호출한적 없음). 필수. 기본 검색
+    - "종목 stock price yahoo finance" keyword로 google_search 호출.
+  * 2단계(= web_scraper 호출한적 없고 1단계 아님). 권장. 시세 조회
+    - "https://finance.yahoo.com/quote/TICKER(.EXCHANGE)/" URL로 web_scraper 호출.
+  * 3단계(= 1단계 아님). 선택. 추가 검색
+    - 이전에 사용한 keyword 단어 중복 제거. "종목 stock analysis" keyword로 google_search 도구 호출.
   * 리포트 작성
     - 지어내지 말고, 확인되지 않은 정보는 "확인 불가"로 명기.
     - 수집된 정보만으로 최선을 다해 아래 포맷에 맞춰 리포트 작성.` }}
   
   [리포트 포맷]
   종목명/티커 주식 분석 리포트
-  날짜: (오늘 일자)
-  
-  1. 기업 개요
-  - 종목명/티커
-  - 현재 주가: 
-  - 시가총액: 
-  - 변동률: (오늘 일자 기준 1일 및 1주)
+  날짜: ({{ $now.format('yyyy년 MM월 dd일') }})
+    
+    1. 기업 개요
+    - 종목명/티커
+    - 현재 주가: 
+    - 시가총액: 
+    - 변동률: (오늘 일자 기준 1일 및 1주)
   
   2. 투자 매력도 및 리스크
   - 긍정적 요인: (짧게 한줄 요약)
