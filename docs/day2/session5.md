@@ -295,7 +295,7 @@ return {
     * **Credential & Model:** `ibm-granite/granite-4.0-tiny-GGUF` ( AI Lab 에서 추가 서비스 구성 )
     * **Use Responses API:** Off
     * **Options:**
-        * **Frequency Penalty:** `0.6`
+        * **Frequency Penalty:** `0.3`
         * **Maximum Number of Tokens:** `4096`
         * **Response Format:** `Text`
         * **Sampling Temperature:** `0.1`
@@ -316,12 +316,17 @@ return {
 
 * **Source:** `Database` 선택 (저장된 워크플로우 불러오기)
 * **Workflow:** 위에서 만든 `Sub_Goole_Search`를 선택합니다.
-* **Workflow Inputs:** `keyword` 오른쪽의 반짝이는 별 아이콘을 누릅니다. (AI 가 알아서 입력을 넣게 됩니다.)
 * **(왼쪽 상단)Name:** `google_search` (AI가 인식할 도구의 이름입니다. 영문 소문자 권장)
 * **Description (설명서):** **여기가 핵심입니다.** AI에게 이 도구를 언제, 어떻게 써야 하는지 자연어로 설명해줘야 합니다.
     ```text
     Use this tool to search Google.
-    The first call example: { "keyword": "SK하이닉스 site:google.com/finance" }
+    The first call example: { "keyword": "SK하이닉스 stock ..." }
+    ```
+* **Workflow Inputs:** `keyword` 오른쪽의 반짝이는 별 아이콘을 누릅니다. (AI 가 알아서 입력을 넣게 됩니다.)
+    * `keyword > Description`
+    ```text
+    The first call example: "SK하이닉스 stock price yahoo finance"
+    The others call example: "SK하이닉스 stock analysis"
     ```
 
 3. 작동 원리 (설명용)
