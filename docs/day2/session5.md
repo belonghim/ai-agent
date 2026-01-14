@@ -252,7 +252,7 @@ return {
   작성된 리포트는 까다로운 '팀장님(Supervisor)'이 심사 예정.
 
   [도구]
-  - keyword_search: 키워드 검색
+  - keyword_search: 키워드 기반 검색
   - web_scraper: 웹페이지 추출
   
   [행동 지침]
@@ -260,17 +260,19 @@ return {
   - 리포트는 1000 context를 넘지 않도록 짧게 작성.
   - 기존 지식을 믿지 말고, TICKER로 조회한 정보만 사용.
   {{ $json.reason ? `- 이전 리포트가 반려된 상황. 피드백 내용을 최우선으로 반영하여 내용을 수정.
-  - 종목에 대해 완성된 리포트만 출력.` : `- TICKER를 지정한 url로 web_scraper를 호출하여 주가 확인.
-  - 같은 키워드 단어를 keyword_search 입력으로 재사용 금지.
+  - 종목에 대해 완성된 리포트만 출력.
+  ` : `- 기존 지식을 믿지 말고, 도구로 수집된 정보
+  - TICKER quote URL에서 주가 관련 정보들을 추출하여 확인.
+  - 사용했던 keyword는 keyword_search 에 재입력 금지.
   
   [행동 절차]
-  * 1단계(TICKER 확인한 적 없으면) TICKER 확인:
-    - "종목 ticker stock yahoo finance" keyword로 keyword_search 호출.
-  * 2단계(TICKER 확인되면) TICKER를 지정한 url로 주가 확인:
-    - "https://finance.yahoo.com/quote/TICKER(.Suffix)/" 형식의 url로 web_scraper 호출.
-  * 리포트 작성(keyword_search 와 web_scraper 둘 다 호출되었으면):
-    - 지어내지 말고, 확인되지 않은 정보는 "확인 불가"로 명기.
-    - 그동안 수집된 정보만으로 최선을 다해 아래 포맷에 맞춰 리포트 작성.` }}
+  * 1단계. TICKER quote URL 검색:
+    - "종목" keyword와 "1" num으로 keyword_search 호출하여, TICKER quote URL 확인.
+  * 2단계. TICKER quote URL로 주가 정보 추출:
+    - "https://google.com/finance/quote/TICKER:EXCHANGE" URL로 web_scraper 호출하여, 추출된 주가 관련 정보들을 확인.
+  * 리포트 작성:
+    - 절대로 지어내지 말고, 확인되지 않은 정보는 "미확인"으로 명기.
+    - 아래 포맷에 맞춰 리포트 작성.` }}
   
   [리포트 포맷]
   종목명/티커 주식 분석 리포트
