@@ -206,16 +206,22 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
     * **Source Data:** `JSON`
     * **JSON Property:** `data` (HTTP Request가 가져온 내용이 담긴 변수명)
     * **Extraction Values (추출 설정):**
-    * **Key:** `content` (결과를 담을 변수 이름)
-    * **CSS Selector:** `main, article` (main 또는 article 만 가져오기)
-    * **Return Value:** `Text` (**가장 중요!** HTML 태그 제거)
+        * **Key:** `content` (결과를 담을 변수 이름)
+        * **CSS Selector:** `[aria-labelledby='key-stats-heading'], #content` (content 가져오기)
+        * **Return Value:** `Text` (**가장 중요!** HTML 태그 제거)
+        * `Add Value` 버튼 클릭
+        * **Key:** `main` (결과를 담을 변수 이름)
+        * **CSS Selector:** `main` (main 가져오기)
+        * **Return Value:** `Text` (**가장 중요!** HTML 태그 제거)
 
 5. `HTML` 노드 뒤에 **`Code` 노드**를 하나 추가합니다.
 * 아래 코드를 붙여넣습니다. (텍스트를 2,000자까지만 자릅니다.)
 
 ```javascript
+const json = $input.first().json;
+
 // 입력된 텍스트가 있으면 가져오고, 없으면 빈 문자열
-const content = $input.first().json.content || "";
+const content = (json.content || "") + (json.main || "");
 
 // 2000글자만 자르고, 뒤에 '...생략됨' 붙이기
 const truncated = content.length > 2000 ? content.substring(0, 2000) + " ...(생략됨)" : content;
