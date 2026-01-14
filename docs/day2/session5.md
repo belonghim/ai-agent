@@ -356,7 +356,7 @@ return {
 * **Description (설명서):**
     ```text
     Use this tool to scrape the content of a specific webpage.
-    Example: { "url": "https://finance.yahoo.com/quote/000660.KS/" }
+    Example: { "url": "https://finance.yahoo.com/quote/005930.KS/" }
     ```
 
 
