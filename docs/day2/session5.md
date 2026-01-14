@@ -321,7 +321,7 @@ return {
 * **Description (설명서):** **여기가 핵심입니다.** AI에게 이 도구를 언제, 어떻게 써야 하는지 자연어로 설명해줘야 합니다.
     ```text
     Use this tool to search for keywords.
-    The first call example: { "keyword": "000660.KS ..." }
+    The first call example: { "keyword": "SK하이닉스 ..." }
     ```
 * **Workflow Inputs:** `keyword` 오른쪽의 반짝이는 별 아이콘을 누릅니다. (AI 가 알아서 입력을 넣게 됩니다.)
     * `keyword > Description`
