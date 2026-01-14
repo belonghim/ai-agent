@@ -262,7 +262,7 @@ return {
   
   [행동 절차]
   * 1단계(TICKER 확인한 적 없으면) TICKER 확인:
-    - "종목 ticker stock price yahoo finance" keyword로 keyword_search 호출.
+    - "종목 ticker stock yahoo finance" keyword로 keyword_search 호출.
   * 2단계(TICKER 확인되면) TICKER를 지정한 url로 주가 확인:
     - "https://finance.yahoo.com/quote/TICKER(.Suffix)/" 형식의 url로 web_scraper 호출.
   * 리포트 작성(keyword_search 와 web_scraper 둘 다 호출되었으면):
@@ -321,12 +321,12 @@ return {
 * **Description (설명서):** **여기가 핵심입니다.** AI에게 이 도구를 언제, 어떻게 써야 하는지 자연어로 설명해줘야 합니다.
     ```text
     Use this tool to search for keywords.
-    The first call example: { "keyword": "엔비디아 ..." }
+    The first call example: { "keyword": "엔비디아 ticker ..." }
     ```
 * **Workflow Inputs:** `keyword` 오른쪽의 반짝이는 별 아이콘을 누릅니다. (AI 가 알아서 입력을 넣게 됩니다.)
     * `keyword > Description`
     ```text
-    The first call example: "엔비디아 ticker stock price yahoo finance"
+    The first call example: "엔비디아 ticker stock yahoo finance"
     ```
 
 3. 작동 원리 (설명용)
