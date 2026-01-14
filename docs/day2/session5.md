@@ -196,12 +196,9 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
     * **Send Headers:** 스위치 **ON**
     * **Header Parameters** 추가시 **[Add Parameter]** 클릭:
     * **Name:** `User-Agent`
-    * **Value:** `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36`
+    * **Value:** `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36`
     * **Name:** `Accept`
     * **Value:** `*/*`
-
-* **Follow Redirects 켜기**
-    * `Options > Directs > Follow Redirects` 스위치를 ON 로 킵니다.
 
 4. **HTML Extract Content (알맹이만 꺼내기)**
 
