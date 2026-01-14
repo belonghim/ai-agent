@@ -39,7 +39,7 @@ n8n의 최신 `AI Agent` 노드는 LangChain 기반으로 동작합니다.
 
 에이전트 노드에 연결할 2가지 도구를 준비합니다. 2가지 모두 `Call n8n Workflow` 도구를 사용하여 서브 워크플로우를 호출합니다.
 
-1.  **google_search (검색):**
+1.  **keyword_search (검색):**
       * `Google Search` 노드 연결.
       * *용도:* 최신 정보를 실시간으로 긁어오는 역할.
 2.  **web_scraper (읽기):**
@@ -58,7 +58,7 @@ n8n의 최신 `AI Agent` 노드는 LangChain 기반으로 동작합니다.
 
 ## 🛠️ [사전 준비] Google Search API 연동 가이드
 
-n8n의 `google_search` 워크플로우를 통해 실제 구글 검색 결과를 가져오기 위해서는 **1. GCP(Google Cloud Platform) 프로젝트 설정**과 **2. 검색 엔진(CSE) 생성** 두 가지 작업이 모두 필요합니다.
+n8n의 `keyword_search` 워크플로우를 통해 실제 구글 검색 결과를 가져오기 위해서는 **1. GCP(Google Cloud Platform) 프로젝트 설정**과 **2. 검색 엔진(CSE) 생성** 두 가지 작업이 모두 필요합니다.
 
 ### 1단계: Google Cloud Platform (GCP) 설정
 
@@ -249,29 +249,29 @@ return {
   작성된 리포트는 까다로운 '팀장님(Supervisor)'이 심사 예정.
 
   [도구]
-  - google_search: 정보 검색
-  - web_scraper: 정보 조회
-
+  - keyword_search: 키워드 검색
+  - web_scraper: 웹페이지 추출
+  
   [행동 지침]
+  - 오늘({{ $now.format('yyyy년 MM월 dd일') }}) 일자를 기준으로 분석. 
   - 리포트는 1000 context를 넘지 않도록 짧게 작성.
-  - 나의 지식을 믿지 말고, 도구를 순서대로 호출하여 정보 수집.
+  - 기존 지식을 믿지 말고, TICKER로 조회한 정보만 사용.
   {{ $json.reason ? `- 이전 리포트가 반려된 상황. 피드백 내용을 최우선으로 반영하여 내용을 수정.
-  - 종목에 대해 완성된 리포트만 출력.` : `- 1단계(google_search 호출) 후, 2단계(web_scraper 호출) 권장.
+  - 종목에 대해 완성된 리포트만 출력.` : `- TICKER를 지정한 url로 web_scraper를 호출하여 주가 확인.
+  - 같은 키워드 단어를 keyword_search 입력으로 재사용 금지.
   
   [행동 절차]
-  * 1단계(= 도구를 호출한적 없음). 필수. 기본 검색
-    - "종목 stock price yahoo finance" keyword로 google_search 호출.
-  * 2단계(= web_scraper 호출한적 없고 1단계 아님). 권장. 시세 조회
-    - "https://finance.yahoo.com/quote/TICKER(.EXCHANGE)/" URL로 web_scraper 호출.
-  * 3단계(= 1단계 아님). 선택. 추가 검색
-    - 이전에 사용한 keyword 단어 중복 제거. "종목 stock analysis" keyword로 google_search 도구 호출.
-  * 리포트 작성
+  * 1단계(TICKER 확인한 적 없으면) TICKER 확인:
+    - "종목 ticker stock price yahoo finance" keyword로 keyword_search 호출.
+  * 2단계(TICKER 확인되면) TICKER를 지정한 url로 주가 확인:
+    - "https://finance.yahoo.com/quote/TICKER(.Suffix)/" 형식의 url로 web_scraper 호출.
+  * 리포트 작성(keyword_search 와 web_scraper 둘 다 호출되었으면):
     - 지어내지 말고, 확인되지 않은 정보는 "확인 불가"로 명기.
-    - 수집된 정보만으로 최선을 다해 아래 포맷에 맞춰 리포트 작성.` }}
+    - 그동안 수집된 정보만으로 최선을 다해 아래 포맷에 맞춰 리포트 작성.` }}
   
   [리포트 포맷]
   종목명/티커 주식 분석 리포트
-  날짜: ({{ $now.format('yyyy년 MM월 dd일') }})
+  날짜: {{ $now.format('yyyy년 MM월 dd일') }}
     
     1. 기업 개요
     - 종목명/티커
@@ -299,13 +299,13 @@ return {
         * **Frequency Penalty:** `0.3`
         * **Maximum Number of Tokens:** `4096`
         * **Response Format:** `Text`
-        * **Sampling Temperature:** `0.2`
+        * **Sampling Temperature:** `0.1`
         * **Timeout:** `300000`
-        * **Top P:** `0.3`
+        * **Top P:** `0.2`
 
 ---
 
-##### Step 2.1: 메인 워크플로우에 google_search 연결하기 (도구 쥐여주기)
+##### Step 2.1: 메인 워크플로우에 keyword_search 연결하기 (도구 쥐여주기)
 
 
 * `AI Agent` 노드의 **Tools** 항목에서 `+` 버튼을 누릅니다.
@@ -317,17 +317,16 @@ return {
 
 * **Source:** `Database` 선택 (저장된 워크플로우 불러오기)
 * **Workflow:** 위에서 만든 `Sub_Goole_Search`를 선택합니다.
-* **(왼쪽 상단)Name:** `google_search` (AI가 인식할 도구의 이름입니다. 영문 소문자 권장)
+* **(왼쪽 상단)Name:** `keyword_search` (AI가 인식할 도구의 이름입니다. 영문 소문자 권장)
 * **Description (설명서):** **여기가 핵심입니다.** AI에게 이 도구를 언제, 어떻게 써야 하는지 자연어로 설명해줘야 합니다.
     ```text
-    Use this tool to search Google.
-    The first call example: { "keyword": "SK하이닉스 stock ..." }
+    Use this tool to search for keywords.
+    The first call example: { "keyword": "000660.KS ..." }
     ```
 * **Workflow Inputs:** `keyword` 오른쪽의 반짝이는 별 아이콘을 누릅니다. (AI 가 알아서 입력을 넣게 됩니다.)
     * `keyword > Description`
     ```text
-    The first call example: "SK하이닉스 stock price yahoo finance"
-    The others call example: "SK하이닉스 stock analysis"
+    The first call example: "SK하이닉스 ticker stock price yahoo finance"
     ```
 
 3. 작동 원리 (설명용)
@@ -335,7 +334,7 @@ return {
 
     1.  **상황:** 에이전트(인턴 사원)가 리포트 작성을 마쳤습니다.
     2.  **판단:** 에이전트는 본인의 도구 상자를 봅니다.
-          * *"어? `google_search`라는 도구가 있네? 설명서를 보니 '실시간 정보 검색에 써라'고 되어있고, `keyword`라는 봉투에 내용을 담아주면 된다고 하네."*
+          * *"어? `keyword_search`라는 도구가 있네? 설명서를 보니 '키워드 정보 검색에 써라'고 되어있고, `keyword`라는 봉투에 내용을 담아주면 된다고 하네."*
     3.  **실행:** 에이전트는 `Sub_Goole_Search` 워크플로우를 호출하면서 `{ "keyword": "오늘 엔비디아 주가 뉴스" }` 라는 데이터를 던집니다.
     4.  **결과:** 서브 워크플로우가 대신 구글 검색을 전달하고, 에이전트에게 결과를 넘겨줍니다.
 
@@ -356,7 +355,7 @@ return {
 * **Name:** `web_scraper`
 * **Description (설명서):**
     ```text
-    Use this tool to read the content of a specific webpage.
+    Use this tool to scrape the content of a specific webpage.
     Example: { "url": "https://finance.yahoo.com/quote/000660.KS/" }
     ```
 
