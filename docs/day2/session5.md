@@ -269,7 +269,7 @@ return {
   
   [행동 절차]
   * 1단계. TICKER quote URL 검색:
-    - "종목" keyword와 "1" num으로 keyword_search 호출하여, TICKER quote URL 확인.
+    - "종목 stock" keyword와 "1" num으로 keyword_search 호출하여, TICKER quote URL 확인.
   * 2단계. TICKER quote URL로 주가 정보 추출:
     - "https://google.com/finance/quote/TICKER:EXCHANGE" URL로 web_scraper 호출하여, 추출된 주가 관련 정보들을 확인.
   * 리포트 작성:
@@ -328,7 +328,7 @@ return {
 * **Description (설명서):** **여기가 핵심입니다.** AI에게 이 도구를 언제, 어떻게 써야 하는지 자연어로 설명해줘야 합니다.
     ```text
     Use this tool to search num results based on keyword.
-    The first call example: { "keyword": "엔비디아", "num": 1 }
+    The first call example: { "keyword": "엔비디아 stock", "num": 1 }
     ```
 * **Workflow Inputs:** `keyword` 오른쪽의 반짝이는 별 아이콘을 누릅니다. (AI 가 알아서 입력을 넣게 됩니다.)
     * **keyword** 오른쪽의 반짝이는 별 아이콘을 누릅니다. (AI 가 알아서 입력을 넣게 됩니다.)
