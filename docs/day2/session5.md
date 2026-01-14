@@ -120,7 +120,9 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Google_Search** 를 만듭
 
 * 노드 검색창에 `Execute Workflow Trigger`를 검색하여 추가합니다.
 * 이 노드는 \*\*"누군가 나를 부르면(Call) 실행된다"\*\*는 뜻입니다.
-* **[중요]** AI가 데이터를 넘겨줄 때 어떤 변수명을 쓸지 정해야 합니다. `keyword`라는 변수에 내용을 담아 보낸다고 가정합니다.
+* **[중요]** AI가 데이터를 넘겨줄 때 어떤 변수명을 쓸지 정해야 합니다.
+  * `keyword`라는 변수를 생성합니다. String 을 담아 보낸다고 가정합니다.
+  * `num` 변수를 생성합니다. Number 를 담아 보낸다고 가정합니다.
 
 3.  **Action 설정 (하는 일):**
 
@@ -138,7 +140,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Google_Search** 를 만듭
 | **`q`** | `{{ $json.keyword }} -site:finance.yahoo.com` | 검색어 (이전 노드에서 받아온 값 매핑) |
 | **`cx`** | `0123456789...` | **검색 엔진 ID** (Programmable Search Engine에서 복사한 값) |
 | **`key`** | `AIzaSy...` | **GCP API Key** (Google Cloud Platform에서 발급받은 키) |
-| **`num`** | `3` | **검색 결과 개수를 제한** (기본값 10) |
+| **`num`** | `{{ $json.num }}` | **검색 결과 개수를 제한** (기본값 10) |
 
 4. **Code 노드:**
 * `HTTP Request` 노드 바로 뒤에 붙여서, 복잡한 JSON을 심플하게 바꿉니다.
@@ -208,11 +210,11 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Web_Scraper** 를 만듭�
     * **Extraction Values (추출 설정):**
         * **Key:** `content` (결과를 담을 변수 이름)
         * **CSS Selector:** `[aria-labelledby='key-stats-heading'], #content` (content 가져오기)
-        * **Return Value:** `Text` (**가장 중요!** HTML 태그 제거)
+        * **Return Value:** `Text` (**중요!** HTML 태그 제거)
         * `Add Value` 버튼 클릭
         * **Key:** `main` (결과를 담을 변수 이름)
         * **CSS Selector:** `main` (main 가져오기)
-        * **Return Value:** `Text` (**가장 중요!** HTML 태그 제거)
+        * **Return Value:** `Text`
 
 5. `HTML` 노드 뒤에 **`Code` 노드**를 하나 추가합니다.
 * 아래 코드를 붙여넣습니다. (텍스트를 2,000자까지만 자릅니다.)
@@ -325,13 +327,15 @@ return {
 * **(왼쪽 상단)Name:** `keyword_search` (AI가 인식할 도구의 이름입니다. 영문 소문자 권장)
 * **Description (설명서):** **여기가 핵심입니다.** AI에게 이 도구를 언제, 어떻게 써야 하는지 자연어로 설명해줘야 합니다.
     ```text
-    Use this tool to search for keywords.
-    The first call example: { "keyword": "엔비디아 ticker ..." }
+    Use this tool to search num results based on keyword.
+    The first call example: { "keyword": "엔비디아", "num": 1 }
     ```
 * **Workflow Inputs:** `keyword` 오른쪽의 반짝이는 별 아이콘을 누릅니다. (AI 가 알아서 입력을 넣게 됩니다.)
-    * `keyword > Description`
+    * **keyword** 오른쪽의 반짝이는 별 아이콘을 누릅니다. (AI 가 알아서 입력을 넣게 됩니다.)
+    * **num** 오른쪽의 반짝이는 별 아이콘을 누릅니다.
+    * `num > Description`
     ```text
-    The first call example: "엔비디아 ticker stock yahoo finance"
+    The first input example is 1
     ```
 
 3. 작동 원리 (설명용)
@@ -361,7 +365,7 @@ return {
 * **Description (설명서):**
     ```text
     Use this tool to scrape the content of a specific webpage.
-    Example: { "url": "https://finance.yahoo.com/quote/005930.KS/" }
+    Example: { "url": "https://google.com/finance/quote/005930.KS/" }
     ```
 
 
