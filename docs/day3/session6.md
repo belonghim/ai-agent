@@ -92,8 +92,8 @@ OCR API는 보통 방대한 양의 "원문 텍스트"나 "좌표 정보"를 줍�
 
 #### Step 5: 데이터 정제 (Structured OutPut Parser)
 
-* **Basic LLM Chain** 에서 `Require Specific Output Format` 를 키면 Output Parser 를 연결할 수 있습니다.
-* AI가 뱉어낸 JSON 문자열을 n8n이 인식할 수 있는 JSON 객체로 변환합니다.
+* **Basic LLM Chain** 에서 `Require Specific Output Format` 를 키면 Structured Output Parser 를 연결할 수 있습니다.
+* Structured Output Parser 는 AI가 뱉어낸 JSON 문자열을 n8n이 인식할 수 있는 JSON 객체로 변환합니다.
 * *Define using JSON Schema:*
     ```
     {
