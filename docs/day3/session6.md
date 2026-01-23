@@ -123,7 +123,7 @@ OCR API는 보통 방대한 양의 "원문 텍스트"나 "좌표 정보"를 줍�
 
 #### Step 6: DB 저장 (Google Sheets Append or update row in sheet)
 
-  * **Node:** `Google Sheets Append or update row in sheet` (또는 Supabase 등)
+  * **Node:** `Google Sheets Append or update row in sheet`
   * **Operation:** `Append or Update Row` (또는 Insert)
   * **Document** 와 **Sheet** 를 사전에 준비한 `Google Sheets Document` 와 `Sheet` 이름으로 선택 (자동 조회된 항목 중 선택)
   * **Mapping:**
