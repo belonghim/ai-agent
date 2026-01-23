@@ -68,26 +68,14 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
    {% raw %}
    ```js
 
-     📋 승인 요청</h2>
-     AI가 분석한 도면의 결과는 아래와 같습니다. DB에 저장을 승인하시겠습니까?
+   <div style="font-family: sans-serif; border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
+     <h2 style="color: #333;">📋 승인 요청</h2>
+     <p>AI가 분석한 도면의 결과는 아래와 같습니다. DB에 저장을 승인하시겠습니까?</p>
    
      <ul style="background-color: #f9f9f9; padding: 15px; list-style: none;">
        {{ Object.entries($json).map(([key, value]) => `<li><b>${key}:</b> ${value}</li>`).join('') }}
      </ul>
    
-     <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-   
-     <a href="{{ $execution.resumeUrl }}/?action=approve&id={{ $('Loop Over Items').item.json.id }}" 
-        style="background-color: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
-        ✅ 승인 및 저장
-     </a>
-     
-     &nbsp;&nbsp;&nbsp;
-   
-     <a href="{{ $execution.resumeUrl }}/?action=reject" 
-        style="background-color: #dc3545; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
-        ❌ 반려
-     </a>
    </div>
    ```
    {% endraw %}
