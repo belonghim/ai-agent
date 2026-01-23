@@ -78,23 +78,8 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
    ```
    {% endraw %}
 
-> **💡 핵심 포인트:** `{{ $execution.resumeUrl }}`은 n8n이 자동으로 만들어주는 **"이 워크플로우를 깨우는 주소"**입니다. 뒤에 `/?action=approve`와 `/?action=reject`를 붙여서 동작을 구분합니다.
 
-
-### Step 2: 사람 기다리기 (Wait Node)
-
-이메일을 보내고 나면, n8n은 사람이 버튼을 누를 때까지 멈춰 있어야 합니다.
-
-* **Node 추가:** `Wait`
-* **Resume Strategy:** `On Webhook Call` (웹훅 신호가 오면 깨어남)
-* **Respond to Webhook:** `Node Output` (브라우저에 "처리되었습니다" 메시지 표시)
-* **Authentication:** `None` (실습 편의상)
-* **Suffix:** `/`
-
-> **⚠️ 중요 (로컬 사용자 필독):**
-> n8n을 `localhost`에서 실행 중이므로, 이메일에 적힌 링크(`http://localhost...`)는 외부(스마트폰 등)에서 클릭하면 안 열립니다. 실습할 때는 **같은 PC의 브라우저**에서 클릭해야 합니다.
-
-### Step 3: 승인/반려 판단하기 (Switch Node)
+### Step 2: 승인/반려 판단하기 (Switch Node)
 
 사람이 `approve` 링크를 눌렀는지, `reject` 링크를 눌렀는지 판단합니다.
 
@@ -103,7 +88,7 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
 * **Number of Outputs:** `2`
 * **Output Index:** 에서 승인 여부를 검사합니다.
     ```
-    {{ $json.query.action == "approve" && $json.query.id == $('Loop Over Items').item.json.id }}
+    {{ $json.data.approved == true }}
     ```
 
 
@@ -123,32 +108,9 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
     * **Mapping Column Mode** 는 `Map Automatically` 로 선택합니다.
     * **Column to match on** 는 `Drawing link` 로 선택합니다.
 
-* **출력 0(반려)**에는 아무것도 연결하지 않거나, `Email` 노드를 연결해 "취소되었습니다" 알림을 보낼 수도 있습니다.
+* **출력 0(반려)**에는 아무것도 연결하지 않습니다.
 
 
-### Step 6: Respond to Webhook 노드(브라우저에 "처리되었습니다" 메시지 표시)
-
-* **Respond to Webhook**노드를 **출력 1(승인)** 과 **출력 2(반려)** 에 각각 만들어 줍니다.
-* **출력 1(승인) 의 Respond to Webhook** 노드에는 아래와 같이 입력합니다. (Expression)
-    ```
-    <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
-    <h1 style="color: #4CAF50;">✅ 처리되었습니다.</h1>
-    <p>{{ $('Code in JavaScript').item.json['Drawing link'] }}</p>
-    <p>데이터가 성공적으로 구글 시트에 저장되었습니다.</p>
-    <button onclick="window.close()" style="padding: 10px 20px; cursor: pointer;">창 닫기</button>
-    </div>
-    ```
-    * **Respose Header** 를 추가하고, `Content-Type` 은 `text/html` 로 설정합니다.
-
-* **출력 0(반려) 의 Respond to Webhook1** 노드에는 아래와 같이 입력합니다. (Expression)
-    ```
-    <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
-    <h1 style="color: #4CAF50;">❌ 반려 되었습니다.</h1>
-    <p>{{ $('Basic LLM Chain').item.json['Drawing link'] }}</p>
-    <button onclick="window.close()" style="padding: 10px 20px; cursor: pointer;">창 닫기</button>
-    </div>
-    ```
-    * **Respose Header** 를 추가하고, `Content-Type` 은 `text/html` 로 설정합니다.
 
 
 ---
