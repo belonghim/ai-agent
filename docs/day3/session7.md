@@ -92,7 +92,7 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
     ```
 
 
-### Step 4: Code 노드
+### Step 3: Code 노드
 * **Switch 노드** 의 **출력 1(승인)**에 `Code` 노드를 연결합니다.
 * LLM 이 출력했던 내용을 다시 가져오는 역할을 합니다.
 * **JavaScript:**
@@ -101,7 +101,7 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
   ```
 
 
-### Step 5: DB 저장 (Google Sheets)
+### Step 4: DB 저장 (Google Sheets)
 
 * `Code` 노드 다음에 `Google Sheets` 노드를 연결합니다.
 * **Append or update row in sheet** 노드에서 `Document` 와 `Sheet` 를 도면용으로 만든 파일과 시트를 선택합니다.
