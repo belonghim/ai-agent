@@ -51,22 +51,25 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
   # Input Text
   {{ $json.text }}
   ```
+* **OpenAI Chat Mode**
+  * `Timeout:` 300000
+  * `Response Format:` JSON
+ 
 
 ### Step 1: 승인 요청 이메일 보내기 (SendAndWait email Node)
 
-**이메일(SMTP)** 노드를 추가합니다(또는 Slack). HTML을 지원하므로 예쁜 버튼을 만들 수 있습니다.
-
-* **Node 추가** `Send Email` (n8n 기본 노드)
+**SendAndWait email** 노드를 추가합니다.
+* **Node 추가** `SendAndWait email`
 * **From Email:** 본인 이메일
 * **To Email:** 본인 이메일 (테스트용)
 * **Subject:** `[n8n] {{ $json['Product code'] }} 도면 처리 승인 요청건`
-* **HTML Message:** (Expression)
+* **Message:** (Expression)
 
    {% raw %}
    ```js
-   <div style="font-family: sans-serif; border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
-     <h2 style="color: #333;">📋 승인 요청</h2>
-     <p>AI가 분석한 도면의 결과는 아래와 같습니다. DB에 저장을 승인하시겠습니까?</p>
+
+     📋 승인 요청</h2>
+     AI가 분석한 도면의 결과는 아래와 같습니다. DB에 저장을 승인하시겠습니까?
    
      <ul style="background-color: #f9f9f9; padding: 15px; list-style: none;">
        {{ Object.entries($json).map(([key, value]) => `<li><b>${key}:</b> ${value}</li>`).join('') }}
