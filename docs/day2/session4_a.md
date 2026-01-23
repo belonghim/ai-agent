@@ -73,19 +73,22 @@
 * **Body Content Type:** `Form-Data` **(중요!)**
   * API 서버로 바이너리 파일을 전송하기 위해서, 반드시 위 옵션을 써야 합니다.
 
-* **Body Parameters:**
-* **file:** `data`
-    * **Parameter Type:** `n8n Binary File`
-    * **Parameter Name:** `file` (API 문서에서 요구하는 파일 필드명 확인 필수)
-    * **Input Data Field:** Step 1에서 넘어온 바이너리 데이터 속성명: `data`
-* **language:** `ko`
-    * **Parameter Type:** `Form Data`
-    * **Parameter Name:** `language`
-    * **Value:** `ko`
-* **translate:** `false` 
-    * **Parameter Type:** `Form Data`
-    * **Parameter Name:** `translate`
-    * **Value:** `false`
+* **Body Fields:**
+  * **file:**
+      * **Parameter Type:** `n8n Binary File`
+      * **Parameter Name:** `file` (API 문서에서 요구하는 파일 필드명 확인 필수)
+      * **Input Data Field:** Step 1에서 넘어온 바이너리 데이터 속성명: `data`
+  * **language:**
+      * **Parameter Type:** `Form Data`
+      * **Parameter Name:** `language`
+      * **Value:** `ko`
+  * **translate:**
+      * **Parameter Type:** `Form Data`
+      * **Parameter Name:** `translate`
+      * **Value:** `false`
+
+* **Options:**
+  * **Timeout:** `3000000`
 
 
 #### Step 5: 회의록 요약 및 구조화 (LLM)
