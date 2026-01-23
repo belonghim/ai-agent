@@ -35,7 +35,7 @@
 * **Google Drive Trigger** 노드에서 관찰할 Folder 를 지정하고, 'Watch For` 는 **File Created** 로 지정
 * **Google Drive Download** 노드에서 'Operation` 을 **Download** 를 선택합니다.
     * **File:** 은 `By ID` 로 선택한 뒤, {{ $json.id }} 표현식으로 File 을 다운로드 받게 됩니다.
-    * *Put Output File in Field:* 는 `data` 라는 이름으로 바이너리를 전달합니다.
+    * `Add option > `*Put Output File in Field:* 는 `data` 라는 이름으로 바이너리를 전달합니다.
 
 #### Step 2: Batch 사이즈를 고정 (Loop Over Items)
 
