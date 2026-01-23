@@ -72,8 +72,8 @@ podman run -d -p 12222:8000 --name ocr quay.io/joopark/ocr:vector
 OCR API는 보통 방대한 양의 "원문 텍스트"나 "좌표 정보"를 줍니다. 이를 우리가 원하는 깔끔한 JSON으로 만듭니다.
 
 * **Node:** `Basic LLM Chain`
-* **Input:** Step 3의 결과물: `{{ $json.text }}`
-* **Prompt:**
+* **Source for Prompt:** `Define Below`
+* **Prompt (User Message):**
 ```text
 아래 제공되는 [입력 텍스트]는 OCR을 통해 추출된 Raw Data야.
 
