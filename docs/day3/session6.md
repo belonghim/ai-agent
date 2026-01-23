@@ -1,4 +1,4 @@
-## Session 6: n8n으로 구현하는 도면/문서 데이터 정형화
+## Session 6: n8n으로 구현하는 이미지 데이터 정형화
 
 -----
 
@@ -26,13 +26,14 @@
 
 ### 4\. [실습] OCR API + LLM 하이브리드 워크플로우
 
-**시나리오:** 구글 드라이브에 도면/견적서 이미지가 올라오면, **외부 OCR 솔루션**으로 글자를 읽어내고, LLM을 통해 핵심 정보만 뽑아 DB에 저장합니다.
+**시나리오:** 구글 드라이브에 이미지가 올라오면, **외부 OCR 솔루션**으로 글자를 읽어내고, LLM을 통해 핵심 정보만 뽑아 DB에 저장합니다.
 
 
 #### Step 1: 이미지 파일 받기 (Trigger + Download)
 
 * **Google Drive Trigger** 노드에서 관찰할 Folder 를 지정하고, 'Watch For` 는 **File Created** 로 지정
 * **Google Drive Download** 노드에서 'Operation` 을 **Download** 를 선택합니다.
+    * 사전에 구글 드라이브에 디렉토리를 생성해둡니다: 예 n8n_receipt 
     * **File:** 은 `By ID` 로 선택한 뒤, {{ $json.id }} 표현식으로 File 을 다운로드 받게 됩니다.
     * *Put Output File in Field:* 는 `data` 라는 이름으로 바이너리를 전달합니다.
 
