@@ -94,7 +94,7 @@ return result;
 
 * 로그를 보관하기 위한 Document 를 생성합니다.
 * drive.google.com 에 접속 후, 공유용 directory 및 Google Sheets Document 생성
-  * 디렉토리 예: ~/n8n/n8n_save/n8n_feedback
+  * 디렉토리 예: ~/n8n/n8n_db/n8n_feedback
 * **n8n_feedback** Document 를 열고, sheet 명을 feedback 으로 수정합니다.
 * 첫번째 행에 id 라는 열을 만들어 둡니다.
 
