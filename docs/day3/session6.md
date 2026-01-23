@@ -31,7 +31,7 @@
 
 #### Step 1: 이미지 파일 받기 (Trigger + Download)
 
-* 사전에 구글 드라이브에 디렉토리를 생성해둡니다: 예 n8n_receipt 
+* 사전에 구글 드라이브에 디렉토리를 생성해둡니다: 예 n8n_image
 * **Google Drive Trigger** 노드에서 관찰할 Folder 를 지정하고, 'Watch For` 는 **File Created** 로 지정
 * **Google Drive Download** 노드에서 'Operation` 을 **Download** 를 선택합니다.
     * **File:** 은 `By ID` 로 선택한 뒤, {{ $json.id }} 표현식으로 File 을 다운로드 받게 됩니다.
