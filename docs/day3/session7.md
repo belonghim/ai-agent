@@ -78,6 +78,7 @@ AI가 도면에서 추출한 데이터를 바로 DB에 넣지 않고, 담당자�
    ```
    {% endraw %}
 
+* **Type of Approval:** `Approve and Disapprove`
 
 ### Step 2: 승인/반려 판단하기 (Switch Node)
 
