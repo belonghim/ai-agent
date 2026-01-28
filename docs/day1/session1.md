@@ -56,7 +56,7 @@ n8n Agent의 '두뇌' 역할을 할 LLM을 내 PC에 직접 설치합니다. Ope
 #### 3.1. Podman Desktop 설치
 
 Docker의 대안인 오픈소스 컨테이너 엔진 Podman을 설치합니다.
-* 인텔 기준 4세대 이상 프로세서 필요
+* 인텔 기준 6세대 이상 프로세서 필요
 * **다운로드:** [Podman Desktop 공식 홈페이지](https://podman-desktop.io/)
 * **설치:** OS(Windows/Mac)에 맞는 설치 파일 실행 및 기본 설정 완료
 * **Podman** extention 추가 설치 필요
