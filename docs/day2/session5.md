@@ -270,7 +270,7 @@ return {
   
   [행동 절차]
   * 1단계. TICKER quote URL 검색:
-    - "종목 stock" keyword와 "1" num으로 keyword_search 호출하여, TICKER quote URL 확인.
+    - "이름 stock" keyword와 "1" num으로 keyword_search 호출하여, TICKER quote URL 확인.
   * 2단계. TICKER quote URL로 주가 정보 추출:
     - "https://google.com/finance/quote/TICKER:EXCHANGE" URL로 web_scraper 호출하여, 추출된 주가 관련 정보들을 확인.
   * 리포트 작성:
