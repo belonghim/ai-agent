@@ -337,6 +337,7 @@ return {
     * **num** 오른쪽의 반짝이는 별 아이콘을 누릅니다.
     * `num > Description`
     ```text
+    Set the number of search results.
     The first input example is 1
     ```
 
