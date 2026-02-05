@@ -137,7 +137,7 @@ AI가 호출할 '심부름센터(Sub Workflow)' **Sub_Google_Search** 를 만듭
 
 | Name | Value | 설명 |
 | --- | --- | --- |
-| **`q`** | `{{ $json.keyword }} -site:google.com/finance` | 검색어 (이전 노드에서 받아온 값 매핑) |
+| **`q`** | `{{ $json.keyword }} site:google.com/finance` | 검색어 (이전 노드에서 받아온 값 매핑) |
 | **`cx`** | `0123456789...` | **검색 엔진 ID** (Programmable Search Engine에서 복사한 값) |
 | **`key`** | `AIzaSy...` | **GCP API Key** (Google Cloud Platform에서 발급받은 키) |
 | **`num`** | `{{ $json.num }}` | **검색 결과 개수를 제한** (기본값 10) |
