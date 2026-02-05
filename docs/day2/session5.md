@@ -242,7 +242,9 @@ return {
 
 #### Step 2: AI Agent 노드 설정 (Brain)
 
-이제 다시 **AI Agent가 있는 메인 워크플로우**로 돌아옵니다.
+이제 **AI Agent가 있는 메인 워크플로우** 를 만듭니다.
+
+* **Chat Trigger** 생성 후
 
 * **Node:** `AI Agent` (LangChain 기반)
 * **Model:** `OpenAI Chat Model`
